@@ -1,6 +1,6 @@
 {
-  "name": "next-js-boilerplate",
-  "version": "1.0.0",
+  "name": "scorecard",
+  "version": "0.0.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
