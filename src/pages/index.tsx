@@ -11,7 +11,7 @@ const Index = () => {
         <Meta title={AppConfig.title} description={AppConfig.description} />
       }
     >
-      <p>Frontline+ Boilerplate</p>
+      <p>Scorecard Boilerplate</p>
     </Main>
   );
 };
