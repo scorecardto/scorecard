@@ -1,7 +1,7 @@
 export const AppConfig = {
-  site_name: 'Frontline+',
-  title: 'Frontline+',
+  site_name: 'Scorecard',
+  title: 'Scorecard',
   description:
-    "Frontline+ is the productive, elegant, grade tool you've been waiting for.",
+    "Scorecard is the productive, elegant, grade tool you've been waiting for.",
   locale: 'en',
 };
