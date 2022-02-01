@@ -2,30 +2,26 @@ import React, { useEffect, useState } from 'react';
 
 type TableColumnProps = {
   cells: Element[];
+  columnIndex: number;
+  totalColumns: number;
 };
 
-export default function TableColumn({ cells }: TableColumnProps) {
-  const [width, setWidth] = useState<number | undefined>(undefined);
+export default function TableColumn({
+  cells,
+  columnIndex,
+  totalColumns,
+}: TableColumnProps) {
+  const [width, setWidth] = useState(0);
+  const [whitespace, setWhitespace] = useState(0);
+
   const [resizing, setResizing] = useState(false);
-  const [originalWidth, setOriginalWidth] = useState(0);
-  const [defaultWidth, setDefaultWidth] = useState(0);
+  const [applyWhitespace, setApplyWhitespace] = useState(false);
 
   const resizeMouseDown = (e: any) => {
     e.preventDefault();
 
-    const startX = e.clientX;
-    const startWidth = parseInt(
-      document?.defaultView?.getComputedStyle(e.target)?.width ?? '',
-      10
-    );
-
     const mouseMove = (e2: any) => {
-      setWidth(
-        Math.max(
-          originalWidth + 1,
-          defaultWidth + startWidth + e2.clientX - startX
-        )
-      );
+      setWhitespace(Math.max(0, whitespace + e2.clientX - e.clientX));
     };
 
     const mouseUp = () => {
@@ -40,40 +36,63 @@ export default function TableColumn({ cells }: TableColumnProps) {
     setResizing(true);
   };
 
-  const col = React.createRef<HTMLDivElement>();
+  const colContainer = React.createRef<HTMLDivElement>();
 
   useEffect(() => {
-    setOriginalWidth(col?.current?.clientWidth ?? 0);
-  }, []);
+    setApplyWhitespace(false);
+  }, [cells]);
 
   useEffect(() => {
-    setDefaultWidth(col?.current?.clientWidth ?? 0);
-  }, [col]);
+    if (applyWhitespace) return;
+
+    setWidth(colContainer.current?.clientWidth ?? width);
+    setApplyWhitespace(true);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [applyWhitespace]);
 
   return (
-    <>
-      <div style={{ width }} ref={col}>
+    <div
+      className="relative group-one"
+      style={{ zIndex: totalColumns - columnIndex }}
+      ref={colContainer}
+    >
+      <div
+        style={{ width: applyWhitespace ? width + whitespace : undefined }}
+        className="w-fit mr-4 -ml-6 group-one-last:mr-0"
+      >
         {cells.map((cell, idx) => {
           return (
             <p
-              className="block text-base relative border-b border-b-gray-400 last:border-none"
               key={idx}
+              className="relative border-b border-b-gray-400 last:border-b-0"
             >
-              <span className="pl-6 py-2 pr-2 inline-block ">{cell}</span>
-              <span
-                className="w-1 h-full absolute right-1 cursor-col-resize"
-                onMouseDown={resizeMouseDown}
-              ></span>
-              <span
-                className={`w-1 h-full absolute right-0 ${
-                  resizing ? 'border-l-2' : 'border-l'
-                } border-l-gray-400 cursor-col-resize`}
-                onMouseDown={resizeMouseDown}
-              ></span>
+              <span className="pl-6 py-2 pr-10 inline-block whitespace-nowrap">
+                {cell}
+              </span>
             </p>
           );
         })}
       </div>
-    </>
+
+      <span
+        className={`w-8 h-full top-0 right-0 absolute group-one-last:-mr-6  ${
+          resizing ? 'cursor-col-resize' : ''
+        }`}
+      >
+        <span
+          className="w-4 cursor-col-resize h-full absolute group"
+          onMouseDown={resizeMouseDown}
+        >
+          <span
+            className={`${
+              resizing
+                ? 'border-r-2 border-r-blue-400'
+                : 'border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400'
+            } w-2 h-full absolute transition-all`}
+          ></span>
+        </span>
+      </span>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import TableColumn from './TableColumn';
-import styles from './TableDataContainer.module.css';
 
 type TableDataContainerProps = {
   selectedCol: number; // positive if asc, negative if desc
@@ -38,9 +37,16 @@ export default function TableDataContainer({
   }, [data]);
 
   return (
-    <div className={styles.TableDataContainer}>
+    <div className="flex border border-gray-400 w-fit">
       {cols.map((cells, idx) => {
-        return <TableColumn key={idx} cells={cells} />;
+        return (
+          <TableColumn
+            key={idx}
+            cells={cells}
+            columnIndex={idx}
+            totalColumns={cols.length}
+          />
+        );
       })}
     </div>
   );
