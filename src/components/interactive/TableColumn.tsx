@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import Color from 'color';
 
 type TableColumnProps = {
   cells: Element[];
   columnIndex: number;
   totalColumns: number;
   setColumnWidth?: SetColumnWidthsFunc;
+  background?: [number, number, number, number]; // r, g, b, a
 };
 
 /**
@@ -19,6 +22,7 @@ export default function TableColumn({
   columnIndex,
   totalColumns,
   setColumnWidth,
+  background,
 }: TableColumnProps) {
   /**
    * Minumum width of the column
@@ -28,8 +32,16 @@ export default function TableColumn({
   /**
    * Whitespace added to the column
    * = current width - minimum width
+   *
+   * uses ref and state to prevent closure with event listeners
    */
-  const [whitespace, setWhitespace] = useState(0);
+  const [whitespace, setWhitespaceState] = useState(0);
+  const whitespaceRef = useRef(whitespace);
+
+  const setWhitespace = (newValue: number) => {
+    setWhitespaceState(newValue);
+    whitespaceRef.current = newValue;
+  };
 
   /**
    * If user is currently resizing this column
@@ -44,6 +56,11 @@ export default function TableColumn({
   const [applyWidth, setApplyWidth] = useState(false);
 
   /**
+   * If component is playing disspearing animation
+   */
+  const [isComponentDissapearing, setComponentDissapearing] = useState(false);
+
+  /**
    * Called when user begins resizing by holding mouse on handle.
    * @param e MouseEvent
    */
@@ -56,14 +73,14 @@ export default function TableColumn({
      */
     const mouseMove = (e2: any) => {
       // add difference from mouse down to mouse move
-      const newWhitespace = Math.max(0, whitespace + e2.clientX - e.clientX);
+      const newWhitespace = whitespace + e2.clientX - e.clientX;
 
       // update whitespace
       setWhitespace(newWhitespace);
 
       // update column width
       if (setColumnWidth) {
-        setColumnWidth(width + newWhitespace - (columnIndex === 0 ? 32 : 8));
+        setColumnWidth(width + Math.max(newWhitespace, 0));
       }
     };
 
@@ -71,16 +88,55 @@ export default function TableColumn({
      * Called when the mouse is lifted during the resizing process, indicating that the user is done resizing.
      */
     const mouseUp = () => {
-      setResizing(false);
+      if (whitespaceRef.current < width / -4.5) {
+        setComponentDissapearing(true);
+      }
+
+      setWhitespace(Math.max(0, whitespaceRef.current));
       // remove event listeners only used during the resizing process.
       document.documentElement.removeEventListener('mousemove', mouseMove);
       document.documentElement.removeEventListener('mouseup', mouseUp);
+
+      setResizing(false);
     };
 
     document.documentElement.addEventListener('mousemove', mouseMove);
     document.documentElement.addEventListener('mouseup', mouseUp);
 
     setResizing(true);
+  };
+
+  const buildResizeHandleClassname = () => {
+    let returnable = 'w-2 h-full absolute transition-all';
+
+    if (!resizing) {
+      returnable +=
+        ' border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400';
+    } else {
+      returnable += ` border-r-2 ws-${whitespace}`;
+
+      if (whitespace >= -8) {
+        returnable += ' border-r-blue-400';
+      } else {
+        returnable += ' border-r-red-400';
+      }
+    }
+    return returnable;
+    // 'border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400 w-2 h-full absolute transition-all'
+  };
+
+  const buildColumnBackground = (): string => {
+    const returnable = background ?? [0, 0, 0, 0];
+    let color = Color.rgb(returnable);
+
+    if (whitespace < -8) {
+      color = color.mix(
+        Color.rgb([255, 0, 0]),
+        Math.max(whitespace / width, -1) * -0.5
+      );
+    }
+
+    return `rgba(${color.red()},${color.green()},${color.blue()},${color.alpha()})`;
   };
 
   const colContainer = React.createRef<HTMLDivElement>();
@@ -98,15 +154,25 @@ export default function TableColumn({
     setApplyWidth(true);
 
     if (setColumnWidth) {
-      setColumnWidth(newWidth + whitespace - (columnIndex === 0 ? 32 : 8));
+      setColumnWidth(newWidth + Math.max(0, whitespace));
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applyWidth]);
 
+  useEffect(() => {
+    if (isComponentDissapearing) {
+      setWidth(0);
+
+      if (setColumnWidth) {
+        setColumnWidth(-1);
+      }
+    }
+  }, [isComponentDissapearing]);
+
   return (
     <div
-      className="relative group-1"
+      className={`relative group-1${resizing ? ' cursor-col-resize' : ''}`}
       style={{
         zIndex:
           totalColumns -
@@ -115,16 +181,31 @@ export default function TableColumn({
       ref={colContainer}
     >
       <div
-        style={{ width: applyWidth ? width + whitespace : undefined }}
-        className="w-fit mr-4 -ml-6 group-1-last:mr-0"
+        style={{
+          transition: isComponentDissapearing ? '0.3s width ease' : undefined,
+          visibility: isComponentDissapearing ? 'hidden' : undefined,
+          width: applyWidth ? width + Math.max(whitespace, 0) : undefined,
+          background: buildColumnBackground(),
+        }}
+        className="w-fit -ml-0 mr-0"
       >
         {cells.map((cell, idx) => {
           return (
             <p
               key={idx}
-              className="relative border-b border-b-gray-400 last:border-b-0"
+              className={`relative border-b ${
+                whitespace >= -8 ? 'border-b-gray-400' : 'border-b-red-400'
+              } last:border-b-0`}
             >
-              <span className="pl-6 py-2 pr-10 inline-block whitespace-nowrap">
+              <span
+                className="pl-6 py-2 pr-10 inline-block whitespace-nowrap"
+                style={{
+                  opacity:
+                    whitespace < -8.5
+                      ? Math.max(0, 1.25 - (whitespace / width) * -5)
+                      : 1,
+                }}
+              >
                 {cell}
               </span>
             </p>
@@ -133,7 +214,7 @@ export default function TableColumn({
       </div>
 
       <span
-        className={`w-8 h-full top-0 right-0 absolute group-1-last:-mr-6  ${
+        className={`w-8 h-full top-0 right-0 absolute -mr-6  ${
           resizing ? 'cursor-col-resize' : ''
         }`}
       >
@@ -142,14 +223,20 @@ export default function TableColumn({
           onMouseDown={resizeMouseDown}
         >
           <span // column resizing handle left side, used to display handle
-            className={`${
-              resizing
-                ? 'border-r-2 border-r-blue-400'
-                : 'border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400'
-            } w-2 h-full absolute transition-all`}
+            className={`${buildResizeHandleClassname()}`}
           />
         </span>
       </span>
+
+      {whitespace < width / -4.5 ? (
+        <span
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white text-center px-3 py-1 rounded w-fit animate-tooltip-appear ${''}`}
+        >
+          Hide Column
+        </span>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

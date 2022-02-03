@@ -63,7 +63,9 @@ export default class ReportCardsTable extends Component<
           {this.props.columns.map((colName, idx) => {
             return (
               <div
-                className="inline-block"
+                className={`inline-block${
+                  (this.state.columnWidths[idx] ?? -1) < 0 ? ' hidden' : ''
+                }`}
                 style={{ width: this.state.columnWidths[idx] }}
                 key={idx}
               >

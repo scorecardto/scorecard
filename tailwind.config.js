@@ -38,6 +38,23 @@ module.exports = {
           900: '#2a4365',
         },
       },
+      animation: {
+        'tooltip-appear': 'tooltip-appear 0.15s ease-in',
+      },
+      keyframes: {
+        'tooltip-appear': {
+          '0%': {
+            opacity: '0%',
+            transform:
+              'translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(0.5) scaleY(0.5)',
+          },
+          '100%': {
+            opacity: '100%',
+            transform:
+              'translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(1)) scaleY(1)',
+          },
+        },
+      },
     },
   },
   variants: {},
