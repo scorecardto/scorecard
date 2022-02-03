@@ -65,8 +65,7 @@
         "unused-imports/no-unused-vars": [
           "error",
           { "argsIgnorePattern": "^_" }
-        ],
-        "@eslint keyword-spacing": ["error", { "before": true }]
+        ]
       }
     }
   ]

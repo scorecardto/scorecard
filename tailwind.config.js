@@ -41,10 +41,10 @@ module.exports = {
     },
   },
   variants: {},
-  // eslint-disable-next-line global-require
   plugins: [
+    // eslint-disable-next-line global-require
     require('tailwindcss-scoped-groups')({
-      groups: ['one', 'two'],
+      groups: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     }),
   ],
 };

@@ -18,6 +18,7 @@ export default function TableDataContainer({
   selectedCol,
 }: TableDataContainerProps) {
   const [cols, setCols] = useState<Element[][]>([]);
+  // const [columnWidths, setColumnWidths] = useState<number[]>([]);
 
   useEffect(() => {
     const sorted = sortData(selectedCol, data);
@@ -37,17 +38,20 @@ export default function TableDataContainer({
   }, [data]);
 
   return (
-    <div className="flex border border-gray-400 w-fit">
-      {cols.map((cells, idx) => {
-        return (
-          <TableColumn
-            key={idx}
-            cells={cells}
-            columnIndex={idx}
-            totalColumns={cols.length}
-          />
-        );
-      })}
-    </div>
+    <>
+      <div>{}</div>
+      <div className="flex border border-gray-400 w-fit">
+        {cols.map((cells, idx) => {
+          return (
+            <TableColumn
+              key={idx}
+              cells={cells}
+              columnIndex={idx}
+              totalColumns={cols.length}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 }

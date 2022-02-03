@@ -4,28 +4,75 @@ type TableColumnProps = {
   cells: Element[];
   columnIndex: number;
   totalColumns: number;
+  setColumnWidth?: SetColumnWidthsFunc;
+};
+
+/**
+ * Passes column width to parent
+ */
+type SetColumnWidthsFunc = {
+  (width: number): void;
 };
 
 export default function TableColumn({
   cells,
   columnIndex,
   totalColumns,
+  setColumnWidth,
 }: TableColumnProps) {
+  /**
+   * Minumum width of the column
+   */
   const [width, setWidth] = useState(0);
+
+  /**
+   * Whitespace added to the column
+   * = current width - minimum width
+   */
   const [whitespace, setWhitespace] = useState(0);
 
+  /**
+   * If user is currently resizing this column
+   * Used for resizing indicators and event listeners
+   */
   const [resizing, setResizing] = useState(false);
-  const [applyWhitespace, setApplyWhitespace] = useState(false);
 
+  /**
+   * If whitespace is currently being applied.
+   * Used to remeasure minimum width when cell data changes.
+   */
+  const [applyWidth, setApplyWidth] = useState(false);
+
+  /**
+   * Called when user begins resizing by holding mouse on handle.
+   * @param e MouseEvent
+   */
   const resizeMouseDown = (e: any) => {
     e.preventDefault();
 
+    /**
+     * Called when the mouse moves during the resizing process.
+     * @param e2 MouseEvent
+     */
     const mouseMove = (e2: any) => {
-      setWhitespace(Math.max(0, whitespace + e2.clientX - e.clientX));
+      // add difference from mouse down to mouse move
+      const newWhitespace = Math.max(0, whitespace + e2.clientX - e.clientX);
+
+      // update whitespace
+      setWhitespace(newWhitespace);
+
+      // update column width
+      if (setColumnWidth) {
+        setColumnWidth(width + newWhitespace - (columnIndex === 0 ? 32 : 8));
+      }
     };
 
+    /**
+     * Called when the mouse is lifted during the resizing process, indicating that the user is done resizing.
+     */
     const mouseUp = () => {
       setResizing(false);
+      // remove event listeners only used during the resizing process.
       document.documentElement.removeEventListener('mousemove', mouseMove);
       document.documentElement.removeEventListener('mouseup', mouseUp);
     };
@@ -39,27 +86,37 @@ export default function TableColumn({
   const colContainer = React.createRef<HTMLDivElement>();
 
   useEffect(() => {
-    setApplyWhitespace(false);
+    setApplyWidth(false);
   }, [cells]);
 
   useEffect(() => {
-    if (applyWhitespace) return;
+    if (applyWidth) return;
 
-    setWidth(colContainer.current?.clientWidth ?? width);
-    setApplyWhitespace(true);
+    const newWidth = colContainer.current?.clientWidth ?? width;
+
+    setWidth(newWidth);
+    setApplyWidth(true);
+
+    if (setColumnWidth) {
+      setColumnWidth(newWidth + whitespace - (columnIndex === 0 ? 32 : 8));
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [applyWhitespace]);
+  }, [applyWidth]);
 
   return (
     <div
-      className="relative group-one"
-      style={{ zIndex: totalColumns - columnIndex }}
+      className="relative group-1"
+      style={{
+        zIndex:
+          totalColumns -
+          columnIndex /* Allows resize padding on left and right sides */,
+      }}
       ref={colContainer}
     >
       <div
-        style={{ width: applyWhitespace ? width + whitespace : undefined }}
-        className="w-fit mr-4 -ml-6 group-one-last:mr-0"
+        style={{ width: applyWidth ? width + whitespace : undefined }}
+        className="w-fit mr-4 -ml-6 group-1-last:mr-0"
       >
         {cells.map((cell, idx) => {
           return (
@@ -76,21 +133,21 @@ export default function TableColumn({
       </div>
 
       <span
-        className={`w-8 h-full top-0 right-0 absolute group-one-last:-mr-6  ${
+        className={`w-8 h-full top-0 right-0 absolute group-1-last:-mr-6  ${
           resizing ? 'cursor-col-resize' : ''
         }`}
       >
-        <span
+        <span // column resizing handle, including padding
           className="w-4 cursor-col-resize h-full absolute group"
           onMouseDown={resizeMouseDown}
         >
-          <span
+          <span // column resizing handle left side, used to display handle
             className={`${
               resizing
                 ? 'border-r-2 border-r-blue-400'
                 : 'border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400'
             } w-2 h-full absolute transition-all`}
-          ></span>
+          />
         </span>
       </span>
     </div>
