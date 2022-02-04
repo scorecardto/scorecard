@@ -111,18 +111,17 @@ export default function TableColumn({
 
     if (!resizing) {
       returnable +=
-        ' border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400';
+        ' border-r border-r-neutral-400 group-hover:border-r-2 group-hover:border-r-blue-400';
     } else {
       returnable += ` border-r-2 ws-${whitespace}`;
 
-      if (whitespace >= -8) {
-        returnable += ' border-r-blue-400';
-      } else {
+      if (whitespace < -8) {
         returnable += ' border-r-red-400';
+      } else {
+        returnable += ' border-r-blue-400';
       }
     }
     return returnable;
-    // 'border-r border-r-gray-400 group-hover:border-r-2 group-hover:border-r-blue-400 w-2 h-full absolute transition-all'
   };
 
   const buildColumnBackground = (): string => {
@@ -132,11 +131,10 @@ export default function TableColumn({
     if (whitespace < -8) {
       color = color.mix(
         Color.rgb([255, 0, 0]),
-        Math.max(whitespace / width, -1) * -0.5
+        Math.min(0.3, Math.max(whitespace / width, -1) * -0.5) // calculate fitting opacity
       );
     }
-
-    return `rgba(${color.red()},${color.green()},${color.blue()},${color.alpha()})`;
+    return color.toString();
   };
 
   const colContainer = React.createRef<HTMLDivElement>();
@@ -160,6 +158,9 @@ export default function TableColumn({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applyWidth]);
 
+  /**
+   * Code to run when component is dissapearing
+   */
   useEffect(() => {
     if (isComponentDissapearing) {
       setWidth(0);
@@ -168,11 +169,12 @@ export default function TableColumn({
         setColumnWidth(-1);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isComponentDissapearing]);
 
   return (
     <div
-      className={`relative group-1${resizing ? ' cursor-col-resize' : ''}`}
+      className={`relative group-1 ${resizing ? 'cursor-col-resize' : ''}`}
       style={{
         zIndex:
           totalColumns -
@@ -193,16 +195,16 @@ export default function TableColumn({
           return (
             <p
               key={idx}
-              className={`relative border-b ${
-                whitespace >= -8 ? 'border-b-gray-400' : 'border-b-red-400'
-              } last:border-b-0`}
+              className={`relative border-b last:border-b-0 ${
+                whitespace < -8 ? 'border-b-red-400' : 'border-b-neutral-400'
+              }`}
             >
               <span
                 className="pl-6 py-2 pr-10 inline-block whitespace-nowrap"
                 style={{
                   opacity:
-                    whitespace < -8.5
-                      ? Math.max(0, 1.25 - (whitespace / width) * -5)
+                    whitespace < -8.5 // calculate fitting text opacity
+                      ? Math.max(0.1, 1.25 - (whitespace / width) * -5)
                       : 1,
                 }}
               >

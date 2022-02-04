@@ -40,7 +40,7 @@ export default function TableDataContainer({
   return (
     <>
       <div>{}</div>
-      <div className="flex border border-gray-400 w-fit">
+      <div className="flex border border-neutral-400 w-fit">
         {cols.map((cells, idx) => {
           return (
             <TableColumn
