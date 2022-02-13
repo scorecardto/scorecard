@@ -15,16 +15,23 @@ module.exports = {
     },
     extend: {
       colors: {
-        gray: {
-          100: '#f7fafc',
-          200: '#edf2f7',
-          300: '#e2e8f0',
-          400: '#cbd5e0',
-          500: '#a0aec0',
-          600: '#718096',
-          700: '#4a5568',
-          800: '#2d3748',
-          900: '#1a202c',
+        day: {
+          100: '#FFFFFF',
+          200: '#F7F7F7',
+          300: '#E5E5E5',
+          400: '#909090',
+          500: '#688091',
+          600: '#EFF1F4',
+          700: '#333333',
+        },
+        night: {
+          100: '#252A2E',
+          200: '#363e45',
+          300: '#535c63',
+          400: '#909090',
+          500: '#748A9A',
+          600: '#3D4249',
+          700: '#FFFFFF',
         },
         blue: {
           100: '#ebf8ff',
@@ -38,8 +45,30 @@ module.exports = {
           900: '#2a4365',
         },
       },
+      animation: {
+        'tooltip-appear': 'tooltip-appear 0.15s ease-in',
+      },
+      keyframes: {
+        'tooltip-appear': {
+          '0%': {
+            opacity: '0%',
+            transform:
+              'translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(0.5) scaleY(0.5)',
+          },
+          '100%': {
+            opacity: '100%',
+            transform:
+              'translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(1)) scaleY(1)',
+          },
+        },
+      },
     },
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    // eslint-disable-next-line global-require
+    require('tailwindcss-scoped-groups')({
+      groups: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    }),
+  ],
 };

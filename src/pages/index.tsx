@@ -1,10 +1,8 @@
 import { Meta } from '@/layout/Meta';
+import { AppConfig } from '@/lib/AppConfig';
 import { Main } from '@/templates/Main';
-import { AppConfig } from '@/utils/AppConfig';
 
 const Index = () => {
-  // const router = useRouter();
-
   return (
     <Main
       meta={
