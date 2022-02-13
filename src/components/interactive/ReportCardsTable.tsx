@@ -5,18 +5,18 @@ import TableColumn, {
   SetColumnShowingCallback,
 } from './TableColumn';
 import TextCard from './TextCard';
-import { transpose } from '@/utils/util';
+import { transpose } from '@/lib/Util';
 
 type Props = {
   data: ColumnStringContents[];
 };
 
 export default function ReportCardsTable({ data }: Props) {
-  const [shownColumns, setShownColumns] = useState<boolean[]>(
+  const [, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
 
-  const [shownColumnSetters, setShownColumnSetters] = useState<
+  const [, setShownColumnSetters] = useState<
     (SetColumnShowingCallback | undefined)[]
   >(new Array(data.length));
 
@@ -114,15 +114,6 @@ export default function ReportCardsTable({ data }: Props) {
 
   return (
     <div className="_report-cards-table">
-      {shownColumns.toString()}
-      <button
-        onClick={() => {
-          shownColumnSetters[0]?.(true);
-        }}
-      >
-        Show col 1
-      </button>
-
       <div className="_report-cards-col-container flex w-fit border-l border-l-day-300 dark:border-l-night-300">
         {sort(data, sortBy).map((column, idx) => {
           return (

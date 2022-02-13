@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ClickEventCallback } from '../../utils/CommonCallbacks';
+import { ClickEventCallback } from '../../lib/CommonCallbacks';
 
 type Props = {
   children: string | Element;
