@@ -19,3 +19,34 @@ a:hover {
 .content ul {
   @apply my-6;
 }
+
+* {
+  letter-spacing: -.4px;
+}
+
+@layer components {
+  .use-responsive-width {
+    width: min(100%, 700px);
+    margin: auto;
+  }
+  .use-warm-theme {
+    --theme-100: #FCF7DD;
+    --theme-200: #EE6417;
+    --theme-300: #E2800C;
+    --theme-400: #F89C13;
+    --theme-500: #E77A15;
+    --theme-600: #DF7D21;
+    --theme-700: #B61D1D;
+    --theme-800: #EE6417;
+  }
+  .use-rose-theme {
+    --theme-100: #FCDDEC;
+    --theme-200: #e34496;
+    --theme-300: #A03669;
+    --theme-400: #BE5E8C;
+    --theme-500: #B05883;
+    --theme-600: #D94FC3;
+    --theme-700: #CC3156;
+    --theme-800: #8B1842;
+  }
+}
