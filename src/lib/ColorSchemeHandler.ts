@@ -11,16 +11,4 @@ const updateColorScheme = () => {
   }
 };
 
-const usingDarkTheme = () => {
-  return document.documentElement.classList.contains('dark');
-};
-
-const listen = () => {
-  window
-    .matchMedia('(prefers-color-scheme: dark)')
-    .addEventListener('change', () => {
-      updateColorScheme();
-    });
-};
-
-export { listen, updateColorScheme, usingDarkTheme };
+export { updateColorScheme };

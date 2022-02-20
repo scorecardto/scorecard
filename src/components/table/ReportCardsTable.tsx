@@ -1,10 +1,10 @@
 import React, { ReactElement, useState } from 'react';
 
+import TextCard from '../card/TextCard';
 import TableColumn, {
   ColumnStringContents,
   SetColumnShowingCallback,
 } from './TableColumn';
-import TextCard from './TextCard';
 import { transpose } from '@/lib/Util';
 
 type Props = {

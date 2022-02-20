@@ -1,8 +1,10 @@
+import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 
 const Index = () => {
   return (
     <div>
+      <NextSeo title="Insights" />
       <p>Scorecard Boilerplate</p>
       <Link href={'/insights'}>
         <a>link</a>
@@ -14,7 +16,7 @@ const Index = () => {
 export async function getStaticProps() {
   return {
     props: {
-      pageTitle: 'Your Grades',
+      pageTitle: 'Insights',
     },
   };
 }
