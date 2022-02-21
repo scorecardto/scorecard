@@ -140,8 +140,9 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
         }
 
         categoryBacklog.forEach(() => {
-          final.forEach((finalCol) => {
-            finalCol.cells.push('');
+          final.forEach((finalCol, idx) => {
+            finalCol.cells.push(undefined);
+            if (idx === 0) finalCol.cells.push('');
           });
         });
         categoryBacklog = [];
@@ -170,6 +171,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
+              amFirstColumn={idx === 0}
             />
           );
         })}

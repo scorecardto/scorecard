@@ -6,16 +6,17 @@ export type ColumnType = 'COURSE_NAME' | 'OTHER_FIELD' | 'GRADE';
 
 export type Column = {
   header: ReactElement | HTMLElement | string;
-  cells: (ReactElement | HTMLElement | string)[];
+  cells: (ReactElement | HTMLElement | string | undefined)[];
   type: ColumnType;
   zIndex?: number;
+  amFirstColumn?: boolean;
   setComponentShowing: ColumnShowingCallback;
   getSetComponentShowing: GetSetColumnShowingCallback;
 };
 
 export type ColumnStringContents = {
   header: string;
-  cells: string[];
+  cells: (string | undefined)[];
   type: ColumnType;
   zIndex?: number;
 };
@@ -39,6 +40,7 @@ export default function TableColumn({
   zIndex,
   setComponentShowing,
   getSetComponentShowing,
+  amFirstColumn,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -174,7 +176,9 @@ export default function TableColumn({
 
   return (
     <div
-      className={`_table-column  ${resizing ? 'cursor-col-resize ' : ''}`}
+      className={`_table-column group-1 ${
+        resizing ? 'cursor-col-resize ' : ''
+      }`}
       style={{
         ...{
           zIndex,
@@ -190,7 +194,7 @@ export default function TableColumn({
         {header}
       </div>
 
-      <div className="_table-column-cells-wrapper flex w-fit">
+      <div className="_table-column-cells-wrapper flex w-fit group-1-first:border-l border-l-day-300">
         <div
           className="_table-column-cells"
           ref={cellContainerRef}
@@ -208,51 +212,61 @@ export default function TableColumn({
         >
           {cells.map((cell, idx) => {
             return (
-              <div
-                className={`_table-column-single-cell w-full border-b pl-4 pr-4 py-2 first:border-t transition-colors ${
-                  inDeletionAction
-                    ? 'border-red-500'
-                    : 'border-day-300 dark:border-night-300'
-                }${
-                  type !== 'OTHER_FIELD'
-                    ? ' bg-day-200 dark:bg-night-200 text-day-700 dark:text-night-700'
-                    : ' bg-day-100 dark:bg-night-100 text-day-400 dark:text-night-400'
-                }`}
-                style={{
-                  ...{
-                    paddingLeft:
-                      type !== 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+              <>
+                <div
+                  className={`_table-column-single-cell border-b py-2 first:border-t transition-colors ${
+                    inDeletionAction
+                      ? 'border-red-500'
+                      : 'border-day-300 dark:border-night-300'
+                  }${
+                    type !== 'OTHER_FIELD'
+                      ? ' bg-day-200 dark:bg-night-200 text-day-700 dark:text-night-700'
+                      : ' bg-day-100 dark:bg-night-100 text-day-400 dark:text-night-400'
+                  }${
+                    cell === undefined && amFirstColumn
+                      ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
+                      : ' pl-4 pr-4 w-full'
+                  }`}
+                  style={{
+                    ...{
+                      paddingLeft:
+                        type !== 'GRADE'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                    paddingRight:
-                      type === 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+                      paddingRight:
+                        type === 'GRADE'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                    opacity: calculateDeletionTextOpacity(whitespace),
-                  },
-                  ...(isComponentDissapearing != null && {
-                    transition: '0.15s opacity ease',
-                    opacity: 0,
-                  }),
-                }}
-                key={idx}
-              >
-                <span
-                  className="_table-column-single-cell-inner block h-6"
-                  style={{ minWidth: minCellWidth - 46 }}
+                      opacity: calculateDeletionTextOpacity(whitespace),
+                    },
+                    ...(isComponentDissapearing != null && {
+                      transition: '0.15s opacity ease',
+                      opacity: 0,
+                    }),
+                  }}
+                  key={idx}
                 >
-                  {cell}
-                </span>
-              </div>
+                  <span
+                    className="_table-column-single-cell-inner block h-6"
+                    style={{ minWidth: minCellWidth - 46 }}
+                  >
+                    {cell}
+                  </span>
+                </div>
+              </>
             );
           })}
-          <div className="w-full h-full -translate-y-full">
-            <div className="_table-column-tooltip absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden max-w-full z-10">
-              <Tooltip message="Hide Column" shown={whitespace < -20} />
+          {whitespace < -20 ? (
+            <div className="w-full h-full -translate-y-full">
+              <div className="_table-column-tooltip absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden max-w-full z-10">
+                <Tooltip message="Hide Column" shown={whitespace < -20} />
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div
           className="_table-column-handle-wrapper cursor-col-resize group relative"

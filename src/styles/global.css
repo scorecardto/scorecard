@@ -29,6 +29,9 @@ a:hover {
     width: min(100%, 700px);
     margin: auto;
   }
+  .w-full--1 {
+    width: calc(100% - 1px);
+  }
   .use-warm-theme {
     --theme-100: #FCF7DD;
     --theme-200: #EE6417;
