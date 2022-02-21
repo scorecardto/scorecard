@@ -121,7 +121,6 @@ export default function ReportCardsTable({ data }: Props) {
               cells={column.cells}
               header={createHeader(column.header, idx)}
               type={column.type}
-              zIndex={data.length - idx - 1}
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}

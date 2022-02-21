@@ -7,9 +7,9 @@ import AssignmentsTable from '@/components/table/AssignmentsTable';
 const Index = () => {
   return (
     <div>
-      <NextSeo title="Insights" />
+      <NextSeo title="Assignments" />
       <p>Scorecard Boilerplate</p>
-      <Link href={'/insights'}>
+      <Link href={'/dashboard'}>
         <a>link</a>
       </Link>
       <div className="use-responsive-width">
@@ -69,7 +69,7 @@ const Index = () => {
 export async function getStaticProps() {
   return {
     props: {
-      pageTitle: 'Insights',
+      pageTitle: 'Assignments',
     },
   };
 }

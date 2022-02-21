@@ -8,7 +8,6 @@ export type Column = {
   header: ReactElement | HTMLElement | string;
   cells: (ReactElement | HTMLElement | string | undefined)[];
   type: ColumnType;
-  zIndex?: number;
   amFirstColumn?: boolean;
   setComponentShowing: ColumnShowingCallback;
   getSetComponentShowing: GetSetColumnShowingCallback;
@@ -18,7 +17,6 @@ export type ColumnStringContents = {
   header: string;
   cells: (string | undefined)[];
   type: ColumnType;
-  zIndex?: number;
 };
 
 type ColumnShowingCallback = {
@@ -37,7 +35,6 @@ export default function TableColumn({
   header,
   cells,
   type,
-  zIndex,
   setComponentShowing,
   getSetComponentShowing,
   amFirstColumn,
@@ -179,11 +176,6 @@ export default function TableColumn({
       className={`_table-column group-1 ${
         resizing ? 'cursor-col-resize ' : ''
       }`}
-      style={{
-        ...{
-          zIndex,
-        },
-      }}
     >
       <div
         className={`_table-column-header block mb-1 ${

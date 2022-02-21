@@ -6,6 +6,10 @@ import ReportCardsTable from '@/components/table/ReportCardsTable';
 const Dashboard = () => {
   return (
     <div className="use-responsive-width">
+      <p>Scorecard Boilerplate</p>
+      <Link href={'/assignments/'}>
+        <a>link</a>
+      </Link>
       <motion.div layoutId={'table'}>
         <ReportCardsTable
           data={[
@@ -27,9 +31,6 @@ const Dashboard = () => {
           ]}
         />
       </motion.div>
-      <Link href={'/insights/'}>
-        <a>link</a>
-      </Link>
     </div>
   );
 };

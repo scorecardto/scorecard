@@ -134,7 +134,6 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               cells: [],
               header: col.header,
               type: col.type,
-              zIndex: col.zIndex,
             };
           });
         }
@@ -167,7 +166,6 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               cells={column.cells}
               header={createHeader(column.header, idx)}
               type={column.type}
-              zIndex={data.length - idx - 1}
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
