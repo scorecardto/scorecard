@@ -9,6 +9,7 @@ export type Column = {
   cells: (ReactElement | HTMLElement | string | undefined)[];
   type: ColumnType;
   amFirstColumn?: boolean;
+  amLastColumn?: boolean;
   setComponentShowing: ColumnShowingCallback;
   getSetComponentShowing: GetSetColumnShowingCallback;
 };
@@ -38,6 +39,7 @@ export default function TableColumn({
   setComponentShowing,
   getSetComponentShowing,
   amFirstColumn,
+  amLastColumn,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -114,11 +116,15 @@ export default function TableColumn({
       if (newWhitespace <= -8 && now - eventStart < 750) {
         setWhitespace(0);
 
-        futureToolbarTimeout = setTimeout(() => {
-          setWhitespace(newWhitespace);
-        }, 500);
-      } else {
+        if (!amFirstColumn && !amLastColumn) {
+          futureToolbarTimeout = setTimeout(() => {
+            setWhitespace(newWhitespace);
+          }, 500);
+        }
+      } else if (amFirstColumn || amLastColumn) {
+        setWhitespace(Math.max(newWhitespace, 0));
         // update whitespace
+      } else {
         setWhitespace(newWhitespace);
       }
     };

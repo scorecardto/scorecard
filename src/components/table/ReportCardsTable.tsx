@@ -115,7 +115,7 @@ export default function ReportCardsTable({ data }: Props) {
   return (
     <div className="_report-cards-table">
       <div className="_report-cards-col-container flex w-fit">
-        {sort(data, sortBy).map((column, idx) => {
+        {sort(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
               cells={column.cells}
@@ -124,6 +124,8 @@ export default function ReportCardsTable({ data }: Props) {
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
+              amFirstColumn={idx === 0}
+              amLastColumn={idx === array.length - 1}
             />
           );
         })}

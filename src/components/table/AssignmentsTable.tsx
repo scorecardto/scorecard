@@ -160,7 +160,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
   return (
     <div className="_assignments-table">
       <div className="_assignments-col-container flex w-fit relative">
-        {assemble(data, sortBy).map((column, idx) => {
+        {assemble(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
               cells={column.cells}
@@ -170,6 +170,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
               amFirstColumn={idx === 0}
+              amLastColumn={idx === array.length - 1}
             />
           );
         })}
