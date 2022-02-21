@@ -114,7 +114,7 @@ export default function ReportCardsTable({ data }: Props) {
 
   return (
     <div className="_report-cards-table">
-      <div className="_report-cards-col-container flex w-fit border-l border-l-day-300 dark:border-l-night-300">
+      <div className="_report-cards-col-container flex w-fit">
         {sort(data, sortBy).map((column, idx) => {
           return (
             <TableColumn

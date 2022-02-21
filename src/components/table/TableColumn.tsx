@@ -190,7 +190,7 @@ export default function TableColumn({
         {header}
       </div>
 
-      <div className="_table-column-cells-wrapper flex relative w-fit">
+      <div className="_table-column-cells-wrapper flex w-fit">
         <div
           className="_table-column-cells"
           ref={cellContainerRef}
@@ -240,7 +240,7 @@ export default function TableColumn({
                 key={idx}
               >
                 <span
-                  className="_table-column-single-cell-inner block"
+                  className="_table-column-single-cell-inner block h-6"
                   style={{ minWidth: minCellWidth - 46 }}
                 >
                   {cell}
@@ -248,9 +248,14 @@ export default function TableColumn({
               </div>
             );
           })}
+          <div className="w-full h-full -translate-y-full">
+            <div className="_table-column-tooltip absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden max-w-full z-10">
+              <Tooltip message="Hide Column" shown={whitespace < -20} />
+            </div>
+          </div>
         </div>
         <div
-          className="_table-column-handle-wrapper cursor-col-resize group"
+          className="_table-column-handle-wrapper cursor-col-resize group relative"
           onMouseDown={mouseDownHandler}
         >
           <div
@@ -271,9 +276,6 @@ export default function TableColumn({
             resizing ? 'cursor-col-resize' : 'hidden'
           }`}
         ></div>
-        <div className="_table-column-tooltip absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden max-w-full">
-          <Tooltip message="Hide Column" shown={whitespace < -20} />
-        </div>
       </div>
     </div>
   );
