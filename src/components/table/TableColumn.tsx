@@ -199,9 +199,6 @@ export default function TableColumn({
           className="_table-column-cells"
           ref={cellContainerRef}
           style={{
-            ...{
-              background: calculateDeletionBackground(whitespace),
-            },
             ...(isComponentDissapearing != null && {
               whiteSpace: 'nowrap',
               height: 0,
@@ -250,7 +247,7 @@ export default function TableColumn({
                 >
                   <span
                     className="_table-column-single-cell-inner block h-6"
-                    style={{ minWidth: minCellWidth - 46 }}
+                    style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
                   >
                     {cell}
                   </span>
@@ -259,7 +256,10 @@ export default function TableColumn({
             );
           })}
           {whitespace < -20 ? (
-            <div className="w-full h-full -translate-y-full">
+            <div
+              className="w-full h-full -translate-y-full z-10 relative"
+              style={{ background: calculateDeletionBackground(whitespace) }}
+            >
               <div className="_table-column-tooltip absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden max-w-full z-10">
                 <Tooltip message="Hide Column" shown={whitespace < -20} />
               </div>
@@ -269,7 +269,9 @@ export default function TableColumn({
           )}
         </div>
         <div
-          className="_table-column-handle-wrapper cursor-col-resize group relative"
+          className={`_table-column-handle-wrapper cursor-col-resize group relative ${
+            whitespace < -20 ? 'z-10' : ''
+          }`}
           onMouseDown={mouseDownHandler}
         >
           <div
