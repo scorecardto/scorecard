@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 
 import TextCard from '../card/TextCard';
+import CourseSelector from './CourseSelector';
 import TableColumn, {
   ColumnStringContents,
   SetColumnShowingCallback,
@@ -158,7 +159,15 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
   };
 
   return (
-    <div className="_assignments-table">
+    <div className="_assignments-table flex">
+      <CourseSelector
+        courses={[
+          ['Biology', 'biology-AAAAAA'],
+          ['World Geography', 'world-geography-AAAAAA'],
+        ]}
+        selected={''}
+      />
+
       <div className="_assignments-col-container flex w-fit relative">
         {assemble(data, sortBy).map((column, idx, array) => {
           return (
@@ -171,6 +180,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
               amFirstColumn={idx === 0}
               amLastColumn={idx === array.length - 1}
+              hoveredRow={-1}
             />
           );
         })}

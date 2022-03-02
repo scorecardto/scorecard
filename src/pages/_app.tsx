@@ -64,12 +64,12 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
         }}
         canonical={url}
       />
+      <Header
+        currentRoute={router.route}
+        pageTitle={pageProps.pageTitle}
+      ></Header>
       <AnimateSharedLayout>
-        <Header
-          currentRoute={router.route}
-          pageTitle={pageProps.pageTitle}
-        ></Header>
-        <Component {...pageProps} />
+        <Component {...pageProps} cannonical={url} key={url} />
       </AnimateSharedLayout>
     </>
   );

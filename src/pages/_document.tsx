@@ -15,7 +15,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body className="use-rose-theme bg-day-100 dark:bg-night-100">
+        <body className="bg-day-100 dark:bg-night-100">
           <Main />
           <NextScript />
         </body>

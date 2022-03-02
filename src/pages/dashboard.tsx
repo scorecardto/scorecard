@@ -1,16 +1,13 @@
-import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 
 import ReportCardsTable from '@/components/table/ReportCardsTable';
 
 const Dashboard = () => {
   return (
     <div className="use-responsive-width">
-      <p>Scorecard Boilerplate</p>
-      <Link href={'/assignments/'}>
-        <a>link</a>
-      </Link>
-      <motion.div layoutId={'table'}>
+      <NextSeo title="Assignments" />
+
+      <div>
         <ReportCardsTable
           data={[
             {
@@ -30,7 +27,7 @@ const Dashboard = () => {
             },
           ]}
         />
-      </motion.div>
+      </div>
     </div>
   );
 };

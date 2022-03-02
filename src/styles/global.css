@@ -34,7 +34,11 @@ a:hover {
   }
   .use-warm-theme {
     --theme-100: #FCF7DD;
+    --theme-150: #FFF9F2;
+    --theme-150-dark: #402e13;
     --theme-200: #EE6417;
+    --theme-250: #fcf2e6 ;
+    --theme-250-dark: #573d15;
     --theme-300: #E2800C;
     --theme-400: #F89C13;
     --theme-500: #E77A15;
@@ -44,7 +48,11 @@ a:hover {
   }
   .use-rose-theme {
     --theme-100: #FCDDEC;
+    --theme-150: #fff5fb;
+    --theme-150-dark: #3b2b35;
     --theme-200: #e34496;
+    --theme-250: #ffebf7;
+    --theme-250-dark: #523a49;
     --theme-300: #A03669;
     --theme-400: #BE5E8C;
     --theme-500: #B05883;

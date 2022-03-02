@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect, ReactElement } from 'react';
 
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+
 import Tooltip from '../util/Tooltip';
 
 export type ColumnType = 'COURSE_NAME' | 'OTHER_FIELD' | 'GRADE';
@@ -12,12 +15,19 @@ export type Column = {
   amLastColumn?: boolean;
   setComponentShowing: ColumnShowingCallback;
   getSetComponentShowing: GetSetColumnShowingCallback;
+  hoveredRow: number;
+  onCellMouseOver?: CellHoverCallback;
+  clickable?: boolean;
 };
 
 export type ColumnStringContents = {
   header: string;
   cells: (string | undefined)[];
   type: ColumnType;
+};
+
+type CellHoverCallback = {
+  (idx: number): void;
 };
 
 type ColumnShowingCallback = {
@@ -40,6 +50,9 @@ export default function TableColumn({
   getSetComponentShowing,
   amFirstColumn,
   amLastColumn,
+  hoveredRow,
+  onCellMouseOver,
+  clickable,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -192,7 +205,7 @@ export default function TableColumn({
         {header}
       </div>
 
-      <div className="_table-column-cells-wrapper flex w-fit group-1-first:border-l border-l-day-300">
+      <div className="_table-column-cells-wrapper flex w-fit group-1-first:border-l border-l-day-300 dark:border-l-night-300">
         <div
           className="_table-column-cells"
           ref={cellContainerRef}
@@ -207,48 +220,71 @@ export default function TableColumn({
         >
           {cells.map((cell, idx) => {
             return (
-              <div
-                className={`_table-column-single-cell border-b py-2 first:border-t transition-colors ${
-                  inDeletionAction
-                    ? 'border-red-500'
-                    : 'border-day-300 dark:border-night-300'
-                }${
-                  type !== 'OTHER_FIELD'
-                    ? ' bg-day-200 dark:bg-night-200 text-day-700 dark:text-night-700'
-                    : ' bg-day-100 dark:bg-night-100 text-day-400 dark:text-night-400'
-                }${
-                  cell === undefined && amFirstColumn
-                    ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
-                    : ' pl-4 pr-4 w-full'
-                }`}
-                style={{
-                  ...{
-                    paddingLeft:
-                      type !== 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+              <Link href="/assignments" key={idx}>
+                <div
+                  className={`_table-column-single-cell border-b py-2 first:border-t transition-colors ${
+                    clickable ? 'cursor-pointer' : ''
+                  } ${
+                    inDeletionAction
+                      ? 'border-red-500'
+                      : 'border-day-300 dark:border-night-300'
+                  }${
+                    type !== 'OTHER_FIELD'
+                      ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
+                          hoveredRow === idx &&
+                          'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                        }`
+                      : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
+                          hoveredRow === idx &&
+                          'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                        }`
+                  }${
+                    cell === undefined && amFirstColumn
+                      ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
+                      : ' pl-4 pr-4 w-full'
+                  }`}
+                  onMouseOver={
+                    onCellMouseOver &&
+                    (() => {
+                      onCellMouseOver(idx);
+                    })
+                  }
+                  style={{
+                    ...{
+                      paddingLeft:
+                        type !== 'GRADE'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                    paddingRight:
-                      type === 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+                      paddingRight:
+                        type === 'GRADE'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                    opacity: calculateDeletionTextOpacity(whitespace),
-                  },
-                  ...(isComponentDissapearing != null && {
-                    transition: '0.15s opacity ease',
-                    opacity: 0,
-                  }),
-                }}
-                key={idx}
-              >
-                <span
-                  className="_table-column-single-cell-inner block h-6"
-                  style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+                      opacity: calculateDeletionTextOpacity(whitespace),
+                    },
+                    ...(isComponentDissapearing != null && {
+                      transition: '0.15s opacity ease',
+                      opacity: 0,
+                    }),
+                  }}
                 >
-                  {cell}
-                </span>
-              </div>
+                  {amFirstColumn && hoveredRow === idx ? (
+                    <motion.span
+                      layoutId="table-row-highlight"
+                      className="_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 -ml-12 transition-opacity opacity-0 group-2-hover:opacity-100"
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <span
+                    className="_table-column-single-cell-inner block h-6 whitespace-nowrap"
+                    style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+                  >
+                    {cell}
+                  </span>
+                </div>
+              </Link>
             );
           })}
           {whitespace < -20 ? (

@@ -22,7 +22,9 @@ module.exports = {
       colors: {
         day: {
           100: '#FFFFFF',
+          150: 'var(--theme-150, #f5faff)',
           200: '#F7F7F7',
+          250: 'var(--theme-250, #e6eff7)',
           300: '#E5E5E5',
           400: '#909090',
           500: '#688091',
@@ -31,7 +33,9 @@ module.exports = {
         },
         night: {
           100: '#252A2E',
+          150: 'var(--theme-150-dark, #1e3140)',
           200: '#363e45',
+          250: 'var(--theme-250-dark, #354b5c)',
           300: '#535c63',
           400: '#909090',
           500: '#748A9A',

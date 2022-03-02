@@ -1,19 +1,18 @@
-import { motion } from 'framer-motion';
 import { NextSeo } from 'next-seo';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import AssignmentsTable from '@/components/table/AssignmentsTable';
 
 const Index = () => {
+  const router = useRouter();
+  const { course } = router.query;
+
   return (
     <div>
-      <NextSeo title="Assignments" />
-      <p>Scorecard Boilerplate</p>
-      <Link href={'/dashboard'}>
-        <a>link</a>
-      </Link>
+      <NextSeo title={`Assignments for ${course}`} />
+
       <div className="use-responsive-width">
-        <motion.div layoutId={'table'}>
+        <div>
           <AssignmentsTable
             data={[
               [
@@ -60,7 +59,7 @@ const Index = () => {
               },
             ]}
           />
-        </motion.div>
+        </div>
       </div>
     </div>
   );

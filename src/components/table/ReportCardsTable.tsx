@@ -111,10 +111,11 @@ export default function ReportCardsTable({ data }: Props) {
       return returnable;
     });
   };
+  const [hoveredRow, setHoveredRow] = useState<number>(-1);
 
   return (
-    <div className="_report-cards-table">
-      <div className="_report-cards-col-container flex w-fit">
+    <div className="_report-cards-table flex">
+      <div className="_report-cards-col-container flex w-fit group-2">
         {sort(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
@@ -126,6 +127,11 @@ export default function ReportCardsTable({ data }: Props) {
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
               amFirstColumn={idx === 0}
               amLastColumn={idx === array.length - 1}
+              hoveredRow={hoveredRow}
+              onCellMouseOver={(idx2) => {
+                setHoveredRow(idx2);
+              }}
+              clickable
             />
           );
         })}
