@@ -1,5 +1,9 @@
 import React, { ReactElement, useState } from 'react';
 
+import { IoBookmarks, IoBookmark } from 'react-icons/io5';
+
+import SelectorCard from '../card/SelectorCard';
+import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
 import TableColumn, {
   ColumnStringContents,
@@ -42,10 +46,14 @@ export default function ReportCardsTable({ data }: Props) {
 
   const [sortBy, setSortBy] = useState(1);
 
-  const createHeader = (header: string, idx: number): ReactElement => {
+  const createHeader = (
+    header: string,
+    idx: number,
+    totalLength: number
+  ): ReactElement => {
     return (
       <>
-        <div className="-ml-3">
+        <div className="-ml-3 flex flex-row flex-nowrap justify-between">
           <TextCard
             onClick={() => {
               setSortBy((sort) => {
@@ -58,6 +66,21 @@ export default function ReportCardsTable({ data }: Props) {
           >
             {header}
           </TextCard>
+          {idx === totalLength - 1 ? (
+            <div className="_col-changer w-48 flex flex-row justify-end">
+              <SelectorCard
+                cardIcon={<IoBookmarks className={STATIC_CARD_ICON_STYLES} />}
+                icon={<IoBookmark className={STATIC_CARD_ICON_STYLES} />}
+                selectedIcon={
+                  <IoBookmark className={STATIC_CARD_ICON_STYLES} />
+                }
+              >
+                1st Nine Weeks
+              </SelectorCard>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </>
     );
@@ -120,7 +143,7 @@ export default function ReportCardsTable({ data }: Props) {
           return (
             <TableColumn
               cells={column.cells}
-              header={createHeader(column.header, idx)}
+              header={createHeader(column.header, idx, array.length)}
               type={column.type}
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}

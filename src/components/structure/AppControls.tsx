@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import IconCard from '../card/IconCard';
+import IconCard from '../card/SwitchCard';
 
 type IAppControlsProps = {
   currentRoute: string;
