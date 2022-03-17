@@ -13,9 +13,13 @@ import { transpose } from '@/lib/Util';
 
 type Props = {
   data: ColumnStringContents[];
+  grades: {
+    name: string;
+    grades: JSX.Element[];
+  }[];
 };
 
-export default function ReportCardsTable({ data }: Props) {
+export default function ReportCardsTable({ data, grades }: Props) {
   const [, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
@@ -33,6 +37,8 @@ export default function ReportCardsTable({ data }: Props) {
       });
     };
   };
+
+  const [gradingPeriod, setGradingPeriod] = useState(0);
 
   const createGetSetIsColumnShowing = (idx: number) => {
     return (setIsShowing: SetColumnShowingCallback) => {
@@ -66,17 +72,18 @@ export default function ReportCardsTable({ data }: Props) {
           >
             {header}
           </TextCard>
-          {idx === totalLength - 1 ? (
+          {idx === totalLength ? (
             <div className="_col-changer w-48 flex flex-row justify-end">
               <SelectorCard
+                selected={gradingPeriod}
+                setSelected={setGradingPeriod}
+                options={grades.map((g) => g.name)}
                 cardIcon={<IoBookmarks className={STATIC_CARD_ICON_STYLES} />}
                 icon={<IoBookmark className={STATIC_CARD_ICON_STYLES} />}
                 selectedIcon={
                   <IoBookmark className={STATIC_CARD_ICON_STYLES} />
                 }
-              >
-                1st Nine Weeks
-              </SelectorCard>
+              />
             </div>
           ) : (
             <></>
@@ -136,20 +143,27 @@ export default function ReportCardsTable({ data }: Props) {
   };
   const [hoveredRow, setHoveredRow] = useState<number>(-1);
 
+  const sorted = sort(data, sortBy);
   return (
     <div className="_report-cards-table flex">
       <div className="_report-cards-col-container flex w-fit group-2">
-        {sort(data, sortBy).map((column, idx, array) => {
+        {sorted.map((column, idx, array) => {
           return (
             <TableColumn
-              cells={column.cells}
+              cells={column.cells.map((str, idx2) => {
+                return (
+                  <span className="h-8 whitespace-nowrap block mt-2" key={idx2}>
+                    {str}
+                  </span>
+                );
+              })}
               header={createHeader(column.header, idx, array.length)}
               type={column.type}
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
               amFirstColumn={idx === 0}
-              amLastColumn={idx === array.length - 1}
+              amLastColumn={false}
               hoveredRow={hoveredRow}
               onCellMouseOver={(idx2) => {
                 setHoveredRow(idx2);
@@ -158,6 +172,22 @@ export default function ReportCardsTable({ data }: Props) {
             />
           );
         })}
+
+        <TableColumn
+          cells={grades[gradingPeriod]?.grades ?? []}
+          header={createHeader('Grade', sorted.length, sorted.length)}
+          type={'GRADE'}
+          key={sorted.length}
+          setComponentShowing={createIsColumnShowing(sorted.length)}
+          getSetComponentShowing={createGetSetIsColumnShowing(sorted.length)}
+          amFirstColumn={sorted.length === 0}
+          amLastColumn={true}
+          hoveredRow={hoveredRow}
+          onCellMouseOver={(idx2) => {
+            setHoveredRow(idx2);
+          }}
+          clickable
+        />
       </div>
     </div>
   );

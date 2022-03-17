@@ -222,7 +222,7 @@ export default function TableColumn({
             return (
               <Link href="/assignments" key={idx}>
                 <div
-                  className={`_table-column-single-cell border-b py-2 first:border-t transition-colors ${
+                  className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
                     clickable ? 'cursor-pointer' : ''
                   } ${
                     inDeletionAction
@@ -278,7 +278,7 @@ export default function TableColumn({
                     <></>
                   )}
                   <span
-                    className="_table-column-single-cell-inner block h-6 whitespace-nowrap"
+                    className="_table-column-single-cell-inner block"
                     style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
                   >
                     {cell}
