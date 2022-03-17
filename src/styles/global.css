@@ -60,4 +60,18 @@ a:hover {
     --theme-700: #CC3156;
     --theme-800: #8B1842;
   }
+  .use-jade-theme {
+    --theme-100: #c7f1d8;
+    --theme-150: #edfaee;
+    --theme-150-dark: #2b3b32;
+    --theme-200: #138b49;
+    --theme-250: #dff2e7;
+    --theme-250-dark: #3b543f;
+    --theme-300: #7fb18e;
+    --theme-400: #28d16e;
+    --theme-500: #15d34e;
+    --theme-600: #1c6fb3;
+    --theme-700: #179c53;
+    --theme-800: #066631;
+  }
 }
