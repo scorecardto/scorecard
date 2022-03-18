@@ -4,12 +4,22 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 import Tooltip from '../util/Tooltip';
+import GradebookCategory from '@/lib/GradebookCategory';
 
 export type ColumnType = 'COURSE_NAME' | 'OTHER_FIELD' | 'GRADE';
 
 export type Column = {
   header: ReactElement | HTMLElement | string;
-  cells: (ReactElement | HTMLElement | string | undefined)[];
+  cells: {
+    type: 'VALUE' | 'CATEGORY';
+    element:
+      | ReactElement
+      | HTMLElement
+      | string
+      | undefined
+      | GradebookCategory;
+  }[];
+
   type: ColumnType;
   amFirstColumn?: boolean;
   amLastColumn?: boolean;
@@ -22,7 +32,7 @@ export type Column = {
 
 export type ColumnStringContents = {
   header: string;
-  cells: (string | undefined)[];
+  cells: (string | undefined | GradebookCategory)[];
   type: ColumnType;
 };
 
@@ -239,7 +249,7 @@ export default function TableColumn({
                           'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
                         }`
                   }${
-                    cell === undefined && amFirstColumn
+                    cell.type === 'CATEGORY'
                       ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
                       : ' pl-4 pr-4 w-full'
                   }`}
@@ -252,12 +262,12 @@ export default function TableColumn({
                   style={{
                     ...{
                       paddingLeft:
-                        type !== 'GRADE'
+                        type !== 'GRADE' || cell.type === 'CATEGORY'
                           ? undefined
                           : Math.max(whitespace, 0) + 40,
 
                       paddingRight:
-                        type === 'GRADE'
+                        type === 'GRADE' || cell.type === 'CATEGORY'
                           ? undefined
                           : Math.max(whitespace, 0) + 40,
 
@@ -278,10 +288,10 @@ export default function TableColumn({
                     <></>
                   )}
                   <span
-                    className="_table-column-single-cell-inner block"
+                    className={`_table-column-single-cell-inner block`}
                     style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
                   >
-                    {cell}
+                    {cell.element}
                   </span>
                 </div>
               </Link>

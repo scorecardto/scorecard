@@ -151,11 +151,17 @@ export default function ReportCardsTable({ data, grades }: Props) {
           return (
             <TableColumn
               cells={column.cells.map((str, idx2) => {
-                return (
-                  <span className="h-8 whitespace-nowrap block mt-2" key={idx2}>
-                    {str}
-                  </span>
-                );
+                return {
+                  type: 'VALUE',
+                  element: (
+                    <span
+                      className="h-8 whitespace-nowrap block mt-2"
+                      key={idx2}
+                    >
+                      {str}
+                    </span>
+                  ),
+                };
               })}
               header={createHeader(column.header, idx, array.length)}
               type={column.type}
@@ -174,7 +180,14 @@ export default function ReportCardsTable({ data, grades }: Props) {
         })}
 
         <TableColumn
-          cells={grades[gradingPeriod]?.grades ?? []}
+          cells={
+            grades[gradingPeriod]?.grades.map((element) => {
+              return {
+                type: 'VALUE',
+                element,
+              };
+            }) ?? []
+          }
           header={createHeader('Grade', sorted.length, sorted.length)}
           type={'GRADE'}
           key={sorted.length}

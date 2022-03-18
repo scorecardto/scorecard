@@ -6,6 +6,7 @@ import TableColumn, {
   ColumnStringContents,
   SetColumnShowingCallback,
 } from './TableColumn';
+import GradebookCategory from '@/lib/GradebookCategory';
 import { transpose } from '@/lib/Util';
 
 type IAssignmentsTableProps = {
@@ -141,8 +142,9 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
 
         categoryBacklog.forEach(() => {
           final.forEach((finalCol, idx) => {
+            if (idx === 0)
+              finalCol.cells.push(new GradebookCategory('Projects', 40));
             finalCol.cells.push(undefined);
-            if (idx === 0) finalCol.cells.push('');
           });
         });
         categoryBacklog = [];
@@ -172,7 +174,28 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
         {assemble(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
-              cells={column.cells}
+              cells={column.cells.map((str, idx2) => {
+                return {
+                  type: str instanceof GradebookCategory ? 'CATEGORY' : 'VALUE',
+                  element: (
+                    <span
+                      className={`h-8 whitespace-nowrap block mt-2`}
+                      key={idx2}
+                    >
+                      {str instanceof GradebookCategory ? (
+                        <span className="grid">
+                          <span className="justify-self-center">
+                            {' '}
+                            {str.name}
+                          </span>
+                        </span>
+                      ) : (
+                        str
+                      )}
+                    </span>
+                  ),
+                };
+              })}
               header={createHeader(column.header, idx)}
               type={column.type}
               key={idx}
