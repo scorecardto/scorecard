@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { IoResize, IoChevronForward } from 'react-icons/io5';
 
 type ICourseSelectorProps = {
   courses: [string, string][];
@@ -17,7 +19,15 @@ export default function CourseSelector({ courses }: ICourseSelectorProps) {
           </p>
           <Link href="/dashboard">
             <a>
-              <div className="h-8 w-8 bg-red-400 rounded-md float-right"></div>
+              <div className="h-8 w-8 bg-theme-100 dark:bg-theme-200 rounded-md float-right text-theme-200 dark:text-theme-100 flex justify-center items-center">
+                <motion.div
+                  className="h-12 w-12 flex justify-center items-center"
+                  initial={{ scale: 0.8 }}
+                  whileHover={{ scale: 1 }}
+                >
+                  <IoResize size={24} />
+                </motion.div>
+              </div>
             </a>
           </Link>
         </div>
@@ -25,10 +35,11 @@ export default function CourseSelector({ courses }: ICourseSelectorProps) {
           {courses.map((course, idx) => {
             return (
               <div
-                className="_course-selector-course-item py-2 pl-5 bg-day-200 dark:bg-night-200 hover:bg-theme-100 dark:hover:bg-theme-200 hover:text-theme-200 dark:hover:text-theme-100"
+                className="_course-selector-course-item py-2 pl-5 text-day-400 dark:text-night-400 bg-day-200 dark:bg-night-200 hover:bg-theme-100 dark:hover:bg-theme-200 hover:text-theme-200 dark:hover:text-theme-100 flex items-center"
                 key={idx}
               >
-                {course[0]}
+                <span className="mr-2">{course[0]}</span>
+                <IoChevronForward />
               </div>
             );
           })}
