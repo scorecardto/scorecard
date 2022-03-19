@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo';
 
+import CompactNotificationCenter from '@/components/notifications/CompactNotificationCenter';
 import ReportCardsTable from '@/components/table/ReportCardsTable';
 
 const Dashboard = () => {
@@ -8,6 +9,21 @@ const Dashboard = () => {
       <NextSeo title="Assignments" />
 
       <div>
+        <CompactNotificationCenter
+          notification={
+            //   {
+            //   assignment: 'Unit Test',
+            //   course: 'Geometry',
+            //   grade: 'MSG',
+            //   newAverage: 75,
+            //   oldAverage: 96,
+            // }
+            undefined
+          }
+          totalNotifications={0}
+          totalMissingAssignments={0}
+        />
+
         <ReportCardsTable
           data={[
             {
