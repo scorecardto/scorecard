@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 import { IoBookmarks, IoBookmark } from 'react-icons/io5';
 
@@ -143,10 +143,23 @@ export default function ReportCardsTable({ data, grades }: Props) {
   };
   const [hoveredRow, setHoveredRow] = useState<number>(-1);
 
+  const [width, setWidth] = useState(-1);
+
+  const ref = React.createRef<HTMLDivElement>();
+
+  const onResize = () => {
+    setWidth(ref.current?.clientWidth ?? -1);
+  };
+
+  useEffect(() => {
+    onResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ref]);
+
   const sorted = sort(data, sortBy);
   return (
     <div className="_report-cards-table flex">
-      <div className="_report-cards-col-container flex w-fit group-2">
+      <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
         {sorted.map((column, idx, array) => {
           return (
             <TableColumn
@@ -163,6 +176,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
                   ),
                 };
               })}
+              onResize={onResize}
               highlightPosition={'LEFT'}
               header={createHeader(column.header, idx, array.length)}
               type={column.type}
@@ -176,6 +190,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
                 setHoveredRow(idx2);
               }}
               clickable
+              deltaSnapPoint={700 - width}
             />
           );
         })}
@@ -201,6 +216,8 @@ export default function ReportCardsTable({ data, grades }: Props) {
             setHoveredRow(idx2);
           }}
           clickable
+          onResize={onResize}
+          deltaSnapPoint={700 - width}
         />
       </div>
     </div>

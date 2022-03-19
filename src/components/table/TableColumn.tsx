@@ -30,6 +30,10 @@ export type Column = {
   onCellMouseOver?: CellHoverCallback;
   clickable?: boolean;
   highlightPosition?: 'HIDDEN' | 'LEFT' | 'RIGHT';
+  onResize?: {
+    (): void;
+  };
+  deltaSnapPoint?: number;
 };
 
 export type ColumnStringContents = {
@@ -66,6 +70,8 @@ export default function TableColumn({
   onCellMouseOver,
   clickable,
   highlightPosition,
+  onResize,
+  deltaSnapPoint,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -132,7 +138,14 @@ export default function TableColumn({
     let futureToolbarTimeout: NodeJS.Timeout;
 
     const onMouseMove = (event2: MouseEvent) => {
-      const newWhitespace = whitespace + event2.clientX - event.clientX;
+      const delta = event2.clientX - event.clientX;
+
+      const useSnapPoint =
+        deltaSnapPoint != null && Math.abs(deltaSnapPoint - delta) <= 10;
+
+      const newWhitespace =
+        whitespace + (useSnapPoint ? deltaSnapPoint : delta);
+
       const now = Date.now();
 
       if (futureToolbarTimeout) {
@@ -172,6 +185,8 @@ export default function TableColumn({
       document.documentElement.removeEventListener('mouseup', onMouseUp);
 
       setResizing(false);
+
+      if (onResize) onResize();
     };
 
     document.documentElement.addEventListener('mousemove', onMouseMove);
@@ -285,7 +300,7 @@ export default function TableColumn({
                         opacity: calculateDeletionTextOpacity(whitespace),
                       },
                       ...(isComponentDissapearing != null && {
-                        transition: '0.15s opacity ease',
+                        transition: '0.15s opacity ease, 0.15s padding ease',
                         opacity: 0,
                       }),
                     }}
