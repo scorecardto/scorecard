@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, ReactElement } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+import Grade from '../grade/Grade';
 import Tooltip from '../util/Tooltip';
 import GradebookCategory from '@/lib/GradebookCategory';
 
@@ -28,6 +29,7 @@ export type Column = {
   hoveredRow: number;
   onCellMouseOver?: CellHoverCallback;
   clickable?: boolean;
+  highlightPosition?: 'HIDDEN' | 'LEFT' | 'RIGHT';
 };
 
 export type ColumnStringContents = {
@@ -63,6 +65,7 @@ export default function TableColumn({
   hoveredRow,
   onCellMouseOver,
   clickable,
+  highlightPosition,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -228,75 +231,95 @@ export default function TableColumn({
             }),
           }}
         >
-          {cells.map((cell, idx) => {
-            return (
-              <Link href="/assignments" key={idx}>
-                <div
-                  className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
-                    clickable ? 'cursor-pointer' : ''
-                  } ${
-                    inDeletionAction
-                      ? 'border-red-500'
-                      : 'border-day-300 dark:border-night-300'
-                  }${
-                    type !== 'OTHER_FIELD'
-                      ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
-                          hoveredRow === idx &&
-                          'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
-                        }`
-                      : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
-                          hoveredRow === idx &&
-                          'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
-                        }`
-                  }${
-                    cell.type === 'CATEGORY'
-                      ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
-                      : ' pl-4 pr-4 w-full'
-                  }`}
-                  onMouseOver={
-                    onCellMouseOver &&
-                    (() => {
-                      onCellMouseOver(idx);
-                    })
-                  }
-                  style={{
-                    ...{
-                      paddingLeft:
-                        type !== 'GRADE' || cell.type === 'CATEGORY'
-                          ? undefined
-                          : Math.max(whitespace, 0) + 40,
+          {(() => {
+            let realIdx = -1;
 
-                      paddingRight:
-                        type === 'GRADE' || cell.type === 'CATEGORY'
-                          ? undefined
-                          : Math.max(whitespace, 0) + 40,
+            return cells.map((cell, idx) => {
+              if (!(cells[idx - 1] && cells[idx - 1]?.type === 'CATEGORY'))
+                realIdx += 1;
 
-                      opacity: calculateDeletionTextOpacity(whitespace),
-                    },
-                    ...(isComponentDissapearing != null && {
-                      transition: '0.15s opacity ease',
-                      opacity: 0,
-                    }),
-                  }}
-                >
-                  {amFirstColumn && hoveredRow === idx ? (
-                    <motion.span
-                      layoutId="table-row-highlight"
-                      className="_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 -ml-12 transition-opacity opacity-0 group-2-hover:opacity-100"
-                    />
-                  ) : (
-                    <></>
-                  )}
-                  <span
-                    className={`_table-column-single-cell-inner block`}
-                    style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+              const myRealIdx = realIdx;
+
+              return (
+                <Link href="/assignments" key={idx}>
+                  <div
+                    className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
+                      clickable ? 'cursor-pointer' : ''
+                    } ${
+                      inDeletionAction
+                        ? 'border-red-500'
+                        : 'border-day-300 dark:border-night-300'
+                    }${
+                      type !== 'OTHER_FIELD'
+                        ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
+                            hoveredRow === myRealIdx &&
+                            'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                          }`
+                        : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
+                            hoveredRow === myRealIdx &&
+                            'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                          }`
+                    }${
+                      cell.type === 'CATEGORY'
+                        ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
+                        : ' pl-4 pr-4 w-full'
+                    }`}
+                    onMouseOver={
+                      onCellMouseOver &&
+                      (() => {
+                        onCellMouseOver(myRealIdx);
+                      })
+                    }
+                    style={{
+                      ...{
+                        paddingLeft:
+                          type !== 'GRADE' || cell.type === 'CATEGORY'
+                            ? undefined
+                            : Math.max(whitespace, 0) + 40,
+
+                        paddingRight:
+                          type === 'GRADE' || cell.type === 'CATEGORY'
+                            ? undefined
+                            : Math.max(whitespace, 0) + 40,
+
+                        opacity: calculateDeletionTextOpacity(whitespace),
+                      },
+                      ...(isComponentDissapearing != null && {
+                        transition: '0.15s opacity ease',
+                        opacity: 0,
+                      }),
+                    }}
                   >
-                    {cell.element}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+                    {amFirstColumn &&
+                    hoveredRow === myRealIdx &&
+                    highlightPosition &&
+                    highlightPosition !== 'HIDDEN' ? (
+                      <motion.span
+                        layoutId="table-row-highlight"
+                        className={`_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 transition-opacity opacity-0 group-2-hover:opacity-100 ${
+                          highlightPosition === 'LEFT'
+                            ? '-ml-12'
+                            : 'right-0 -mr-8'
+                        }`}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                    <span
+                      className={`_table-column-single-cell-inner block`}
+                      style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+                    >
+                      {type === 'GRADE' ? (
+                        <Grade grade={cell.element} />
+                      ) : (
+                        cell.element
+                      )}
+                    </span>
+                  </div>
+                </Link>
+              );
+            });
+          })()}
           {whitespace < -20 ? (
             <div
               className="w-full h-full -translate-y-full z-10 relative"

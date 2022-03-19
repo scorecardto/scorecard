@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 
 import TextCard from '../card/TextCard';
+import GradeWithWeight from '../grade/GradeWithWeight';
 import CourseSelector from './CourseSelector';
 import TableColumn, {
   ColumnStringContents,
@@ -160,6 +161,8 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
     return final;
   };
 
+  const [hoveredRow, setHoveredRow] = useState(-1);
+
   return (
     <div className="_assignments-table flex">
       <CourseSelector
@@ -170,32 +173,44 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
         selected={''}
       />
 
-      <div className="_assignments-col-container flex w-fit relative">
+      <div className="_assignments-col-container flex w-fit relative group-2">
         {assemble(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
+              clickable={true}
               cells={column.cells.map((str, idx2) => {
                 return {
                   type: str instanceof GradebookCategory ? 'CATEGORY' : 'VALUE',
-                  element: (
-                    <span
-                      className={`h-8 whitespace-nowrap block mt-2`}
-                      key={idx2}
-                    >
-                      {str instanceof GradebookCategory ? (
-                        <span className="grid">
-                          <span className="justify-self-center">
-                            {' '}
-                            {str.name}
+                  element:
+                    column.type === 'GRADE' ? (
+                      str
+                    ) : (
+                      <span
+                        className={`h-8 whitespace-nowrap block ${
+                          str instanceof GradebookCategory ? 'mb-2' : 'mt-2'
+                        }`}
+                        key={idx2}
+                      >
+                        {str instanceof GradebookCategory ? (
+                          <span className="flex items-center">
+                            <span className="flex-inital absolute left-1/2 -translate-x-1/2">
+                              {str.name}
+                            </span>
+                            <span className="flex-inital ml-auto">
+                              <GradeWithWeight
+                                grade={str.weight.toString()}
+                                weight={str.weight}
+                              />
+                            </span>
                           </span>
-                        </span>
-                      ) : (
-                        str
-                      )}
-                    </span>
-                  ),
+                        ) : (
+                          str
+                        )}
+                      </span>
+                    ),
                 };
               })}
+              highlightPosition={'RIGHT'}
               header={createHeader(column.header, idx)}
               type={column.type}
               key={idx}
@@ -203,7 +218,10 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
               amFirstColumn={idx === 0}
               amLastColumn={idx === array.length - 1}
-              hoveredRow={-1}
+              hoveredRow={hoveredRow}
+              onCellMouseOver={(idx2) => {
+                setHoveredRow(idx2);
+              }}
             />
           );
         })}

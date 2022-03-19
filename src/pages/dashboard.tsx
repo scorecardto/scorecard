@@ -26,18 +26,7 @@ const Dashboard = () => {
             // { name: '2nd Nine Weeks', grades: ['90', '90', '90', '90'] },
             {
               name: 'Midterm',
-              grades: [
-                <span
-                  className="block from-theme-600 to-theme-700 bg-gradient-to-tr w-fit py-1 px-3 rounded-xl my-1 text-white ml-auto"
-                  key={0}
-                >
-                  {/* // <span
-                //   key={0}
-                //   className="float-right from-theme-600 to-theme-700 bg-gradient-to-tr py-1.5 px-3 rounded-xl h-9"
-                // > */}
-                  40
-                </span>,
-              ],
+              grades: ['40'],
             },
           ]}
         />

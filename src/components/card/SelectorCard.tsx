@@ -50,7 +50,7 @@ export default function SelectorCard({
         {options[selected] ?? ''}
       </StaticCard>
       <div
-        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 right-0 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 overflow-hidden mt-2 transition-all origin-top-right duration-200 ${
+        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 right-0 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 overflow-hidden mt-2 transition-all origin-top-right duration-200 z-10 ${
           !open ? 'scale-75 opacity-0' : ''
         }`}
       >

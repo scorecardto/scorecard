@@ -15,7 +15,7 @@ type Props = {
   data: ColumnStringContents[];
   grades: {
     name: string;
-    grades: JSX.Element[];
+    grades: string[];
   }[];
 };
 
@@ -163,6 +163,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
                   ),
                 };
               })}
+              highlightPosition={'LEFT'}
               header={createHeader(column.header, idx, array.length)}
               type={column.type}
               key={idx}
