@@ -225,7 +225,7 @@ export default function TableColumn({
       }${isComponentDissapearing === 0 ? '' : ''}`}
     >
       <div
-        className={`_table-column-header block mb-1 relative ${
+        className={`_table-column-header block mb-2 relative ${
           isComponentDissapearing === 0 ? 'opacity-0 w-0 hidden' : 'opacity-100'
         }`}
         ref={colHeaderRef}

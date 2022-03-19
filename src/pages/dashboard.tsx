@@ -9,6 +9,7 @@ const Dashboard = () => {
       <NextSeo title="Assignments" />
 
       <div>
+        <div className="mt-10" />
         <CompactNotificationCenter
           notification={
             //   {
@@ -23,6 +24,8 @@ const Dashboard = () => {
           totalNotifications={0}
           totalMissingAssignments={0}
         />
+
+        <div className="mt-10" />
 
         <ReportCardsTable
           data={[
@@ -42,7 +45,7 @@ const Dashboard = () => {
             // { name: '2nd Nine Weeks', grades: ['90', '90', '90', '90'] },
             {
               name: 'Midterm',
-              grades: ['40'],
+              grades: ['80', '85', '90', 'P'],
             },
           ]}
         />

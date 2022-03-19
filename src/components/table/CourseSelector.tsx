@@ -11,7 +11,7 @@ type ICourseSelectorProps = {
 
 export default function CourseSelector({ courses }: ICourseSelectorProps) {
   return (
-    <div className="_course-selector-wrapper pt-9 relative w-fit">
+    <div className="_course-selector-wrapper pt-10 relative w-fit">
       <div className="_course-selector bg-day-200 dark:bg-night-200 h-full w-60 border-y border-l border-day-300 dark:border-night-300">
         <div className="_course-selector-header px-3 py-3">
           <p className="float-left text-day-700 dark:text-night-700 ml-2 mt-1">
@@ -19,7 +19,7 @@ export default function CourseSelector({ courses }: ICourseSelectorProps) {
           </p>
           <Link href="/dashboard">
             <a>
-              <div className="h-8 w-8 bg-theme-100 dark:bg-theme-200 rounded-md float-right text-theme-200 dark:text-theme-100 flex justify-center items-center">
+              <div className="h-8 w-8 bg-theme-100 dark:bg-theme-200 rounded-md float-right text-theme-200 dark:text-theme-100 flex justify-center items-center overflow-hidden">
                 <motion.div
                   className="h-12 w-12 flex justify-center items-center"
                   initial={{ scale: 0.8 }}
