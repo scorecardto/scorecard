@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 import TextCard from '../card/TextCard';
 import GradeWithWeight from '../grade/GradeWithWeight';
@@ -163,6 +163,18 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
 
   const [hoveredRow, setHoveredRow] = useState(-1);
 
+  const [width, setWidth] = useState(0);
+
+  const ref = React.createRef<HTMLDivElement>();
+
+  const onResize = () => {
+    setWidth(ref.current?.clientWidth ?? -1);
+  };
+
+  useEffect(() => {
+    setWidth(ref.current?.clientWidth ?? -1);
+  }, [ref]);
+
   return (
     <div className="_assignments-table flex">
       <CourseSelector
@@ -222,6 +234,8 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               onCellMouseOver={(idx2) => {
                 setHoveredRow(idx2);
               }}
+              deltaSnapPoint={700 - width}
+              onResize={onResize}
             />
           );
         })}

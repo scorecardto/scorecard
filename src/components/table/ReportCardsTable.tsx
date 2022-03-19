@@ -152,8 +152,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
   };
 
   useEffect(() => {
-    onResize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setWidth(ref.current?.clientWidth ?? -1);
   }, [ref]);
 
   const sorted = sort(data, sortBy);
