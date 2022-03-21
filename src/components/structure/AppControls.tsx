@@ -1,6 +1,9 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 
+import Link from 'next/link';
+
 import IconCard from '../card/SwitchCard';
+import InsightsControls from './InsightsControls';
 
 type IAppControlsProps = {
   currentRoute: string;
@@ -26,10 +29,27 @@ export default function AppControls({
         {pageTitle}
       </h1>
       <div className="_app_controls-tabs-left flex gap-3">
-        <IconCard colored={currentTab === 'courses'}>Courses</IconCard>
-        <IconCard colored={currentTab === 'insights'}>Insights</IconCard>
-        <IconCard colored={currentTab === 'export'}>Export</IconCard>
+        <Link href="/dashboard">
+          <a className="border-none">
+            <IconCard colored={currentTab === 'courses'}>Courses</IconCard>
+          </a>
+        </Link>
+        <Link href="/insights/notifications">
+          <a className="border-none">
+            <IconCard colored={currentTab === 'insights'}>Insights</IconCard>
+          </a>
+        </Link>
+        <Link href="/export">
+          <a className="border-none">
+            <IconCard colored={currentTab === 'export'}>Export</IconCard>
+          </a>
+        </Link>
       </div>
+      {currentRoute.startsWith('/insights') ? (
+        <InsightsControls currentRoute={currentRoute} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
