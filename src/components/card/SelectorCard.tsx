@@ -26,6 +26,9 @@ export default function SelectorCard({
     if (open) {
       const listen = () => {
         setOpened(false);
+        setTimeout(() => {
+          setShown(false);
+        }, 200);
       };
 
       document.addEventListener('click', listen);

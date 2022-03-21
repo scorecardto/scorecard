@@ -165,6 +165,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
               cells={column.cells.map((str, idx2) => {
                 return {
                   type: 'VALUE',
+                  link: '/assignments',
                   element: (
                     <span
                       className="h-8 whitespace-nowrap block mt-2"
@@ -199,6 +200,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
             grades[gradingPeriod]?.grades.map((element) => {
               return {
                 type: 'VALUE',
+                link: '/assignments',
                 element,
               };
             }) ?? []

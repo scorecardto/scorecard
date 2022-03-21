@@ -13,6 +13,7 @@ export type Column = {
   header: ReactElement | HTMLElement | string;
   cells: {
     type: 'VALUE' | 'CATEGORY';
+    link?: string;
     element:
       | ReactElement
       | HTMLElement
@@ -255,84 +256,84 @@ export default function TableColumn({
 
               const myRealIdx = realIdx;
 
-              return (
-                <Link href="/assignments" key={idx}>
-                  <div
-                    className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
-                      clickable ? 'cursor-pointer' : ''
-                    } ${
-                      inDeletionAction
-                        ? 'border-red-500'
-                        : 'border-day-300 dark:border-night-300'
-                    }${
-                      type !== 'OTHER_FIELD'
-                        ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
-                            hoveredRow === myRealIdx &&
-                            'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
-                          }`
-                        : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
-                            hoveredRow === myRealIdx &&
-                            'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
-                          }`
-                    }${
-                      cell.type === 'CATEGORY'
-                        ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
-                        : ' pl-4 pr-4 w-full'
-                    }`}
-                    onMouseOver={
-                      onCellMouseOver &&
-                      (() => {
-                        onCellMouseOver(myRealIdx);
-                      })
-                    }
-                    style={{
-                      ...{
-                        paddingLeft:
-                          type !== 'GRADE' || cell.type === 'CATEGORY'
-                            ? undefined
-                            : Math.max(whitespace, 0) + 40,
+              const inner = (
+                <div
+                  className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
+                    clickable ? 'cursor-pointer' : ''
+                  } ${
+                    inDeletionAction
+                      ? 'border-red-500'
+                      : 'border-day-300 dark:border-night-300'
+                  }${
+                    type !== 'OTHER_FIELD'
+                      ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
+                          hoveredRow === myRealIdx &&
+                          'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                        }`
+                      : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
+                          hoveredRow === myRealIdx &&
+                          'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                        }`
+                  }${
+                    cell.type === 'CATEGORY'
+                      ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
+                      : ' pl-4 pr-4 w-full'
+                  }`}
+                  onMouseOver={
+                    onCellMouseOver &&
+                    (() => {
+                      onCellMouseOver(myRealIdx);
+                    })
+                  }
+                  style={{
+                    ...{
+                      paddingLeft:
+                        type !== 'GRADE' || cell.type === 'CATEGORY'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                        paddingRight:
-                          type === 'GRADE' || cell.type === 'CATEGORY'
-                            ? undefined
-                            : Math.max(whitespace, 0) + 40,
+                      paddingRight:
+                        type === 'GRADE' || cell.type === 'CATEGORY'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
 
-                        opacity: calculateDeletionTextOpacity(whitespace),
-                      },
-                      ...(isComponentDissapearing != null && {
-                        transition: '0.15s opacity ease, 0.15s padding ease',
-                        opacity: 0,
-                      }),
-                    }}
+                      opacity: calculateDeletionTextOpacity(whitespace),
+                    },
+                    ...(isComponentDissapearing != null && {
+                      transition: '0.15s opacity ease, 0.15s padding ease',
+                      opacity: 0,
+                    }),
+                  }}
+                >
+                  {amFirstColumn &&
+                  hoveredRow === myRealIdx &&
+                  highlightPosition &&
+                  highlightPosition !== 'HIDDEN' ? (
+                    <motion.span
+                      layoutId="table-row-highlight"
+                      className={`_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 transition-opacity opacity-0 group-2-hover:opacity-100 ${
+                        highlightPosition === 'LEFT'
+                          ? '-ml-12'
+                          : 'right-0 -mr-8'
+                      }`}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  <span
+                    className={`_table-column-single-cell-inner block`}
+                    style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
                   >
-                    {amFirstColumn &&
-                    hoveredRow === myRealIdx &&
-                    highlightPosition &&
-                    highlightPosition !== 'HIDDEN' ? (
-                      <motion.span
-                        layoutId="table-row-highlight"
-                        className={`_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 transition-opacity opacity-0 group-2-hover:opacity-100 ${
-                          highlightPosition === 'LEFT'
-                            ? '-ml-12'
-                            : 'right-0 -mr-8'
-                        }`}
-                      />
+                    {type === 'GRADE' ? (
+                      <Grade grade={cell.element} />
                     ) : (
-                      <></>
+                      cell.element
                     )}
-                    <span
-                      className={`_table-column-single-cell-inner block`}
-                      style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
-                    >
-                      {type === 'GRADE' ? (
-                        <Grade grade={cell.element} />
-                      ) : (
-                        cell.element
-                      )}
-                    </span>
-                  </div>
-                </Link>
+                  </span>
+                </div>
               );
+
+              return cell.link ? <Link href={cell.link}>{inner}</Link> : inner;
             });
           })()}
           {whitespace < -20 ? (
