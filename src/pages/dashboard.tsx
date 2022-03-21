@@ -12,17 +12,17 @@ const Dashboard = () => {
         <div className="mt-10" />
         <CompactNotificationCenter
           notification={
-            //   {
-            //   assignment: 'Unit Test',
-            //   course: 'Geometry',
-            //   grade: 'MSG',
-            //   newAverage: 75,
-            //   oldAverage: 96,
-            // }
-            undefined
+            {
+              assignment: 'Unit Test',
+              course: 'Geometry',
+              grade: '96',
+              newAverage: 100,
+              oldAverage: 99,
+            }
+            // undefined
           }
-          totalNotifications={0}
-          totalMissingAssignments={0}
+          totalNotifications={46}
+          totalMissingAssignments={1}
         />
 
         <div className="mt-10" />
@@ -30,12 +30,28 @@ const Dashboard = () => {
         <ReportCardsTable
           data={[
             {
-              cells: ['Biology', 'Chemistry', 'Physics I', 'Physics 2'],
+              cells: [
+                'Biology',
+                'Computer Science',
+                'English',
+                'Geometry',
+                'SciTech',
+                'Spanish',
+                'World Geography',
+              ],
               header: 'Course',
               type: 'COURSE_NAME',
             },
             {
-              cells: ['ADV BIO', 'ADV CHEM', 'AP PHYS I', 'AP PHYS 2'],
+              cells: [
+                'ADV BIO',
+                'AP COMP SCI',
+                'ADV ENG LANG',
+                'ADV GEOMETRY',
+                'ADV ENG SCI',
+                'ADV SPANISH III',
+                'ADV W GEO',
+              ],
               header: 'Course Code',
               type: 'OTHER_FIELD',
             },
@@ -44,8 +60,8 @@ const Dashboard = () => {
             // { name: '1st Nine Weeks', grades: ['100', '100', '100', '100'] },
             // { name: '2nd Nine Weeks', grades: ['90', '90', '90', '90'] },
             {
-              name: 'Midterm',
-              grades: ['80', '85', '90', 'P'],
+              name: '3rd Nine Weeks',
+              grades: ['95', '96', '96', '100', '94', '95', '98'],
             },
           ]}
         />

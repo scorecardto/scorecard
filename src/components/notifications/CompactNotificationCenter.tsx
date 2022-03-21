@@ -1,7 +1,13 @@
 import React from 'react';
 
-import { IoHeart } from 'react-icons/io5';
+import {
+  IoHeart,
+  IoNotifications,
+  IoCheckmarkSharp,
+  IoFlash,
+} from 'react-icons/io5';
 
+import TextCard from '../card/TextCard';
 import ElementIterator from '../util/ElementIterator';
 import GradeNotification, { INotificationProps } from './GradeNotification';
 import Notification from './Notification';
@@ -14,7 +20,15 @@ type ICompactNotificationCenterProps = {
 
 export default function CompactNotificationCenter({
   notification,
+  totalMissingAssignments,
+  totalNotifications,
 }: ICompactNotificationCenterProps) {
+  const missingText = (missing: number) => {
+    if (missing === 1) return '1 Missing Grade';
+    if (missing > 1) return `${missing} Missing Grades`;
+    return 'No Missing Grades';
+  };
+
   return (
     <div>
       {notification ? (
@@ -70,6 +84,27 @@ export default function CompactNotificationCenter({
           }
         />
       )}
+      <div className="flex justify-between mt-2">
+        <div className="text-sm flex items-center">
+          <TextCard icon={<IoNotifications />}>Notifications</TextCard>
+          {totalNotifications > 0 ? (
+            <div className="bg-theme-200 text-white text-xs h-5 flex items-center rounded-md px-2">
+              {totalNotifications}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="text-sm">
+          <TextCard
+            icon={
+              totalMissingAssignments > 0 ? <IoFlash /> : <IoCheckmarkSharp />
+            }
+          >
+            {missingText(totalMissingAssignments)}
+          </TextCard>
+        </div>
+      </div>
     </div>
   );
 }
