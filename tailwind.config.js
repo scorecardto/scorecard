@@ -106,6 +106,9 @@ module.exports = {
           },
         },
       },
+      transitionProperty: {
+        'opacity-transform': 'opacity, transform',
+      },
     },
   },
   variants: {},

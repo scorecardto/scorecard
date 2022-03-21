@@ -20,6 +20,7 @@ export default function SelectorCard({
   cardIcon,
 }: ISelectorCardProps) {
   const [open, setOpened] = useState(false);
+  const [shown, setShown] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -37,20 +38,34 @@ export default function SelectorCard({
     return () => {};
   }, [open]);
 
+  useEffect(() => {
+    if (shown) {
+      setOpened(true);
+    }
+  }, [shown]);
+
   return (
     <div className="_selector-card">
       <StaticCard
         colored={true}
         icon={cardIcon ?? icon}
         onClick={(e) => {
-          setOpened(!open);
+          if (open) {
+            setOpened(false);
+            setTimeout(() => {
+              setShown(false);
+            }, 200);
+          } else {
+            setShown(true);
+          }
           e.stopPropagation();
         }}
       >
         {options[selected] ?? ''}
       </StaticCard>
       <div
-        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 right-0 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 overflow-hidden mt-2 transition-all origin-top-right duration-200 z-10 ${
+        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 right-0 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 overflow-hidden mt-2 transition-opacity-transform origin-top-right duration-200 z-10 
+        ${shown ? ' ' : 'hidden hover:block '}${
           !open ? 'scale-75 opacity-0' : ''
         }`}
       >
@@ -61,9 +76,12 @@ export default function SelectorCard({
                 selected === idx
                   ? 'bg-theme-100 dark:bg-theme-200 text-theme-200 dark:text-theme-100'
                   : 'hover:bg-day-150 hover:dark:bg-night-150'
-              } py-2 pl-4 pr-10 cursor-pointer flex`}
+              } py-2 pl-4 pr-10 flex cursor-pointer`}
               key={idx}
               onClick={() => {
+                if (!open) {
+                  return;
+                }
                 setSelected(idx);
               }}
             >
