@@ -63,6 +63,10 @@ const Dashboard = () => {
               name: '3rd Nine Weeks',
               grades: ['95', '96', '96', '100', '94', '95', '98'],
             },
+            {
+              name: '4th Nine Weeks',
+              grades: ['NG', '100', 'NG', '100', '99', '60', '50'],
+            },
           ]}
         />
       </div>
