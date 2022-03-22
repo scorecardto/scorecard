@@ -30,7 +30,6 @@ export type Column = {
   hoveredRow: number;
   onCellMouseOver?: CellHoverCallback;
   clickable?: boolean;
-  highlightPosition?: 'HIDDEN' | 'LEFT' | 'RIGHT';
   onResize?: {
     (): void;
   };
@@ -70,7 +69,6 @@ export default function TableColumn({
   hoveredRow,
   onCellMouseOver,
   clickable,
-  highlightPosition,
   onResize,
   deltaSnapPoint,
 }: Column) {
@@ -311,21 +309,6 @@ export default function TableColumn({
                     }),
                   }}
                 >
-                  {amFirstColumn &&
-                  hoveredRow === myRealIdx &&
-                  highlightPosition &&
-                  highlightPosition !== 'HIDDEN' ? (
-                    <motion.span
-                      layoutId="table-row-highlight"
-                      className={`_table_column-row-highlight w-3 h-3 rounded-full bg-theme-200 block absolute mt-1.5 transition-opacity opacity-0 group-2-hover:opacity-100 ${
-                        highlightPosition === 'LEFT'
-                          ? '-ml-12'
-                          : 'right-0 -mr-8'
-                      }`}
-                    />
-                  ) : (
-                    <></>
-                  )}
                   <span
                     className={`_table-column-single-cell-inner block`}
                     style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
