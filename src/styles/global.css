@@ -1,13 +1,5 @@
 @tailwind base;
 
-a {
-  @apply text-blue-700;
-}
-
-a:hover {
-  @apply border-b-2 border-blue-700;
-}
-
 @tailwind components;
 
 @tailwind utilities;
@@ -26,8 +18,14 @@ a:hover {
 
 @layer components {
   .use-responsive-width {
-    width: min(100%, 700px);
+    width: min(100%, 740px);
     margin: auto;
+    padding: 0 20px;
+    overflow: scroll;
+  }
+  .responsive-scrollable {
+  margin-left: max(calc(50% - 350px), 20px);
+  overflow: scroll;
   }
   .w-full--1 {
     width: calc(100% - 1px);

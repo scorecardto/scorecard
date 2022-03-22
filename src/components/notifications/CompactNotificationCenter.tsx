@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Link from 'next/link';
 import { IoFlash, IoHeart, IoNotifications } from 'react-icons/io5';
 
 import NumberTextCard from '../card/NumberTextCard';
@@ -73,14 +74,18 @@ export default function CompactNotificationCenter({
           }
         />
       )}
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between mt-2 flex-wrap gap-2">
         <div className="text-sm flex items-center">
-          <NumberTextCard
-            icon={<IoNotifications />}
-            number={totalNotifications}
-          >
-            Notifications
-          </NumberTextCard>
+          <Link href={'/insights/notifications'}>
+            <a>
+              <NumberTextCard
+                icon={<IoNotifications />}
+                number={totalNotifications}
+              >
+                Notifications
+              </NumberTextCard>
+            </a>
+          </Link>
         </div>
         <div className="text-sm">
           <NumberTextCard icon={<IoFlash />} number={totalMissingAssignments}>

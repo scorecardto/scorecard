@@ -24,12 +24,14 @@ export default function InsightsControls({
   const selected = convertCurrentRoute(currentRoute);
 
   return (
-    <div className="_insights-selector flex relative w-fit">
+    <div className="_insights-selector flex relative w-fit mt-5">
       {tabs.map((tab, idx) => {
         return (
           <div
             className={`rounded-t-lg transition-colors ${
-              selected === idx ? '' : 'hover:bg-day-150 cursor-pointer'
+              selected === idx
+                ? ''
+                : 'hover:bg-day-150 hover:dark:bg-night-150 cursor-pointer'
             }`}
             key={idx}
           >
@@ -60,7 +62,7 @@ export default function InsightsControls({
           </div>
         );
       })}
-      <div className="bg-theme-100 w-full absolute h-1 bottom-0 rounded-t-md"></div>
+      <div className="bg-day-250 dark:bg-night-250 w-full absolute h-1 bottom-0 rounded-t-md"></div>
     </div>
   );
 }

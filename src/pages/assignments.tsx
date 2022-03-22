@@ -11,55 +11,53 @@ const Index = () => {
     <div>
       <NextSeo title={`Assignments for ${course}`} />
 
-      <div className="use-responsive-width">
-        <div>
-          <AssignmentsTable
-            data={[
-              [
-                {
-                  cells: ['Quiz 1', 'Quiz 2'],
-                  header: 'Assignment',
-                  type: 'OTHER_FIELD',
-                },
-                {
-                  cells: ['Jan 1', 'Jan 1'],
-                  header: 'Due Date',
-                  type: 'OTHER_FIELD',
-                },
-                {
-                  cells: ['100', '30'],
-                  header: 'Grade',
-                  type: 'GRADE',
-                },
-              ],
+      <div className="responsive-scrollable">
+        <AssignmentsTable
+          data={[
+            [
               {
-                name: 'Quizzes',
-                weight: 60,
+                cells: ['Quiz 1', 'Quiz 2'],
+                header: 'Assignment',
+                type: 'OTHER_FIELD',
               },
-              [
-                {
-                  cells: ['Project 1wkefmkwmefkm', 'Project 2'],
-                  header: 'Assignment',
-                  type: 'OTHER_FIELD',
-                },
-                {
-                  cells: ['Jan 1', 'Jan 1'],
-                  header: 'Due Date',
-                  type: 'OTHER_FIELD',
-                },
-                {
-                  cells: ['100', '30'],
-                  header: 'Grade',
-                  type: 'GRADE',
-                },
-              ],
               {
-                name: 'Projects',
-                weight: 40,
+                cells: ['Jan 1', 'Jan 1'],
+                header: 'Due Date',
+                type: 'OTHER_FIELD',
               },
-            ]}
-          />
-        </div>
+              {
+                cells: ['100', '30'],
+                header: 'Grade',
+                type: 'GRADE',
+              },
+            ],
+            {
+              name: 'Quizzes',
+              weight: 60,
+            },
+            [
+              {
+                cells: ['Project 1wkefmkwmefkm', 'Project 2'],
+                header: 'Assignment',
+                type: 'OTHER_FIELD',
+              },
+              {
+                cells: ['Jan 1', 'Jan 1'],
+                header: 'Due Date',
+                type: 'OTHER_FIELD',
+              },
+              {
+                cells: ['100', '30'],
+                header: 'Grade',
+                type: 'GRADE',
+              },
+            ],
+            {
+              name: 'Projects',
+              weight: 40,
+            },
+          ]}
+        />
       </div>
     </div>
   );

@@ -5,10 +5,10 @@ import ReportCardsTable from '@/components/table/ReportCardsTable';
 
 const Dashboard = () => {
   return (
-    <div className="use-responsive-width">
+    <div>
       <NextSeo title="Assignments" />
 
-      <div>
+      <div className="use-responsive-width">
         <div className="mt-10" />
         <CompactNotificationCenter
           notification={
@@ -26,7 +26,8 @@ const Dashboard = () => {
         />
 
         <div className="mt-10" />
-
+      </div>
+      <div className="responsive-scrollable">
         <ReportCardsTable
           data={[
             {
