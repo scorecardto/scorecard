@@ -257,7 +257,13 @@ export default function TableColumn({
               const myRealIdx = realIdx;
 
               const inner = (
-                <div
+                <motion.div
+                  initial={{ translateX: -75, translateY: -10, opacity: 0 }}
+                  animate={{ translateX: 0, translateY: 0, opacity: 1 }}
+                  transition={{
+                    delay: myRealIdx * 0.03,
+                    duration: 0.3,
+                  }}
                   className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
                     clickable ? 'cursor-pointer' : ''
                   } ${
@@ -330,7 +336,7 @@ export default function TableColumn({
                       cell.element
                     )}
                   </span>
-                </div>
+                </motion.div>
               );
 
               return cell.link ? <Link href={cell.link}>{inner}</Link> : inner;
