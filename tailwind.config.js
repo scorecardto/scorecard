@@ -109,6 +109,9 @@ module.exports = {
       transitionProperty: {
         'opacity-transform': 'opacity, transform',
       },
+      lineHeight: {
+        loose: 1.8,
+      },
     },
   },
   variants: {},

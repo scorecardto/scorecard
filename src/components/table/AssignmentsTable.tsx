@@ -222,7 +222,6 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
                     ),
                 };
               })}
-              highlightPosition={'RIGHT'}
               header={createHeader(column.header, idx)}
               type={column.type}
               key={idx}

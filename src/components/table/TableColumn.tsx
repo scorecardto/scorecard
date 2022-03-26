@@ -34,6 +34,8 @@ export type Column = {
     (): void;
   };
   deltaSnapPoint?: number;
+  animated?: boolean;
+  forceShow?: boolean;
 };
 
 export type ColumnStringContents = {
@@ -70,7 +72,9 @@ export default function TableColumn({
   onCellMouseOver,
   clickable,
   onResize,
+  animated,
   deltaSnapPoint,
+  forceShow,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -154,12 +158,12 @@ export default function TableColumn({
       if (newWhitespace <= -8 && now - eventStart < 750) {
         setWhitespace(0);
 
-        if (!amFirstColumn && !amLastColumn) {
+        if (!amFirstColumn && !amLastColumn && !forceShow) {
           futureToolbarTimeout = setTimeout(() => {
             setWhitespace(newWhitespace);
           }, 500);
         }
-      } else if (amFirstColumn || amLastColumn) {
+      } else if (amFirstColumn || amLastColumn || forceShow) {
         setWhitespace(Math.max(newWhitespace, 0));
         // update whitespace
       } else {
@@ -256,7 +260,13 @@ export default function TableColumn({
 
               const inner = (
                 <motion.div
-                  initial={{ translateX: -75, translateY: -10, opacity: 0 }}
+                  initial={{
+                    ...(animated && {
+                      translateX: -75,
+                      translateY: -10,
+                      opacity: 0,
+                    }),
+                  }}
                   animate={{ translateX: 0, translateY: 0, opacity: 1 }}
                   transition={{
                     delay: myRealIdx * 0.03,

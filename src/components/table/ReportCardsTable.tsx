@@ -176,8 +176,8 @@ export default function ReportCardsTable({ data, grades }: Props) {
                   ),
                 };
               })}
+              animated
               onResize={onResize}
-              highlightPosition={'LEFT'}
               header={createHeader(column.header, idx, array.length)}
               type={column.type}
               key={idx}
@@ -196,6 +196,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
         })}
 
         <TableColumn
+          animated
           cells={
             grades[gradingPeriod]?.grades.map((element) => {
               return {
