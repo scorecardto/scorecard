@@ -7,7 +7,7 @@ import TableColumn, {
   ColumnStringContents,
   SetColumnShowingCallback,
 } from './TableColumn';
-import GradebookCategory from '@/lib/GradebookCategory';
+import GradebookCategory from '@/lib/types/GradebookCategory';
 import { transpose } from '@/lib/Util';
 
 type IAssignmentsTableProps = {

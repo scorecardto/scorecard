@@ -5,4 +5,7 @@ export type Course = {
   weighted: boolean;
   credit: number;
   grades: (string | number)[];
+  otherFields: {
+    (key: string): string;
+  };
 };

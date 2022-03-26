@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import Grade from '../grade/Grade';
 import Tooltip from '../util/Tooltip';
-import GradebookCategory from '@/lib/GradebookCategory';
+import GradebookCategory from '@/lib/types/GradebookCategory';
 
 export type ColumnType = 'COURSE_NAME' | 'OTHER_FIELD' | 'GRADE';
 

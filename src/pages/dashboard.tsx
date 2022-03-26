@@ -1,7 +1,6 @@
 import { NextSeo } from 'next-seo';
 
 import CompactNotificationCenter from '@/components/notifications/CompactNotificationCenter';
-import ReportCardsTable from '@/components/table/ReportCardsTable';
 
 const Dashboard = () => {
   return (
@@ -28,7 +27,7 @@ const Dashboard = () => {
         <div className="mt-10" />
       </div>
       <div className="responsive-scrollable">
-        <ReportCardsTable
+        {/* <ReportCardsTable
           data={[
             {
               cells: [
@@ -69,7 +68,7 @@ const Dashboard = () => {
               grades: ['NG', '100', 'NG', '100', '99', '60', '50'],
             },
           ]}
-        />
+        /> */}
       </div>
     </div>
   );

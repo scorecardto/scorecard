@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { AnimateSharedLayout } from 'framer-motion';
 import { DefaultSeo } from 'next-seo';
@@ -9,6 +9,7 @@ import Head from 'next/head';
 import Header from '@/components/structure/Header';
 import { AppConfig } from '@/lib/AppConfig';
 import { updateColorScheme } from '@/lib/ColorSchemeHandler';
+import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
   const url = `https://scorecard.to${router.route}`;
@@ -16,6 +17,13 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
   useEffect(() => {
     updateColorScheme();
   }, []);
+
+  const [appData, setAppData] = useState<AppData | null>(null);
+
+  const appDataProvider = useMemo(
+    () => ({ appData, setAppData }),
+    [appData, setAppData]
+  );
 
   return (
     <>
@@ -64,12 +72,13 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
         }}
         canonical={url}
       />
-      <Header
-        currentRoute={router.route}
-        pageTitle={pageProps.pageTitle}
-      ></Header>
+
+      <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
+
       <AnimateSharedLayout>
-        <Component {...pageProps} cannonical={url} key={url} />
+        <AppDataContext.Provider value={appDataProvider}>
+          <Component {...pageProps} cannonical={url} key={url} />
+        </AppDataContext.Provider>
       </AnimateSharedLayout>
     </>
   );
