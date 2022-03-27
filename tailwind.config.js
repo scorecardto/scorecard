@@ -108,6 +108,7 @@ module.exports = {
       },
       transitionProperty: {
         'opacity-transform': 'opacity, transform',
+        padding: 'padding',
       },
       lineHeight: {
         loose: 1.8,

@@ -30,6 +30,9 @@
   .w-full--1 {
     width: calc(100% - 1px);
   }
+  .focus {
+    box-shadow: 0 0 0 100vmax rgba(0,0,0,0.6);
+  }
   .use-warm-theme {
     --theme-100: #FCF7DD;
     --theme-150: #FFF9F2;

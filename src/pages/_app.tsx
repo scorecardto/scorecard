@@ -25,6 +25,79 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
     [appData, setAppData]
   );
 
+  useEffect(() => {
+    setAppData({
+      courses: [
+        {
+          name: 'Advanced Biology',
+          grades: [95, 92, 80, 91, 95, 'NG'],
+          cellKey: '!!!',
+          hash: '!!!',
+          credit: 1,
+          otherFields: [{ key: 'Course Code', value: 'ADV BIO' }],
+          weighted: true,
+        },
+        {
+          name: 'Magnet English',
+          grades: [80, 95, 100, 90, 70, 'NG'],
+          cellKey: '@@@',
+          hash: '@@@',
+          credit: 1,
+          otherFields: [{ key: 'Course Code', value: 'ADV ENG' }],
+          weighted: true,
+        },
+        {
+          name: 'Everyday Algebra I',
+          grades: ['P', 'P', '75', 'P', 'P', 'NG'],
+          cellKey: '###',
+          hash: '###',
+          credit: 2,
+          otherFields: [{ key: 'Course Code', value: 'ED ALGEBRA I' }],
+          weighted: false,
+        },
+        {
+          name: 'US History',
+          grades: ['80', '85', 'EXC', '83', '90', 'NG'],
+          cellKey: '$$$',
+          hash: '$$$',
+          credit: 1,
+          otherFields: [{ key: 'Course Code', value: 'US HISTORY' }],
+          weighted: false,
+        },
+      ],
+      gradingPeriods: [
+        {
+          name: '1st Nine Weeks',
+          code: '1 Nin Wks',
+        },
+        {
+          name: '2nd Nine Weeks',
+          code: '2 Nin Wks',
+        },
+        {
+          name: 'Midterm',
+          code: 'Final Sem 1',
+        },
+        {
+          name: 'Fall Average',
+          code: 'Sem 1 Avg',
+        },
+        {
+          name: '3rd Nine Weeks',
+          code: '3 Nin Wks',
+        },
+        {
+          name: '4th Nine Weeks',
+          code: '4 Nin Wks',
+        },
+      ],
+      selectedGradingPeriod: 0,
+      formula: {
+        weighted: true,
+      },
+    });
+  }, []);
+
   return (
     <>
       <Head>
@@ -72,14 +145,15 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
         }}
         canonical={url}
       />
+      <div>
+        <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
 
-      <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
-
-      <AnimateSharedLayout>
-        <AppDataContext.Provider value={appDataProvider}>
-          <Component {...pageProps} cannonical={url} key={url} />
-        </AppDataContext.Provider>
-      </AnimateSharedLayout>
+        <AnimateSharedLayout>
+          <AppDataContext.Provider value={appDataProvider}>
+            <Component {...pageProps} cannonical={url} key={url} />
+          </AppDataContext.Provider>
+        </AnimateSharedLayout>
+      </div>
     </>
   );
 };

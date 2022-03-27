@@ -184,47 +184,51 @@ export default function ReportCardsTable({
   return (
     <div className="_report-cards-table flex">
       <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
-        {sorted.data.map((column, idx, array) => {
-          return (
-            <TableColumn
-              cells={column.map((str, idx2) => {
-                return {
-                  type: 'VALUE',
-                  link: '/assignments',
-                  element: (
-                    <span
-                      className="h-8 whitespace-nowrap block mt-2"
-                      key={idx2}
-                    >
-                      {str}
-                    </span>
-                  ),
-                };
-              })}
-              animated
-              onResize={onResize}
-              header={createHeader(
-                idx === 0
-                  ? 'Course Name'
-                  : data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
-                idx,
-                array.length
-              )}
-              type={idx === 0 ? 'COURSE_NAME' : 'OTHER_FIELD'}
-              key={idx}
-              setComponentShowing={createIsColumnShowing(idx)}
-              getSetComponentShowing={createGetSetIsColumnShowing(idx)}
-              amFirstColumn={idx === 0}
-              amLastColumn={false}
-              hoveredRow={hoveredRow}
-              onCellMouseOver={(idx2) => {
-                setHoveredRow(idx2);
-              }}
-              clickable
-              deltaSnapPoint={700 - width}
-            />
-          );
-        })}
+        {sorted ? (
+          sorted.data.map((column, idx, array) => {
+            return (
+              <TableColumn
+                cells={column.map((str, idx2) => {
+                  return {
+                    type: 'VALUE',
+                    link: '/assignments',
+                    element: (
+                      <span
+                        className="h-8 whitespace-nowrap block mt-2"
+                        key={idx2}
+                      >
+                        {str}
+                      </span>
+                    ),
+                  };
+                })}
+                animated
+                onResize={onResize}
+                header={createHeader(
+                  idx === 0
+                    ? 'Course Name'
+                    : data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
+                  idx,
+                  array.length
+                )}
+                type={idx === 0 ? 'COURSE_NAME' : 'OTHER_FIELD'}
+                key={idx}
+                setComponentShowing={createIsColumnShowing(idx)}
+                getSetComponentShowing={createGetSetIsColumnShowing(idx)}
+                amFirstColumn={idx === 0}
+                amLastColumn={false}
+                hoveredRow={hoveredRow}
+                onCellMouseOver={(idx2) => {
+                  setHoveredRow(idx2);
+                }}
+                clickable
+                deltaSnapPoint={700 - width}
+              />
+            );
+          })
+        ) : (
+          <></>
+        )}
 
         <TableColumn
           animated

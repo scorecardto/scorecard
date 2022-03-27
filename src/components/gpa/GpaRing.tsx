@@ -9,7 +9,7 @@ export default function GpaRing({ gpa, weighted }: IGpaRingProps) {
   const [pct, setPct] = useState(1);
 
   useEffect(() => {
-    setPct(1 - (gpa - 1) / (weighted ? 4.0 : 3.0));
+    setPct(1 - (gpa - 1) / (weighted ? 5.0 : 4.0));
   }, [gpa, weighted]);
 
   return (

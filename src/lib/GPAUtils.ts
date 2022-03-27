@@ -1,23 +1,44 @@
 import { Course } from './types/Course';
 import { GPAFormula } from './types/GPAFormula';
 
+export const getPointsFor = (
+  grade: string | number,
+  weighted: boolean,
+  formula: GPAFormula
+): number => {
+  const asInt = typeof grade === 'string' ? parseInt(grade, 10) : grade;
+
+  if (!Number.isNaN(asInt)) {
+    return (asInt + (formula.weighted && weighted ? 10 : 0) - 60) / 10;
+  }
+
+  return -1;
+};
+
 export const getGPA = (
   courses: Course[],
   gradingPeriod: number,
   formula: GPAFormula
-) => {
+): number => {
   let total: number = 0;
   let count: number = 0;
 
   courses.forEach((course) => {
-    const raw = course.grades[gradingPeriod] ?? '';
-    const asInt = typeof raw === 'string' ? parseInt(raw, 10) : raw;
+    const points = getPointsFor(
+      course.grades[gradingPeriod] ?? 'NG',
+      course.weighted,
+      formula
+    );
 
-    if (!Number.isNaN(asInt)) {
-      total += asInt + (formula.weighted && course.weighted ? 10 : 0);
-      count += 1;
+    if (points !== -1) {
+      total += points * course.credit;
+      count += course.credit;
     }
   });
 
-  return Math.round(((total / count - 60) / 10) * 100) / 100;
+  if (count === 0) {
+    return -1;
+  }
+
+  return Math.round((total / count) * 100) / 100;
 };
