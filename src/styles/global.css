@@ -24,8 +24,8 @@
     overflow: scroll;
   }
   .responsive-scrollable {
-  padding-left: max(calc(50% - 350px), 20px);
-  overflow: scroll;
+    padding-left: max(calc(50% - 350px), 20px);
+    overflow-x: scroll;
   }
   .w-full--1 {
     width: calc(100% - 1px);

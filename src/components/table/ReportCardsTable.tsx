@@ -201,7 +201,9 @@ export default function ReportCardsTable({
               animated
               onResize={onResize}
               header={createHeader(
-                data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
+                idx === 0
+                  ? 'Course Name'
+                  : data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
                 idx,
                 array.length
               )}

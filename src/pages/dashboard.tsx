@@ -102,17 +102,18 @@ const Dashboard = () => {
 
         <div className="mt-10" />
       </div>
-      <div className="responsive-scrollable">
-        {appData ? (
-          <ReportCardsTable
-            data={appData.courses}
-            gradingPeriods={appData.gradingPeriods}
-            selected={appData.selectedGradingPeriod}
-          />
-        ) : (
-          <></>
-        )}
-        {/* <ReportCardsTable
+      <div className="overflow-visible">
+        <div className="responsive-scrollable">
+          {appData ? (
+            <ReportCardsTable
+              data={appData.courses}
+              gradingPeriods={appData.gradingPeriods}
+              selected={appData.selectedGradingPeriod}
+            />
+          ) : (
+            <></>
+          )}
+          {/* <ReportCardsTable
           data={[
             {
               cells: [
@@ -154,6 +155,7 @@ const Dashboard = () => {
             },
           ]}
         /> */}
+        </div>
       </div>
     </div>
   );
