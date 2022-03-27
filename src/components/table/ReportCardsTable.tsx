@@ -5,21 +5,21 @@ import { IoBookmarks, IoBookmark } from 'react-icons/io5';
 import SelectorCard from '../card/SelectorCard';
 import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
-import TableColumn, {
-  ColumnStringContents,
-  SetColumnShowingCallback,
-} from './TableColumn';
-import { transpose } from '@/lib/Util';
+import TableColumn, { SetColumnShowingCallback } from './TableColumn';
+import { Course } from '@/lib/types/Course';
+import { GradingPeriod } from '@/lib/types/GradingPeriod';
 
-type Props = {
-  data: ColumnStringContents[];
-  grades: {
-    name: string;
-    grades: string[];
-  }[];
+type IReportCardsTableProps = {
+  data: Course[];
+  gradingPeriods: GradingPeriod[];
+  selected: number;
 };
 
-export default function ReportCardsTable({ data, grades }: Props) {
+export default function ReportCardsTable({
+  data,
+  gradingPeriods,
+  selected,
+}: IReportCardsTableProps) {
   const [, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
@@ -38,7 +38,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
     };
   };
 
-  const [gradingPeriod, setGradingPeriod] = useState(0);
+  const [gradingPeriod, setGradingPeriod] = useState(selected);
 
   const createGetSetIsColumnShowing = (idx: number) => {
     return (setIsShowing: SetColumnShowingCallback) => {
@@ -77,7 +77,7 @@ export default function ReportCardsTable({ data, grades }: Props) {
               <SelectorCard
                 selected={gradingPeriod}
                 setSelected={setGradingPeriod}
-                options={grades.map((g) => g.name)}
+                options={gradingPeriods.map((g) => g.name)}
                 cardIcon={<IoBookmarks className={STATIC_CARD_ICON_STYLES} />}
                 icon={<IoBookmark className={STATIC_CARD_ICON_STYLES} />}
                 selectedIcon={
@@ -95,52 +95,73 @@ export default function ReportCardsTable({ data, grades }: Props) {
 
   const sort = (
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    data: ColumnStringContents[],
+    courses: Course[],
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    selected: number,
     // eslint-disable-next-line @typescript-eslint/no-shadow
     sortBy: number
-  ): ColumnStringContents[] => {
+  ): {
+    data: string[][];
+    grades: (string | number)[];
+  } => {
     const sortByIdx = Math.abs(sortBy) - 1;
     const sortAsc = sortBy > 0 ? 1 : -1;
 
-    const sortedCells: (ReactElement | HTMLElement | string)[][] = transpose(
-      transpose(
-        data.map((cols) => {
-          return cols.cells;
-        })
-      ).sort(
-        (
-          a: (ReactElement | HTMLElement | string)[],
-          b: (ReactElement | HTMLElement | string)[]
-        ) => {
-          const aCell = a[sortByIdx];
-          const bCell = b[sortByIdx];
+    const rows: (string | number)[][] = courses.map((course) => {
+      const returnable: (string | number)[] = [course.name].concat(
+        course.otherFields.map((field) => field.value)
+      );
 
-          if (aCell == null || bCell == null) {
-            if (aCell == null && bCell == null) return 0;
-            if (aCell == null) return -1 * sortAsc;
-            return 1 * sortAsc;
-          }
-
-          if (aCell > bCell) {
-            return 1 * sortAsc;
-          }
-
-          if (aCell < bCell) {
-            return -1 * sortAsc;
-          }
-
-          return 0;
-        }
-      )
-    );
-
-    return data.map((col: ColumnStringContents, idx) => {
-      const returnable = col;
-      // @ts-ignore
-      returnable.cells = sortedCells[idx];
-      return returnable;
+      return returnable.concat([course.grades[selected] ?? '--']);
     });
+
+    const sorted = rows.sort((a, b) => {
+      let aCell = a[sortByIdx];
+      let bCell = b[sortByIdx];
+
+      if (aCell == null || bCell == null) {
+        if (aCell == null && bCell == null) return 0;
+        if (aCell == null) return -1 * sortAsc;
+        return 1 * sortAsc;
+      }
+
+      if (typeof aCell !== typeof bCell) {
+        aCell = aCell.toString();
+        bCell = bCell.toString();
+      }
+
+      if (aCell > bCell) {
+        return 1 * sortAsc;
+      }
+
+      if (aCell < bCell) {
+        return -1 * sortAsc;
+      }
+
+      return 0;
+    });
+
+    const dataReturnable: string[][] = [];
+    const gradesReturnable: (string | number)[] = [];
+
+    sorted.forEach((row, idx) => {
+      row.forEach((cell, idx2) => {
+        if (idx2 === row.length - 1) {
+          gradesReturnable[idx] = cell;
+        } else {
+          if (dataReturnable[idx2] == null) dataReturnable[idx2] = [];
+          // @ts-ignore
+          dataReturnable[idx2][idx] = cell.toString();
+        }
+      });
+    });
+
+    return {
+      data: dataReturnable,
+      grades: gradesReturnable,
+    };
   };
+
   const [hoveredRow, setHoveredRow] = useState<number>(-1);
 
   const [width, setWidth] = useState(-1);
@@ -155,14 +176,15 @@ export default function ReportCardsTable({ data, grades }: Props) {
     setWidth(ref.current?.clientWidth ?? -1);
   }, [ref]);
 
-  const sorted = sort(data, sortBy);
+  const sorted = sort(data, gradingPeriod, sortBy);
+
   return (
     <div className="_report-cards-table flex">
       <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
-        {sorted.map((column, idx, array) => {
+        {sorted.data.map((column, idx, array) => {
           return (
             <TableColumn
-              cells={column.cells.map((str, idx2) => {
+              cells={column.map((str, idx2) => {
                 return {
                   type: 'VALUE',
                   link: '/assignments',
@@ -178,8 +200,12 @@ export default function ReportCardsTable({ data, grades }: Props) {
               })}
               animated
               onResize={onResize}
-              header={createHeader(column.header, idx, array.length)}
-              type={column.type}
+              header={createHeader(
+                data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
+                idx,
+                array.length
+              )}
+              type={idx === 0 ? 'COURSE_NAME' : 'OTHER_FIELD'}
               key={idx}
               setComponentShowing={createIsColumnShowing(idx)}
               getSetComponentShowing={createGetSetIsColumnShowing(idx)}
@@ -197,21 +223,21 @@ export default function ReportCardsTable({ data, grades }: Props) {
 
         <TableColumn
           animated
-          cells={
-            grades[gradingPeriod]?.grades.map((element) => {
-              return {
-                type: 'VALUE',
-                link: '/assignments',
-                element,
-              };
-            }) ?? []
-          }
-          header={createHeader('Grade', sorted.length, sorted.length)}
+          cells={sorted.grades.map((g) => {
+            return {
+              type: 'VALUE',
+              link: '/assignments',
+              element: g.toString() ?? '',
+            };
+          })}
+          header={createHeader('Grade', sorted.data.length, sorted.data.length)}
           type={'GRADE'}
-          key={sorted.length}
-          setComponentShowing={createIsColumnShowing(sorted.length)}
-          getSetComponentShowing={createGetSetIsColumnShowing(sorted.length)}
-          amFirstColumn={sorted.length === 0}
+          key={sorted.data.length}
+          setComponentShowing={createIsColumnShowing(sorted.data.length)}
+          getSetComponentShowing={createGetSetIsColumnShowing(
+            sorted.data.length
+          )}
+          amFirstColumn={sorted.data.length === 0}
           amLastColumn={true}
           hoveredRow={hoveredRow}
           onCellMouseOver={(idx2) => {

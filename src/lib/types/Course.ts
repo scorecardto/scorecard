@@ -6,6 +6,7 @@ export type Course = {
   credit: number;
   grades: (string | number)[];
   otherFields: {
-    (key: string): string;
-  };
+    key: string;
+    value: string;
+  }[];
 };
