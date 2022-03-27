@@ -6,6 +6,7 @@ type ISelectorCardProps = {
   options: string[];
   selected: number;
   setSelected: React.Dispatch<React.SetStateAction<number>>;
+  onSelected?(arg0: number): void;
   icon?: JSX.Element;
   selectedIcon?: JSX.Element;
   cardIcon?: JSX.Element;
@@ -18,6 +19,7 @@ export default function SelectorCard({
   icon,
   selectedIcon,
   cardIcon,
+  onSelected,
 }: ISelectorCardProps) {
   const [open, setOpened] = useState(false);
   const [shown, setShown] = useState(false);
@@ -85,6 +87,7 @@ export default function SelectorCard({
                 if (!open) {
                   return;
                 }
+                if (onSelected) onSelected(idx);
                 setSelected(idx);
               }}
             >

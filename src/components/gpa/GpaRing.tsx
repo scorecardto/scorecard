@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 type IGpaRingProps = {
   gpa: number;
+  weighted: boolean;
 };
 
-export default function GpaRing({ gpa }: IGpaRingProps) {
+export default function GpaRing({ gpa, weighted }: IGpaRingProps) {
   const [pct, setPct] = useState(1);
 
   useEffect(() => {
-    setPct(1 - (gpa - 1) / 4.0);
-  }, [gpa]);
+    setPct(1 - (gpa - 1) / (weighted ? 4.0 : 3.0));
+  }, [gpa, weighted]);
 
   return (
     <svg height="30" width="30" viewBox="0 0 60 60">

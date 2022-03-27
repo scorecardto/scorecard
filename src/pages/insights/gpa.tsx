@@ -1,53 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { NextSeo } from 'next-seo';
 
-import GpaAnalysisTable from '@/components/gpa/GpaAnalysisTable';
 import GpaDisplay from '@/components/gpa/GpaDisplay';
 import GpaQuickStats from '@/components/gpa/GpaQuickStats';
+import { AppDataContext } from '@/lib/context/AppDataContext';
+import { getGPA } from '@/lib/GPAUtils';
 
 export default function GPA() {
-  const myGpa = 4.27;
+  const { appData } = useContext(AppDataContext);
 
-  const courses = [
-    'Biology',
-    'Computer Science',
-    'English',
-    'Geometry',
-    'SciTech',
-    'Spanish',
-    'World Geography',
-  ];
-
-  const weighted = [true, false, true, false, true, false, true];
-
-  const grades = [100, 95, 90, 85, 70, 60, 'P'];
-
-  const gpa = [5.0, 3.5, 4.0, 2.5, 2.0, '--', '--'];
-  // TODO: ability to change how a grade counts in the gradebook
-
-  // 3.4
-  const delta = [0.4, 0.025, 0.15, 0.225, 0.35, '--', '--'];
+  const gpa = appData
+    ? getGPA(appData.courses, appData.selectedGradingPeriod, appData.formula)
+    : null;
 
   return (
     <div>
       <NextSeo title="Grade Point" />
-      <div className="use-responsive-width">
-        <div className="flex flex-row gap-20 items-center mt-5">
-          <GpaDisplay gpa={myGpa} />
-          <GpaQuickStats />
-        </div>
-      </div>
+      {appData && gpa ? (
+        <div>
+          <div className="use-responsive-width flex flex-row gap-20 items-center mt-5">
+            <GpaDisplay gpa={gpa} weighted={appData.formula.weighted} />
 
-      <div className="responsive-scrollable">
-        <GpaAnalysisTable
-          courses={courses}
-          delta={delta}
-          grades={grades}
-          weighted={weighted}
-          gpa={gpa}
-        />
-      </div>
+            <GpaQuickStats
+              courses={appData.courses}
+              formula={appData.formula}
+              gradingPeriod={appData.selectedGradingPeriod}
+            />
+          </div>
+
+          <div className="responsive-scrollable">
+            {/* <GpaAnalysisTable
+              courses={courses}
+              delta={delta}
+              grades={grades}
+              weighted={weighted}
+              gpa={gpa}
+            /> */}
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

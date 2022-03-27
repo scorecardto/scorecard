@@ -10,8 +10,7 @@ const isGradeHigh = (
   grade: string,
   tolerance: number
 ): 'high' | 'low' | 'unsure' => {
-  // eslint-disable-next-line radix
-  const parsed = Number.parseInt(grade);
+  const parsed = Number.parseInt(grade, 10);
   if (!Number.isNaN(parsed)) {
     return parsed >= tolerance ? 'high' : 'low';
   }

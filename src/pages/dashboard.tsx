@@ -76,6 +76,9 @@ const Dashboard = () => {
         },
       ],
       selectedGradingPeriod: 0,
+      formula: {
+        weighted: true,
+      },
     });
   }, []);
 
@@ -109,6 +112,12 @@ const Dashboard = () => {
               data={appData.courses}
               gradingPeriods={appData.gradingPeriods}
               selected={appData.selectedGradingPeriod}
+              updateGradingPeriod={(arg0) => {
+                setAppData({
+                  ...appData,
+                  selectedGradingPeriod: arg0,
+                });
+              }}
             />
           ) : (
             <></>

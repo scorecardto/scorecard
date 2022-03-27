@@ -13,12 +13,14 @@ type IReportCardsTableProps = {
   data: Course[];
   gradingPeriods: GradingPeriod[];
   selected: number;
+  updateGradingPeriod?(arg0: number): void;
 };
 
 export default function ReportCardsTable({
   data,
   gradingPeriods,
   selected,
+  updateGradingPeriod,
 }: IReportCardsTableProps) {
   const [, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
@@ -83,6 +85,7 @@ export default function ReportCardsTable({
                 selectedIcon={
                   <IoBookmark className={STATIC_CARD_ICON_STYLES} />
                 }
+                onSelected={updateGradingPeriod}
               />
             </div>
           ) : (
