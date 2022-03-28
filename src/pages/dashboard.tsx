@@ -36,13 +36,13 @@ const Dashboard = () => {
         <div className="mt-10" />
       </div>
       <div className="overflow-visible">
-        <div className="responsive-scrollable">
-          <div
-            className={`transition-padding duration-300 ease-in-out ${
-              editingTable ? 'z-50 absolute focus px-7 py-5 rounded-lg' : ''
-            }`}
-          >
-            {appData ? (
+        {appData ? (
+          <div className="responsive-scrollable">
+            <div
+              className={`transition-padding duration-300 ease-in-out ${
+                editingTable ? 'z-50 absolute focus px-7 py-5 rounded-lg' : ''
+              }`}
+            >
               <ReportCardsTable
                 editingEnabled={editingTable}
                 data={appData.courses}
@@ -55,16 +55,16 @@ const Dashboard = () => {
                   });
                 }}
               />
-            ) : (
-              <></>
-            )}
-            <EditingToggle
-              textStart="Edit Courses"
-              editing={editingTable}
-              setEditing={setEditingTable}
-            />
+              <EditingToggle
+                textStart="Edit Courses"
+                editing={editingTable}
+                setEditing={setEditingTable}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

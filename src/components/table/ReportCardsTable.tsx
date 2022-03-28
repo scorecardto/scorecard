@@ -6,6 +6,7 @@ import SelectorCard from '../card/SelectorCard';
 import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
 import Checkbox from '../interactive/Checkbox';
+import NumberScale from '../interactive/NumberScale';
 import TableColumn, { SetColumnShowingCallback } from './TableColumn';
 import { Course } from '@/lib/types/Course';
 import { GradingPeriod } from '@/lib/types/GradingPeriod';
@@ -119,11 +120,19 @@ export default function ReportCardsTable({
           course.name,
           <Checkbox
             onClick={() => {}}
-            editingEnabled={false}
+            editingEnabled={editingEnabled}
             checked={course.weighted}
             key={idx}
           />,
-          course.credit,
+          <NumberScale
+            editingEnabled={editingEnabled}
+            setNumber={() => {}}
+            max={10}
+            min={0}
+            key={idx}
+          >
+            {course.credit}
+          </NumberScale>,
         ].concat(course.otherFields.map((field) => field.value));
 
         return returnable.concat([course.grades[selected] ?? '--']);
@@ -229,7 +238,6 @@ export default function ReportCardsTable({
                     ),
                   };
                 })}
-                animated
                 onResize={onResize}
                 header={createHeader(
                   idx <= 2
@@ -258,7 +266,6 @@ export default function ReportCardsTable({
         )}
 
         <TableColumn
-          animated
           cells={sorted.grades.map((g) => {
             return {
               type: 'VALUE',

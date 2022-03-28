@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, ReactElement } from 'react';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
 import Grade from '../grade/Grade';
+import ConditionalLink from '../util/ConditionalLink';
 import Tooltip from '../util/Tooltip';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -336,7 +336,18 @@ export default function TableColumn({
                 </motion.div>
               );
 
-              return cell.link ? <Link href={cell.link}>{inner}</Link> : inner;
+              return (
+                <ConditionalLink
+                  href={cell.link}
+                  key={idx}
+                  enabled={cell.link != null}
+                >
+                  {inner}
+                </ConditionalLink>
+                // <Link href={cell.link ?? '/'} key={idx}>
+                //   {inner}
+                // </Link>
+              );
             });
           })()}
           {whitespace < -20 ? (
