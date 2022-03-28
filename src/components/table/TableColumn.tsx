@@ -209,9 +209,11 @@ export default function TableColumn({
     getSetComponentShowing((isShowing: boolean) => {
       if (isShowing && isComponentDissapearing !== -1) {
         setComponentDissapearing(undefined);
-      } else if (!isShowing && isComponentDissapearing === -1) {
+      } else if (!isShowing && isComponentDissapearing === undefined) {
         setComponentDissapearing(cellContainerRef.current?.clientWidth);
         setComponentShowing(false);
+        setWhitespace(0);
+        setWhitespace(Math.max(0, whitespaceRef.current));
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,13 +225,13 @@ export default function TableColumn({
 
   return (
     <div
-      className={`_table-column group-1 overflow-visible ${
-        resizing ? 'cursor-col-resize' : ''
-      }${isComponentDissapearing === 0 ? '' : ''}`}
+      className={`_table-column group-1 ${resizing ? 'cursor-col-resize' : ''}${
+        isComponentDissapearing === 0 ? '' : ''
+      }`}
     >
       <div
-        className={`_table-column-header block mb-2 relative ${
-          isComponentDissapearing === 0 ? 'opacity-0 w-0 hidden' : 'opacity-100'
+        className={`_table-column-header block mb-2 relative transition-opacity ${
+          isComponentDissapearing === 0 ? 'opacity-0 w-0' : 'opacity-100'
         }`}
         ref={colHeaderRef}
       >

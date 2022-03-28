@@ -5,6 +5,7 @@ import { IoBookmarks, IoBookmark } from 'react-icons/io5';
 import SelectorCard from '../card/SelectorCard';
 import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
+import Checkbox from '../interactive/Checkbox';
 import TableColumn, { SetColumnShowingCallback } from './TableColumn';
 import { Course } from '@/lib/types/Course';
 import { GradingPeriod } from '@/lib/types/GradingPeriod';
@@ -14,6 +15,7 @@ type IReportCardsTableProps = {
   gradingPeriods: GradingPeriod[];
   selected: number;
   updateGradingPeriod?(arg0: number): void;
+  editingEnabled: boolean;
 };
 
 export default function ReportCardsTable({
@@ -21,12 +23,13 @@ export default function ReportCardsTable({
   gradingPeriods,
   selected,
   updateGradingPeriod,
+  editingEnabled,
 }: IReportCardsTableProps) {
-  const [, setShownColumns] = useState<boolean[]>(
+  const [shownColumns, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
 
-  const [, setShownColumnSetters] = useState<
+  const [columnSetters, setShownColumnSetters] = useState<
     (SetColumnShowingCallback | undefined)[]
   >(new Array(data.length));
 
@@ -104,19 +107,28 @@ export default function ReportCardsTable({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     sortBy: number
   ): {
-    data: string[][];
-    grades: (string | number)[];
+    data: (string | number | JSX.Element)[][];
+    grades: (string | number | JSX.Element)[];
   } => {
     const sortByIdx = Math.abs(sortBy) - 1;
     const sortAsc = sortBy > 0 ? 1 : -1;
 
-    const rows: (string | number)[][] = courses.map((course) => {
-      const returnable: (string | number)[] = [course.name].concat(
-        course.otherFields.map((field) => field.value)
-      );
+    const rows: (string | number | JSX.Element)[][] = courses.map(
+      (course, idx) => {
+        const returnable: (string | number | JSX.Element)[] = [
+          course.name,
+          <Checkbox
+            onClick={() => {}}
+            editingEnabled={false}
+            checked={course.weighted}
+            key={idx}
+          />,
+          course.credit,
+        ].concat(course.otherFields.map((field) => field.value));
 
-      return returnable.concat([course.grades[selected] ?? '--']);
-    });
+        return returnable.concat([course.grades[selected] ?? '--']);
+      }
+    );
 
     const sorted = rows.sort((a, b) => {
       let aCell = a[sortByIdx];
@@ -144,8 +156,8 @@ export default function ReportCardsTable({
       return 0;
     });
 
-    const dataReturnable: string[][] = [];
-    const gradesReturnable: (string | number)[] = [];
+    const dataReturnable: (string | number | JSX.Element)[][] = [];
+    const gradesReturnable: (string | number | JSX.Element)[] = [];
 
     sorted.forEach((row, idx) => {
       row.forEach((cell, idx2) => {
@@ -154,7 +166,7 @@ export default function ReportCardsTable({
         } else {
           if (dataReturnable[idx2] == null) dataReturnable[idx2] = [];
           // @ts-ignore
-          dataReturnable[idx2][idx] = cell.toString();
+          dataReturnable[idx2][idx] = cell;
         }
       });
     });
@@ -181,6 +193,21 @@ export default function ReportCardsTable({
 
   const sorted = sort(data, gradingPeriod, sortBy);
 
+  useEffect(() => {
+    if (editingEnabled) {
+      const wasEnabled = [shownColumns[1], shownColumns[2]];
+      columnSetters[1]?.(true);
+      columnSetters[2]?.(true);
+
+      return () => {
+        columnSetters[1]?.(!!wasEnabled[0]);
+        columnSetters[2]?.(!!wasEnabled[1]);
+      };
+    }
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingEnabled]);
+
   return (
     <div className="_report-cards-table flex">
       <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
@@ -191,7 +218,7 @@ export default function ReportCardsTable({
                 cells={column.map((str, idx2) => {
                   return {
                     type: 'VALUE',
-                    link: '/assignments',
+                    link: !editingEnabled ? '/assignments' : undefined,
                     element: (
                       <span
                         className="h-8 whitespace-nowrap block mt-2"
@@ -205,9 +232,9 @@ export default function ReportCardsTable({
                 animated
                 onResize={onResize}
                 header={createHeader(
-                  idx === 0
-                    ? 'Course Name'
-                    : data[0]?.otherFields[idx - 1]?.key ?? 'Unknown',
+                  idx <= 2
+                    ? ['Course Name', 'Weighted', 'Credit'][idx] ?? 'Unknown'
+                    : data[0]?.otherFields[idx - 3]?.key ?? 'Unknown',
                   idx,
                   array.length
                 )}
@@ -221,7 +248,7 @@ export default function ReportCardsTable({
                 onCellMouseOver={(idx2) => {
                   setHoveredRow(idx2);
                 }}
-                clickable
+                clickable={!editingEnabled}
                 deltaSnapPoint={700 - width}
               />
             );
@@ -235,7 +262,7 @@ export default function ReportCardsTable({
           cells={sorted.grades.map((g) => {
             return {
               type: 'VALUE',
-              link: '/assignments',
+              link: !editingEnabled ? '/assignments' : undefined,
               element: g.toString() ?? '',
             };
           })}
@@ -252,7 +279,7 @@ export default function ReportCardsTable({
           onCellMouseOver={(idx2) => {
             setHoveredRow(idx2);
           }}
-          clickable
+          clickable={!editingEnabled}
           onResize={onResize}
           deltaSnapPoint={700 - width}
         />

@@ -1,13 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import { NextSeo } from 'next-seo';
 
+import EditingToggle from '@/components/interactive/EditingToggle';
 import CompactNotificationCenter from '@/components/notifications/CompactNotificationCenter';
 import ReportCardsTable from '@/components/table/ReportCardsTable';
 import { AppDataContext } from '@/lib/context/AppDataContext';
 
 const Dashboard = () => {
   const { appData, setAppData } = useContext(AppDataContext);
+
+  const [editingTable, setEditingTable] = useState(false);
 
   return (
     <div>
@@ -34,63 +37,33 @@ const Dashboard = () => {
       </div>
       <div className="overflow-visible">
         <div className="responsive-scrollable">
-          {appData ? (
-            <ReportCardsTable
-              data={appData.courses}
-              gradingPeriods={appData.gradingPeriods}
-              selected={appData.selectedGradingPeriod}
-              updateGradingPeriod={(arg0) => {
-                setAppData({
-                  ...appData,
-                  selectedGradingPeriod: arg0,
-                });
-              }}
+          <div
+            className={`transition-padding duration-300 ease-in-out ${
+              editingTable ? 'z-50 absolute focus px-7 py-5 rounded-lg' : ''
+            }`}
+          >
+            {appData ? (
+              <ReportCardsTable
+                editingEnabled={editingTable}
+                data={appData.courses}
+                gradingPeriods={appData.gradingPeriods}
+                selected={appData.selectedGradingPeriod}
+                updateGradingPeriod={(arg0) => {
+                  setAppData({
+                    ...appData,
+                    selectedGradingPeriod: arg0,
+                  });
+                }}
+              />
+            ) : (
+              <></>
+            )}
+            <EditingToggle
+              textStart="Edit Courses"
+              editing={editingTable}
+              setEditing={setEditingTable}
             />
-          ) : (
-            <></>
-          )}
-          {/* <ReportCardsTable
-          data={[
-            {
-              cells: [
-                'Biology',
-                'Computer Science',
-                'English',
-                'Geometry',
-                'SciTech',
-                'Spanish',
-                'World Geography',
-              ],
-              header: 'Course',
-              type: 'COURSE_NAME',
-            },
-            {
-              cells: [
-                'ADV BIO',
-                'AP COMP SCI',
-                'ADV ENG LANG',
-                'ADV GEOMETRY',
-                'ADV ENG SCI',
-                'ADV SPANISH III',
-                'ADV W GEO',
-              ],
-              header: 'Course Code',
-              type: 'OTHER_FIELD',
-            },
-          ]}
-          grades={[
-            // { name: '1st Nine Weeks', grades: ['100', '100', '100', '100'] },
-            // { name: '2nd Nine Weeks', grades: ['90', '90', '90', '90'] },
-            {
-              name: '3rd Nine Weeks',
-              grades: ['95', '96', '96', '100', '94', '95', '98'],
-            },
-            {
-              name: '4th Nine Weeks',
-              grades: ['NG', '100', 'NG', '100', '99', '60', '50'],
-            },
-          ]}
-        /> */}
+          </div>
         </div>
       </div>
     </div>

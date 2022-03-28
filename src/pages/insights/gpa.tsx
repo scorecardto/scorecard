@@ -1,13 +1,11 @@
 import React, { useContext, useState } from 'react';
 
 import { NextSeo } from 'next-seo';
-import { IoOptions } from 'react-icons/io5';
 
-import StaticCard from '@/components/card/StaticCard';
 import GpaAnalysisTable from '@/components/gpa/GpaAnalysisTable';
 import GpaDisplay from '@/components/gpa/GpaDisplay';
 import GpaQuickStats from '@/components/gpa/GpaQuickStats';
-import AnimateMyWidth from '@/components/util/AnimateMyWidth';
+import EditingToggle from '@/components/interactive/EditingToggle';
 import { AppDataContext } from '@/lib/context/AppDataContext';
 import { getGPA } from '@/lib/GPAUtils';
 
@@ -48,33 +46,12 @@ export default function GPA() {
                 setAppData={setAppData}
                 editingEnabled={editing}
               />
-              <div
-                className={`${editing ? 'mt-4' : 'mt-2'} transition-all h-fit`}
-              >
-                <AnimateMyWidth>
-                  {editing ? (
-                    <StaticCard
-                      colored={true}
-                      onClick={() => {
-                        setEditing(!editing);
-                      }}
-                      icon={<IoOptions />}
-                    >
-                      Done
-                    </StaticCard>
-                  ) : (
-                    <StaticCard
-                      colored={true}
-                      icon={<IoOptions />}
-                      onClick={() => {
-                        setEditing(!editing);
-                      }}
-                    >
-                      Edit Courses
-                    </StaticCard>
-                  )}
-                </AnimateMyWidth>
-              </div>
+
+              <EditingToggle
+                editing={editing}
+                setEditing={setEditing}
+                textStart="Edit Courses"
+              />
             </div>
           </div>
         </div>
