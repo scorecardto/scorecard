@@ -281,12 +281,14 @@ export default function TableColumn({
                   }${
                     type !== 'OTHER_FIELD'
                       ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
-                          hoveredRow === myRealIdx &&
-                          'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                          hoveredRow === myRealIdx && clickable
+                            ? 'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                            : ''
                         }`
                       : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
-                          hoveredRow === myRealIdx &&
-                          'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                          hoveredRow === myRealIdx && clickable
+                            ? 'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                            : ''
                         }`
                   }${
                     cell.type === 'CATEGORY'

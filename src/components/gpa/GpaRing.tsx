@@ -19,7 +19,7 @@ export default function GpaRing({ gpa, weighted }: IGpaRingProps) {
         cy="30"
         r="20"
         fill="none"
-        className="stroke-theme-100"
+        className="stroke-theme-100 dark:stroke-night-250"
         strokeWidth="10"
         strokeMiterlimit={1}
       />

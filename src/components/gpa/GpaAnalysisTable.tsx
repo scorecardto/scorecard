@@ -222,7 +222,7 @@ export default function GpaAnalysisTable({
               onCellMouseOver={(idx2) => {
                 setHoveredRow(idx2);
               }}
-              clickable
+              clickable={!editingEnabled}
               deltaSnapPoint={700 - width}
               forceShow={true}
             />
