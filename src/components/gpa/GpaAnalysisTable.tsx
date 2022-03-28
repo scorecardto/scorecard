@@ -98,7 +98,7 @@ export default function GpaAnalysisTable({
   const { courses, selectedGradingPeriod, formula } = appData;
 
   const courseNames: JSX.Element[] = [];
-  const weighted: boolean[] = [];
+  const weighted: JSX.Element[] = [];
   const credit: JSX.Element[] = [];
   const grades: (string | number)[] = [];
   const points: number[] = [];
@@ -130,29 +130,50 @@ export default function GpaAnalysisTable({
         {course.name}
       </Renameable>
     );
-    weighted.push(course.weighted);
 
-    credit.push(
-      <NumberScale
-        min={0}
-        max={10}
-        setNumber={(num) => {
+    weighted.push(
+      <Checkbox
+        editingEnabled={editingEnabled}
+        checked={course.weighted}
+        onClick={(checked) => {
           setAppData({
             ...appData,
             courses: [
               ...coursesWithout.slice(0, idx),
               {
                 ...course,
-                credit: num,
+                weighted: checked,
               },
               ...coursesWithout.slice(idx),
             ],
           });
         }}
-        editingEnabled={editingEnabled}
-      >
-        {course.credit}
-      </NumberScale>
+      />
+    );
+
+    credit.push(
+      <div className="w-full">
+        <NumberScale
+          min={0}
+          max={10}
+          setNumber={(num) => {
+            setAppData({
+              ...appData,
+              courses: [
+                ...coursesWithout.slice(0, idx),
+                {
+                  ...course,
+                  credit: num,
+                },
+                ...coursesWithout.slice(idx),
+              ],
+            });
+          }}
+          editingEnabled={editingEnabled}
+        >
+          {course.credit}
+        </NumberScale>
+      </div>
     );
 
     const grade = course.grades[selectedGradingPeriod] ?? 'NG';
@@ -177,25 +198,14 @@ export default function GpaAnalysisTable({
                 return {
                   type: 'VALUE',
                   /* add a course link at some point */
-                  element:
-                    typeof cell === 'boolean' ? (
-                      <span
-                        className="h-8 whitespace-nowrap flex items-center my-1"
-                        key={idx2}
-                      >
-                        <Checkbox
-                          checked={cell}
-                          editingEnabled={editingEnabled}
-                        />
-                      </span>
-                    ) : (
-                      <span
-                        className="h-9 whitespace-nowrap block mt-1"
-                        key={idx2}
-                      >
-                        {cell}
-                      </span>
-                    ),
+                  element: (
+                    <span
+                      className="h-10 whitespace-nowrap flex items-center"
+                      key={idx2}
+                    >
+                      {cell}
+                    </span>
+                  ),
                 };
               })}
               setComponentShowing={() => {}}
