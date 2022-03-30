@@ -7,12 +7,16 @@ import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
 import Checkbox from '../interactive/Checkbox';
 import NumberScale from '../interactive/NumberScale';
+import Renameable from '../interactive/Renameable';
 import TableColumn, { SetColumnShowingCallback } from './TableColumn';
+import { AppData, AppDataProvider } from '@/lib/context/AppDataContext';
+import SortableElement from '@/lib/SortableElement';
 import { Course } from '@/lib/types/Course';
 import { GradingPeriod } from '@/lib/types/GradingPeriod';
 
 type IReportCardsTableProps = {
-  data: Course[];
+  appData: AppData;
+  setAppData: AppDataProvider['setAppData'];
   gradingPeriods: GradingPeriod[];
   selected: number;
   updateGradingPeriod?(arg0: number): void;
@@ -20,12 +24,15 @@ type IReportCardsTableProps = {
 };
 
 export default function ReportCardsTable({
-  data,
+  appData,
+  setAppData,
   gradingPeriods,
   selected,
   updateGradingPeriod,
   editingEnabled,
 }: IReportCardsTableProps) {
+  const data = appData.courses;
+
   const [shownColumns, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
@@ -108,32 +115,96 @@ export default function ReportCardsTable({
     // eslint-disable-next-line @typescript-eslint/no-shadow
     sortBy: number
   ): {
-    data: (string | number | JSX.Element)[][];
-    grades: (string | number | JSX.Element)[];
+    data: (string | number | boolean | JSX.Element)[][];
+    grades: (string | number | boolean | JSX.Element)[];
   } => {
     const sortByIdx = Math.abs(sortBy) - 1;
     const sortAsc = sortBy > 0 ? 1 : -1;
 
-    const rows: (string | number | JSX.Element)[][] = courses.map(
+    const rows: (string | number | boolean | SortableElement)[][] = courses.map(
       (course, idx) => {
-        const returnable: (string | number | JSX.Element)[] = [
-          course.name,
-          <Checkbox
-            onClick={() => {}}
-            editingEnabled={editingEnabled}
-            checked={course.weighted}
-            key={idx}
-          />,
-          <NumberScale
-            editingEnabled={editingEnabled}
-            setNumber={() => {}}
-            max={10}
-            min={0}
-            key={idx}
-          >
-            {course.credit}
-          </NumberScale>,
-        ].concat(course.otherFields.map((field) => field.value));
+        const coursesWithout = Array.from(data);
+        coursesWithout.splice(idx, 1);
+
+        let returnable: (string | number | SortableElement)[] = [
+          new SortableElement(
+            course.name,
+            (
+              <Renameable
+                editingEnabled={editingEnabled}
+                setName={(name) => {
+                  setAppData({
+                    ...appData,
+                    courses: [
+                      ...coursesWithout.slice(0, idx),
+                      {
+                        ...course,
+                        name,
+                      },
+                      ...coursesWithout.slice(idx),
+                    ],
+                  });
+                }}
+                key={idx}
+              >
+                {course.name}
+              </Renameable>
+            )
+          ),
+          new SortableElement(
+            course.weighted,
+            (
+              <Checkbox
+                onClick={(checked) => {
+                  setAppData({
+                    ...appData,
+                    courses: [
+                      ...coursesWithout.slice(0, idx),
+                      {
+                        ...course,
+                        weighted: checked,
+                      },
+                      ...coursesWithout.slice(idx),
+                    ],
+                  });
+                }}
+                editingEnabled={editingEnabled}
+                checked={course.weighted}
+                key={idx}
+              />
+            )
+          ),
+          new SortableElement(
+            course.credit,
+            (
+              <NumberScale
+                editingEnabled={editingEnabled}
+                setNumber={(num) => {
+                  setAppData({
+                    ...appData,
+                    courses: [
+                      ...coursesWithout.slice(0, idx),
+                      {
+                        ...course,
+                        credit: num,
+                      },
+                      ...coursesWithout.slice(idx),
+                    ],
+                  });
+                }}
+                max={10}
+                min={0}
+                key={idx}
+              >
+                {course.credit}
+              </NumberScale>
+            )
+          ),
+        ];
+
+        returnable = returnable.concat(
+          course.otherFields.map((field) => field.value)
+        );
 
         return returnable.concat([course.grades[selected] ?? '--']);
       }
@@ -147,6 +218,14 @@ export default function ReportCardsTable({
         if (aCell == null && bCell == null) return 0;
         if (aCell == null) return -1 * sortAsc;
         return 1 * sortAsc;
+      }
+
+      if (aCell instanceof SortableElement) {
+        aCell = aCell.sortInput;
+      }
+
+      if (bCell instanceof SortableElement) {
+        bCell = bCell.sortInput;
       }
 
       if (typeof aCell !== typeof bCell) {
@@ -165,17 +244,27 @@ export default function ReportCardsTable({
       return 0;
     });
 
-    const dataReturnable: (string | number | JSX.Element)[][] = [];
-    const gradesReturnable: (string | number | JSX.Element)[] = [];
+    const dataReturnable: (string | number | boolean | JSX.Element)[][] = [];
+    const gradesReturnable: (string | number | boolean | JSX.Element)[] = [];
 
     sorted.forEach((row, idx) => {
       row.forEach((cell, idx2) => {
         if (idx2 === row.length - 1) {
-          gradesReturnable[idx] = cell;
+          if (cell instanceof SortableElement) {
+            gradesReturnable[idx] = cell.sortOutput;
+          } else {
+            gradesReturnable[idx] = cell;
+          }
         } else {
           if (dataReturnable[idx2] == null) dataReturnable[idx2] = [];
-          // @ts-ignore
-          dataReturnable[idx2][idx] = cell;
+
+          if (cell instanceof SortableElement) {
+            // @ts-ignore
+            dataReturnable[idx2][idx] = cell.sortOutput;
+          } else {
+            // @ts-ignore
+            dataReturnable[idx2][idx] = cell;
+          }
         }
       });
     });
@@ -230,7 +319,7 @@ export default function ReportCardsTable({
                     link: !editingEnabled ? '/assignments' : undefined,
                     element: (
                       <span
-                        className="h-8 whitespace-nowrap block mt-2"
+                        className="h-8 whitespace-nowrap block my-1"
                         key={idx2}
                       >
                         {str}

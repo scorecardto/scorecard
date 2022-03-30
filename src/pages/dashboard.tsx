@@ -44,8 +44,9 @@ const Dashboard = () => {
               }`}
             >
               <ReportCardsTable
+                appData={appData}
+                setAppData={setAppData}
                 editingEnabled={editingTable}
-                data={appData.courses}
                 gradingPeriods={appData.gradingPeriods}
                 selected={appData.selectedGradingPeriod}
                 updateGradingPeriod={(arg0) => {

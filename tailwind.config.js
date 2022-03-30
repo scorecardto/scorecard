@@ -110,6 +110,7 @@ module.exports = {
         'opacity-transform': 'opacity, transform',
         padding: 'padding',
         'background-transform': 'background, background-color, transform',
+        'background-padding': 'background, background-color, padding',
       },
       lineHeight: {
         loose: 1.8,
