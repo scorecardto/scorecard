@@ -16,7 +16,7 @@ export default function Renameable({
 }: IRenameableProps) {
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
 
-  const editable = React.createRef<HTMLInputElement>();
+  const editable = React.createRef<HTMLLabelElement>();
   const widthRef = React.createRef<HTMLDivElement>();
 
   const handleEditButton = () => {
@@ -37,29 +37,40 @@ export default function Renameable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input]);
 
+  useEffect(() => {
+    if (currentlyEditing) {
+      editable.current?.focus();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentlyEditing]);
+
   return (
     <div
       className={`_renameable flex flex-row cursor-auto items-center w-fit mr-0`}
     >
       <div className="relative">
-        <p className="absolute top-0 left-0 invisible" ref={widthRef}>
+        <p
+          className="absolute top-0 left-0 invisible whitespace-pre"
+          ref={widthRef}
+        >
           {input}
         </p>
-
-        <input
-          style={{ maxWidth: inputMaxWidth }}
-          className={`mr-4 outline-none transition-background-padding duration-300 rounded-md resize-none h-8 w-fit box-content ${
-            currentlyEditing
-              ? 'bg-theme-100 dark:bg-night-150 px-2'
-              : 'bg-transparent'
-          }`}
-          disabled={!currentlyEditing}
-          ref={editable}
-          value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-          }}
-        />
+        <label ref={editable}>
+          <input
+            style={{ maxWidth: inputMaxWidth ?? 10 }}
+            className={`mr-4 outline-none transition-background-padding duration-300 rounded-md resize-none h-8 w-fit box-content ${
+              currentlyEditing
+                ? 'bg-theme-100 dark:bg-night-150 px-2'
+                : 'bg-transparent'
+            }`}
+            autoFocus
+            disabled={!currentlyEditing}
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
+          />
+        </label>
       </div>
 
       <div
