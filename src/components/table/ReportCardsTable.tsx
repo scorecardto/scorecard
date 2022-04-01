@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 
 import TextCard from '../card/TextCard';
 import Checkbox from '../interactive/Checkbox';
@@ -255,11 +255,7 @@ export default function ReportCardsTable({
     setWidth(ref.current?.clientWidth ?? -1);
   }, [ref]);
 
-  const sorted = useMemo(
-    () => sort(appData.courses, appData.selectedGradingPeriod, sortBy),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [appData, sortBy]
-  );
+  const sorted = sort(appData.courses, appData.selectedGradingPeriod, sortBy);
 
   useEffect(() => {
     if (editingEnabled) {
