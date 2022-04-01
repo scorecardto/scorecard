@@ -233,7 +233,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
               onCellMouseOver={(idx2) => {
                 setHoveredRow(idx2);
               }}
-              deltaSnapPoint={700 - width}
+              deltaSnapPoint={850 - width}
               onResize={onResize}
             />
           );

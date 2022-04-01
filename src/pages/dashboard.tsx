@@ -47,14 +47,6 @@ const Dashboard = () => {
                 appData={appData}
                 setAppData={setAppData}
                 editingEnabled={editingTable}
-                gradingPeriods={appData.gradingPeriods}
-                selected={appData.selectedGradingPeriod}
-                updateGradingPeriod={(arg0) => {
-                  setAppData({
-                    ...appData,
-                    selectedGradingPeriod: arg0,
-                  });
-                }}
               />
               <EditingToggle
                 textStart="Edit Courses"

@@ -146,13 +146,13 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
         canonical={url}
       />
       <div>
-        <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
+        <AppDataContext.Provider value={appDataProvider}>
+          <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
 
-        <AnimateSharedLayout>
-          <AppDataContext.Provider value={appDataProvider}>
+          <AnimateSharedLayout>
             <Component {...pageProps} cannonical={url} key={url} />
-          </AppDataContext.Provider>
-        </AnimateSharedLayout>
+          </AnimateSharedLayout>
+        </AppDataContext.Provider>
       </div>
     </>
   );

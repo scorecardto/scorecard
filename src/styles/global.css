@@ -18,13 +18,12 @@
 
 @layer components {
   .use-responsive-width {
-    width: min(100%, 740px);
+    width: min(100%, 890px);
     margin: auto;
     padding: 0 20px;
-    overflow: scroll;
   }
   .responsive-scrollable {
-    padding-left: max(calc(50% - 350px), 20px);
+    padding-left: max(calc(50% - 425px), 20px);
     overflow-x: scroll;
   }
   .w-full--1 {

@@ -1,9 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 
-import { IoBookmarks, IoBookmark } from 'react-icons/io5';
-
-import SelectorCard from '../card/SelectorCard';
-import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
 import TextCard from '../card/TextCard';
 import Checkbox from '../interactive/Checkbox';
 import NumberScale from '../interactive/NumberScale';
@@ -12,34 +8,25 @@ import TableColumn, { SetColumnShowingCallback } from './TableColumn';
 import { AppData, AppDataProvider } from '@/lib/context/AppDataContext';
 import SortableElement from '@/lib/SortableElement';
 import { Course } from '@/lib/types/Course';
-import { GradingPeriod } from '@/lib/types/GradingPeriod';
 
 type IReportCardsTableProps = {
   appData: AppData;
   setAppData: AppDataProvider['setAppData'];
-  gradingPeriods: GradingPeriod[];
-  selected: number;
-  updateGradingPeriod?(arg0: number): void;
   editingEnabled: boolean;
 };
 
 export default function ReportCardsTable({
   appData,
   setAppData,
-  gradingPeriods,
-  selected,
-  updateGradingPeriod,
   editingEnabled,
 }: IReportCardsTableProps) {
-  const data = appData.courses;
-
   const [shownColumns, setShownColumns] = useState<boolean[]>(
-    new Array(data.length).fill(true)
+    new Array(appData.courses.length).fill(true)
   );
 
   const [columnSetters, setShownColumnSetters] = useState<
     (SetColumnShowingCallback | undefined)[]
-  >(new Array(data.length));
+  >(new Array(appData.courses.length));
 
   const createIsColumnShowing = (idx: number) => {
     return (isShowing: boolean) => {
@@ -50,8 +37,6 @@ export default function ReportCardsTable({
       });
     };
   };
-
-  const [gradingPeriod, setGradingPeriod] = useState(selected);
 
   const createGetSetIsColumnShowing = (idx: number) => {
     return (setIsShowing: SetColumnShowingCallback) => {
@@ -65,11 +50,7 @@ export default function ReportCardsTable({
 
   const [sortBy, setSortBy] = useState(1);
 
-  const createHeader = (
-    header: string,
-    idx: number,
-    totalLength: number
-  ): ReactElement => {
+  const createHeader = (header: string, idx: number): ReactElement => {
     return (
       <>
         <div className="-ml-3 flex flex-row flex-nowrap justify-between">
@@ -85,23 +66,6 @@ export default function ReportCardsTable({
           >
             {header}
           </TextCard>
-          {idx === totalLength ? (
-            <div className="_col-changer w-48 flex flex-row justify-end">
-              <SelectorCard
-                selected={gradingPeriod}
-                setSelected={setGradingPeriod}
-                options={gradingPeriods.map((g) => g.name)}
-                cardIcon={<IoBookmarks className={STATIC_CARD_ICON_STYLES} />}
-                icon={<IoBookmark className={STATIC_CARD_ICON_STYLES} />}
-                selectedIcon={
-                  <IoBookmark className={STATIC_CARD_ICON_STYLES} />
-                }
-                onSelected={updateGradingPeriod}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
         </div>
       </>
     );
@@ -123,7 +87,7 @@ export default function ReportCardsTable({
 
     const rows: (string | number | boolean | SortableElement)[][] = courses.map(
       (course, idx) => {
-        const coursesWithout = Array.from(data);
+        const coursesWithout = Array.from(appData.courses);
         coursesWithout.splice(idx, 1);
 
         let returnable: (string | number | SortableElement)[] = [
@@ -154,24 +118,26 @@ export default function ReportCardsTable({
           new SortableElement(
             course.weighted,
             (
-              <Checkbox
-                onClick={(checked) => {
-                  setAppData({
-                    ...appData,
-                    courses: [
-                      ...coursesWithout.slice(0, idx),
-                      {
-                        ...course,
-                        weighted: checked,
-                      },
-                      ...coursesWithout.slice(idx),
-                    ],
-                  });
-                }}
-                editingEnabled={editingEnabled}
-                checked={course.weighted}
-                key={idx}
-              />
+              <div className="h-8 flex items-center">
+                <Checkbox
+                  onClick={(checked) => {
+                    setAppData({
+                      ...appData,
+                      courses: [
+                        ...coursesWithout.slice(0, idx),
+                        {
+                          ...course,
+                          weighted: checked,
+                        },
+                        ...coursesWithout.slice(idx),
+                      ],
+                    });
+                  }}
+                  editingEnabled={editingEnabled}
+                  checked={course.weighted}
+                  key={idx}
+                />
+              </div>
             )
           ),
           new SortableElement(
@@ -289,7 +255,11 @@ export default function ReportCardsTable({
     setWidth(ref.current?.clientWidth ?? -1);
   }, [ref]);
 
-  const sorted = sort(data, gradingPeriod, sortBy);
+  const sorted = useMemo(
+    () => sort(appData.courses, appData.selectedGradingPeriod, sortBy),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [appData, sortBy]
+  );
 
   useEffect(() => {
     if (editingEnabled) {
@@ -310,7 +280,7 @@ export default function ReportCardsTable({
     <div className="_report-cards-table flex">
       <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
         {sorted ? (
-          sorted.data.map((column, idx, array) => {
+          sorted.data.map((column, idx) => {
             return (
               <TableColumn
                 cells={column.map((str, idx2) => {
@@ -331,9 +301,9 @@ export default function ReportCardsTable({
                 header={createHeader(
                   idx <= 2
                     ? ['Course Name', 'Weighted', 'Credit'][idx] ?? 'Unknown'
-                    : data[0]?.otherFields[idx - 3]?.key ?? 'Unknown',
-                  idx,
-                  array.length
+                    : appData.courses[0]?.otherFields[idx - 3]?.key ??
+                        'Unknown',
+                  idx
                 )}
                 type={idx === 0 ? 'COURSE_NAME' : 'OTHER_FIELD'}
                 key={idx}
@@ -346,7 +316,7 @@ export default function ReportCardsTable({
                   setHoveredRow(idx2);
                 }}
                 clickable={!editingEnabled}
-                deltaSnapPoint={700 - width}
+                deltaSnapPoint={850 - width}
               />
             );
           })
@@ -362,7 +332,7 @@ export default function ReportCardsTable({
               element: g.toString() ?? '',
             };
           })}
-          header={createHeader('Grade', sorted.data.length, sorted.data.length)}
+          header={createHeader('Grade', sorted.data.length)}
           type={'GRADE'}
           key={sorted.data.length}
           setComponentShowing={createIsColumnShowing(sorted.data.length)}
