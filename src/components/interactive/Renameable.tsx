@@ -19,16 +19,21 @@ export default function Renameable({
   const editable = React.createRef<HTMLLabelElement>();
   const widthRef = React.createRef<HTMLDivElement>();
 
+  const [input, setInput] = useState(children);
+
   const handleEditButton = () => {
     if (!editingEnabled) return;
 
     if (currentlyEditing) {
-      setName(editable.current?.textContent || children);
+      setName(input || children);
+
+      if (!input) {
+        setInput(children);
+      }
     }
     setCurrentlyEditing(!currentlyEditing);
   };
 
-  const [input, setInput] = useState(children);
   const [inputMaxWidth, setInputMaxWidth] = useState<number | undefined>(0);
 
   useEffect(() => {
@@ -44,34 +49,61 @@ export default function Renameable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentlyEditing]);
 
+  useEffect(() => {
+    if (!editingEnabled && currentlyEditing) {
+      setName(input || children);
+      setCurrentlyEditing(false);
+
+      if (!input) {
+        setInput(children);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingEnabled]);
+
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const w = widthRef.current?.clientWidth;
+    setInputMaxWidth(w ? w + 0 : undefined);
+    setReady(true);
+  }, [widthRef]);
+
   return (
     <div
       className={`_renameable flex flex-row cursor-auto items-center w-fit mr-0`}
     >
-      <div className="relative">
-        <p
-          className="absolute top-0 left-0 invisible whitespace-pre"
-          ref={widthRef}
-        >
-          {input}
+      {ready ? (
+        <div className="relative">
+          <p
+            className="absolute top-0 left-0 invisible whitespace-pre"
+            ref={widthRef}
+          >
+            {input || children}
+          </p>
+          <label ref={editable}>
+            <input
+              style={{ maxWidth: inputMaxWidth }}
+              className={`mr-4 outline-none transition-background-padding duration-300 rounded-md resize-none h-8 w-fit box-content ${
+                currentlyEditing
+                  ? 'bg-theme-100 dark:bg-night-150 px-2'
+                  : 'bg-transparent'
+              }`}
+              autoFocus
+              disabled={!currentlyEditing}
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
+              placeholder={children}
+            />
+          </label>
+        </div>
+      ) : (
+        <p className="mr-4 h-8 flex items-center" ref={widthRef}>
+          <span>{input}</span>
         </p>
-        <label ref={editable}>
-          <input
-            style={{ maxWidth: inputMaxWidth ?? 10 }}
-            className={`mr-4 outline-none transition-background-padding duration-300 rounded-md resize-none h-8 w-fit box-content ${
-              currentlyEditing
-                ? 'bg-theme-100 dark:bg-night-150 px-2'
-                : 'bg-transparent'
-            }`}
-            autoFocus
-            disabled={!currentlyEditing}
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-          />
-        </label>
-      </div>
+      )}
 
       <div
         className={`flex gap-1 transition-opacity-transform ${
