@@ -11,4 +11,13 @@ module.exports = withBundleAnalyzer({
   // So, the source code is "basePath-ready".
   // You can remove `basePath` if you don't need it.
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: '/insights',
+        destination: '/insights/notifications',
+        permanent: true,
+      },
+    ];
+  },
 });

@@ -1,23 +1,52 @@
 import React, { useRef, useState, useEffect, ReactElement } from 'react';
 
+import { motion } from 'framer-motion';
+
+import Grade from '../grade/Grade';
+import ConditionalLink from '../util/ConditionalLink';
 import Tooltip from '../util/Tooltip';
+import GradebookCategory from '@/lib/types/GradebookCategory';
 
 export type ColumnType = 'COURSE_NAME' | 'OTHER_FIELD' | 'GRADE';
 
 export type Column = {
   header: ReactElement | HTMLElement | string;
-  cells: (ReactElement | HTMLElement | string | undefined)[];
+  cells: {
+    type: 'VALUE' | 'CATEGORY';
+    link?: string;
+    element:
+      | ReactElement
+      | HTMLElement
+      | string
+      | undefined
+      | GradebookCategory;
+  }[];
+
   type: ColumnType;
   amFirstColumn?: boolean;
   amLastColumn?: boolean;
   setComponentShowing: ColumnShowingCallback;
   getSetComponentShowing: GetSetColumnShowingCallback;
+  hoveredRow: number;
+  onCellMouseOver?: CellHoverCallback;
+  clickable?: boolean;
+  onResize?: {
+    (): void;
+  };
+  deltaSnapPoint?: number;
+  animated?: boolean;
+  forceShow?: boolean;
+  outerBorders?: boolean;
 };
 
 export type ColumnStringContents = {
   header: string;
-  cells: (string | undefined)[];
+  cells: (string | undefined | GradebookCategory)[];
   type: ColumnType;
+};
+
+type CellHoverCallback = {
+  (idx: number): void;
 };
 
 type ColumnShowingCallback = {
@@ -40,6 +69,14 @@ export default function TableColumn({
   getSetComponentShowing,
   amFirstColumn,
   amLastColumn,
+  hoveredRow,
+  onCellMouseOver,
+  clickable,
+  onResize,
+  animated,
+  deltaSnapPoint,
+  forceShow,
+  outerBorders,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -106,7 +143,14 @@ export default function TableColumn({
     let futureToolbarTimeout: NodeJS.Timeout;
 
     const onMouseMove = (event2: MouseEvent) => {
-      const newWhitespace = whitespace + event2.clientX - event.clientX;
+      const delta = event2.clientX - event.clientX;
+
+      const useSnapPoint =
+        deltaSnapPoint != null && Math.abs(deltaSnapPoint - delta) <= 10;
+
+      const newWhitespace =
+        whitespace + (useSnapPoint ? deltaSnapPoint : delta);
+
       const now = Date.now();
 
       if (futureToolbarTimeout) {
@@ -116,12 +160,12 @@ export default function TableColumn({
       if (newWhitespace <= -8 && now - eventStart < 750) {
         setWhitespace(0);
 
-        if (!amFirstColumn && !amLastColumn) {
+        if (!amFirstColumn && !amLastColumn && !forceShow) {
           futureToolbarTimeout = setTimeout(() => {
             setWhitespace(newWhitespace);
           }, 500);
         }
-      } else if (amFirstColumn || amLastColumn) {
+      } else if (amFirstColumn || amLastColumn || forceShow) {
         setWhitespace(Math.max(newWhitespace, 0));
         // update whitespace
       } else {
@@ -146,6 +190,8 @@ export default function TableColumn({
       document.documentElement.removeEventListener('mouseup', onMouseUp);
 
       setResizing(false);
+
+      if (onResize) onResize();
     };
 
     document.documentElement.addEventListener('mousemove', onMouseMove);
@@ -165,9 +211,11 @@ export default function TableColumn({
     getSetComponentShowing((isShowing: boolean) => {
       if (isShowing && isComponentDissapearing !== -1) {
         setComponentDissapearing(undefined);
-      } else if (!isShowing && isComponentDissapearing === -1) {
+      } else if (!isShowing && isComponentDissapearing === undefined) {
         setComponentDissapearing(cellContainerRef.current?.clientWidth);
         setComponentShowing(false);
+        setWhitespace(0);
+        setWhitespace(Math.max(0, whitespaceRef.current));
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,20 +227,20 @@ export default function TableColumn({
 
   return (
     <div
-      className={`_table-column group-1 overflow-visible ${
-        resizing ? 'cursor-col-resize' : ''
-      }${isComponentDissapearing === 0 ? '' : ''}`}
+      className={`_table-column group-2 ${resizing ? 'cursor-col-resize' : ''}${
+        isComponentDissapearing === 0 ? '' : ''
+      }`}
     >
       <div
-        className={`_table-column-header block mb-1 relative ${
-          isComponentDissapearing === 0 ? 'opacity-0 w-0 hidden' : 'opacity-100'
+        className={`_table-column-header block relative transition-opacity ${
+          isComponentDissapearing === 0 ? 'opacity-0 w-0' : 'opacity-100'
         }`}
         ref={colHeaderRef}
       >
         {header}
       </div>
 
-      <div className="_table-column-cells-wrapper flex w-fit group-1-first:border-l border-l-day-300">
+      <div className="_table-column-cells-wrapper flex w-fit">
         <div
           className="_table-column-cells"
           ref={cellContainerRef}
@@ -205,52 +253,107 @@ export default function TableColumn({
             }),
           }}
         >
-          {cells.map((cell, idx) => {
-            return (
-              <div
-                className={`_table-column-single-cell border-b py-2 first:border-t transition-colors ${
-                  inDeletionAction
-                    ? 'border-red-500'
-                    : 'border-day-300 dark:border-night-300'
-                }${
-                  type !== 'OTHER_FIELD'
-                    ? ' bg-day-200 dark:bg-night-200 text-day-700 dark:text-night-700'
-                    : ' bg-day-100 dark:bg-night-100 text-day-400 dark:text-night-400'
-                }${
-                  cell === undefined && amFirstColumn
-                    ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
-                    : ' pl-4 pr-4 w-full'
-                }`}
-                style={{
-                  ...{
-                    paddingLeft:
-                      type !== 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+          {(() => {
+            let realIdx = -1;
 
-                    paddingRight:
-                      type === 'GRADE'
-                        ? undefined
-                        : Math.max(whitespace, 0) + 40,
+            return cells.map((cell, idx) => {
+              if (!(cells[idx - 1] && cells[idx - 1]?.type === 'CATEGORY'))
+                realIdx += 1;
 
-                    opacity: calculateDeletionTextOpacity(whitespace),
-                  },
-                  ...(isComponentDissapearing != null && {
-                    transition: '0.15s opacity ease',
-                    opacity: 0,
-                  }),
-                }}
-                key={idx}
-              >
-                <span
-                  className="_table-column-single-cell-inner block h-6"
-                  style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+              const myRealIdx = realIdx;
+
+              const inner = (
+                <motion.div
+                  initial={{
+                    ...(animated && {
+                      translateX: -75,
+                      translateY: -10,
+                      opacity: 0,
+                    }),
+                  }}
+                  animate={{ translateX: 0, translateY: 0, opacity: 1 }}
+                  transition={{
+                    delay: myRealIdx * 0.03,
+                    duration: 0.3,
+                  }}
+                  className={`_table-column-single-cell border-b py-1 transition-colors ${
+                    clickable ? 'cursor-pointer' : ''
+                  } ${
+                    inDeletionAction
+                      ? 'border-red-500'
+                      : 'border-day-300 dark:border-night-300'
+                  }${
+                    type !== 'OTHER_FIELD'
+                      ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
+                          hoveredRow === myRealIdx && clickable
+                            ? 'group-1-hover:bg-day-250 group-1-hover:dark:bg-night-250'
+                            : ''
+                        }`
+                      : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
+                          hoveredRow === myRealIdx && clickable
+                            ? 'group-1-hover:bg-day-150 group-1-hover:dark:bg-night-150'
+                            : ''
+                        }`
+                  } ${
+                    cell.type === 'CATEGORY'
+                      ? ` absolute bg-day-200 dark:bg-night-200 z-10 w-full`
+                      : ` pl-4 pr-4 w-full`
+                  } ${
+                    outerBorders
+                      ? 'group-3-first:border-t border-r group-2-first:border-l'
+                      : ''
+                  }`}
+                  onMouseOver={
+                    onCellMouseOver &&
+                    (() => {
+                      onCellMouseOver(myRealIdx);
+                    })
+                  }
+                  style={{
+                    ...{
+                      paddingLeft:
+                        type !== 'GRADE' || cell.type === 'CATEGORY'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
+
+                      paddingRight:
+                        type === 'GRADE' || cell.type === 'CATEGORY'
+                          ? undefined
+                          : Math.max(whitespace, 0) + 40,
+
+                      opacity: calculateDeletionTextOpacity(whitespace),
+                    },
+                    ...(isComponentDissapearing != null && {
+                      transition: '0.15s opacity ease, 0.15s padding ease',
+                      opacity: 0,
+                    }),
+                  }}
                 >
-                  {cell}
-                </span>
-              </div>
-            );
-          })}
+                  <span
+                    className={`_table-column-single-cell-inner block`}
+                    style={{ minWidth: Math.max(minCellWidth - 46, 70) }}
+                  >
+                    {type === 'GRADE' ? (
+                      <Grade grade={cell.element} />
+                    ) : (
+                      cell.element
+                    )}
+                  </span>
+                </motion.div>
+              );
+
+              return (
+                <div className="group-3" key={idx}>
+                  <ConditionalLink href={cell.link} enabled={cell.link != null}>
+                    {inner}
+                  </ConditionalLink>
+                </div>
+                // <Link href={cell.link ?? '/'} key={idx}>
+                //   {inner}
+                // </Link>
+              );
+            });
+          })()}
           {whitespace < -20 ? (
             <div
               className="w-full h-full -translate-y-full z-10 relative"
@@ -271,7 +374,7 @@ export default function TableColumn({
           onMouseDown={mouseDownHandler}
         >
           <div
-            className={`_table-column-handle absolute top-0 right-0 h-full w-2 border-r border-r-day-300 dark:border-r-night-300 transition-colors duration-200 group-hover:border-r-blue-400 dark:group-hover:border-r-blue-400 group-hover:border-r-2 dark:group-hover:border-r-2 ${
+            className={`_table-column-handle absolute top-0 right-0 h-full w-2 border-r group-2-last:border-r-0 border-r-day-300 dark:border-r-night-300 transition-colors duration-200 group-hover:border-r-blue-400 dark:group-hover:border-r-blue-400 group-hover:border-r-2 group-2-last:group-hover:border-r-2 ${
               resizing
                 ? `${
                     inDeletionAction

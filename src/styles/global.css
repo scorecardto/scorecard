@@ -1,13 +1,5 @@
 @tailwind base;
 
-a {
-  @apply text-blue-700;
-}
-
-a:hover {
-  @apply border-b-2 border-blue-700;
-}
-
 @tailwind components;
 
 @tailwind utilities;
@@ -26,17 +18,29 @@ a:hover {
 
 @layer components {
   .use-responsive-width {
-    width: min(100%, 700px);
+    width: min(100%, 890px);
     margin: auto;
+    padding: 0 20px;
+  }
+  .responsive-scrollable {
+    padding-left: max(calc(50% - 425px), 20px);
+    overflow-x: scroll;
   }
   .w-full--1 {
     width: calc(100% - 1px);
   }
+  .focus {
+    box-shadow: 0 0 0 100vmax rgba(0,0,0,0.6);
+  }
   .use-warm-theme {
     --theme-100: #FCF7DD;
+    --theme-150: #FFF9F2;
+    --theme-150-dark: #402e13;
     --theme-200: #EE6417;
+    --theme-250: #fcf2e6 ;
+    --theme-250-dark: #573d15;
     --theme-300: #E2800C;
-    --theme-400: #F89C13;
+    --theme-400: #e48f0f;
     --theme-500: #E77A15;
     --theme-600: #DF7D21;
     --theme-700: #B61D1D;
@@ -44,12 +48,30 @@ a:hover {
   }
   .use-rose-theme {
     --theme-100: #FCDDEC;
+    --theme-150: #fff5fb;
+    --theme-150-dark: #3b2b35;
     --theme-200: #e34496;
+    --theme-250: #ffebf7;
+    --theme-250-dark: #523a49;
     --theme-300: #A03669;
     --theme-400: #BE5E8C;
     --theme-500: #B05883;
     --theme-600: #D94FC3;
     --theme-700: #CC3156;
     --theme-800: #8B1842;
+  }
+  .use-jade-theme {
+    --theme-100: #c7f1d8;
+    --theme-150: #edfaee;
+    --theme-150-dark: #2b3b32;
+    --theme-200: #138b49;
+    --theme-250: #dff2e7;
+    --theme-250-dark: #3b543f;
+    --theme-300: #7fb18e;
+    --theme-400: #379e78;
+    --theme-500: #15d34e;
+    --theme-600: #1c6fb3;
+    --theme-700: #179c53;
+    --theme-800: #066631;
   }
 }

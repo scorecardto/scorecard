@@ -1,20 +1,26 @@
-import { motion } from 'framer-motion';
+import { useContext } from 'react';
+
 import { NextSeo } from 'next-seo';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import AssignmentsTable from '@/components/table/AssignmentsTable';
+import { AppDataContext } from '@/lib/context/AppDataContext';
 
 const Index = () => {
+  const router = useRouter();
+  const { course } = router.query;
+
+  const { appData, setAppData } = useContext(AppDataContext);
+
   return (
     <div>
-      <NextSeo title="Assignments" />
-      <p>Scorecard Boilerplate</p>
-      <Link href={'/dashboard'}>
-        <a>link</a>
-      </Link>
-      <div className="use-responsive-width">
-        <motion.div layoutId={'table'}>
+      <NextSeo title={`Assignments for ${course}`} />
+
+      <div className="responsive-scrollable">
+        {appData ? (
           <AssignmentsTable
+            appData={appData}
+            setAppData={setAppData}
             data={[
               [
                 {
@@ -60,7 +66,9 @@ const Index = () => {
               },
             ]}
           />
-        </motion.div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

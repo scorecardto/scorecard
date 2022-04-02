@@ -1,36 +1,64 @@
-import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useContext, useState } from 'react';
 
+import { NextSeo } from 'next-seo';
+
+import EditingToggle from '@/components/interactive/EditingToggle';
+import CompactNotificationCenter from '@/components/notifications/CompactNotificationCenter';
 import ReportCardsTable from '@/components/table/ReportCardsTable';
+import { AppDataContext } from '@/lib/context/AppDataContext';
 
 const Dashboard = () => {
+  const { appData, setAppData } = useContext(AppDataContext);
+
+  const [editingTable, setEditingTable] = useState(false);
+
   return (
-    <div className="use-responsive-width">
-      <p>Scorecard Boilerplate</p>
-      <Link href={'/assignments/'}>
-        <a>link</a>
-      </Link>
-      <motion.div layoutId={'table'}>
-        <ReportCardsTable
-          data={[
+    <div>
+      <NextSeo title="Assignments" />
+
+      <div className="use-responsive-width">
+        <div className="mt-10" />
+        <CompactNotificationCenter
+          notification={
             {
-              cells: ['Biology', 'Chemistry', 'Physics I', 'Physics 2'],
-              header: 'Course',
-              type: 'COURSE_NAME',
-            },
-            {
-              cells: ['ADV BIO', 'ADV CHEM', 'AP PHYS I', 'AP PHYS 2'],
-              header: 'Course Code',
-              type: 'OTHER_FIELD',
-            },
-            {
-              cells: ['100', '90', '80', '70'],
-              header: 'Grade',
-              type: 'GRADE',
-            },
-          ]}
+              assignment: 'Unit Test',
+              course: 'Geometry',
+              grade: '96',
+              newAverage: 100,
+              oldAverage: 99,
+            }
+            // undefined
+          }
+          totalNotifications={46}
+          totalMissingAssignments={1}
         />
-      </motion.div>
+
+        <div className="mt-10" />
+      </div>
+      <div className="overflow-visible">
+        {appData ? (
+          <div className="responsive-scrollable">
+            <div
+              className={`transition-padding duration-300 ease-in-out ${
+                editingTable ? 'z-50 absolute focus px-7 py-5 rounded-lg' : ''
+              }`}
+            >
+              <ReportCardsTable
+                appData={appData}
+                setAppData={setAppData}
+                editingEnabled={editingTable}
+              />
+              <EditingToggle
+                textStart="Edit Courses"
+                editing={editingTable}
+                setEditing={setEditingTable}
+              />
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };
