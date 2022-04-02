@@ -28,7 +28,7 @@ export default function IconCard({
         colored
           ? 'bg-theme-100 text-theme-200 dark:bg-theme-200 dark:text-theme-100'
           : 'bg-day-600 text-day-500 dark:bg-night-600 dark:text-night-500'
-      }  w-fit px-3 py-1 rounded-md transition-colors cursor-pointer font-normal text-lg mt-1 whitespace-nowrap overflow-hidden text-ellipsis`}
+      }  w-fit px-3 py-1 rounded-md transition-colors cursor-pointer font-normal text-md whitespace-nowrap overflow-hidden text-ellipsis`}
       onClick={onClick}
     >
       {children}

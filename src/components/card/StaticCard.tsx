@@ -24,7 +24,7 @@ export default function StaticCard({
       }  w-fit px-3 py-1 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden flex items-center`}
       onClick={onClick}
     >
-      <span className="mr-2">{icon ?? <></>}</span>
+      <span className="mr-1">{icon ?? <></>}</span>
       <p className="overflow-hidden text-ellipsis">{children}</p>
     </div>
   );

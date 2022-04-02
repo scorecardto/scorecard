@@ -5,7 +5,7 @@ import { IoBookmarks, IoBookmark } from 'react-icons/io5';
 
 import SelectorCard from '../card/SelectorCard';
 import { STATIC_CARD_ICON_STYLES } from '../card/StaticCard';
-import IconCard from '../card/SwitchCard';
+import SwitchCard from '../card/SwitchCard';
 import InsightsControls from './InsightsControls';
 import { AppData } from '@/lib/context/AppDataContext';
 
@@ -47,23 +47,27 @@ export default function AppControls({
         <h1 className="_app-controls-header text-day-700 dark:text-night-700 text-4xl font-bold mt-10">
           {pageTitle}
         </h1>
-        <div className="_app_controls-tabs-left flex content-between">
+        <div className="_app_controls-tabs-left flex justify-between items-center">
           <div className="flex gap-3">
             <Link href="/dashboard">
               <a className="border-none">
-                <IconCard colored={currentTab === 'courses'}>Courses</IconCard>
+                <SwitchCard colored={currentTab === 'courses'}>
+                  Courses
+                </SwitchCard>
               </a>
             </Link>
             <Link href="/insights/notifications">
               <a className="border-none">
-                <IconCard colored={currentTab === 'insights'}>
+                <SwitchCard colored={currentTab === 'insights'}>
                   Insights
-                </IconCard>
+                </SwitchCard>
               </a>
             </Link>
             <Link href="/export">
               <a className="border-none">
-                <IconCard colored={currentTab === 'export'}>Export</IconCard>
+                <SwitchCard colored={currentTab === 'export'}>
+                  Export
+                </SwitchCard>
               </a>
             </Link>
           </div>

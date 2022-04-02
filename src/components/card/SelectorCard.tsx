@@ -51,24 +51,26 @@ export default function SelectorCard({
 
   return (
     <div className="_selector-card relative">
-      <StaticCard
-        colored={true}
-        icon={cardIcon ?? icon}
-        onClick={(e) => {
-          if (open) {
-            setOpened(false);
-            setTimeout(() => {
-              setShown(false);
-            }, 200);
-          } else {
-            setShown(true);
-          }
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-      >
-        {options[selected] ?? ''}
-      </StaticCard>
+      <span className="text-md">
+        <StaticCard
+          colored={true}
+          icon={cardIcon ?? icon}
+          onClick={(e) => {
+            if (open) {
+              setOpened(false);
+              setTimeout(() => {
+                setShown(false);
+              }, 200);
+            } else {
+              setShown(true);
+            }
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          {options[selected] ?? ''}
+        </StaticCard>
+      </span>
       <div
         className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 mt-2 transition-opacity-transform origin-top-right duration-200 z-10 top-8 right-0 whitespace-nowrap
         ${shown ? ' ' : 'hidden hover:block '}${
