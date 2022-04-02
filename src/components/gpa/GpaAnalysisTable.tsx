@@ -187,13 +187,14 @@ export default function GpaAnalysisTable({
 
   return (
     <div>
-      <div className="_gpa-analysis-col-container flex w-fit group-2" ref={ref}>
+      <div className="_gpa-analysis-col-container flex w-fit group-1" ref={ref}>
         {sort(
           [courseNames, weighted, credit, grades, points, effect],
           sortBy
         ).map((data, idx, arr) => {
           return (
             <TableColumn
+              outerBorders={true}
               cells={data.map((cell, idx2) => {
                 return {
                   type: 'VALUE',

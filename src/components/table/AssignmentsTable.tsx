@@ -186,7 +186,10 @@ export default function AssignmentCardsTable({
       <CourseSelector courses={appData.courses} selected={''} />
 
       <div className="flex flex-col">
-        <div className="_assignments-col-container flex w-fit relative group-1">
+        <div
+          className="_assignments-col-container flex w-fit relative group-1"
+          ref={ref}
+        >
           {assemble(data, sortBy).map((column, idx, array) => {
             return (
               <TableColumn
@@ -236,7 +239,7 @@ export default function AssignmentCardsTable({
                 onCellMouseOver={(idx2) => {
                   setHoveredRow(idx2);
                 }}
-                deltaSnapPoint={850 - width}
+                deltaSnapPoint={594 - width}
                 onResize={onResize}
               />
             );

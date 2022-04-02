@@ -344,7 +344,7 @@ export default function ReportCardsTable({
           }}
           clickable={!editingEnabled}
           onResize={onResize}
-          deltaSnapPoint={700 - width}
+          deltaSnapPoint={850 - width}
           outerBorders={true}
         />
       </div>

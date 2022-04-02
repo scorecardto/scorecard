@@ -13,8 +13,8 @@ type ICourseSelectorProps = {
 
 export default function CourseSelector({ courses }: ICourseSelectorProps) {
   return (
-    <div className="_course-selector-wrapper pt-10 relative w-fit">
-      <div className="_course-selector bg-day-200 dark:bg-night-200 h-full w-60 border-y border-l border-day-300 dark:border-night-300">
+    <div className="_course-selector-wrapper pt-10 relative w-64">
+      <div className="_course-selector bg-day-200 dark:bg-night-200 h-full w-64 border-y border-l border-day-300 dark:border-night-300">
         <div className="_course-selector-header px-3 py-3">
           <p className="float-left text-day-700 dark:text-night-700 ml-2 mt-1">
             Your Courses
