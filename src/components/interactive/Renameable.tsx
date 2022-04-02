@@ -96,6 +96,7 @@ export default function Renameable({
                 setInput(e.target.value);
               }}
               placeholder={children}
+              maxLength={28}
             />
           </label>
         </div>

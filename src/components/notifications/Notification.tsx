@@ -14,9 +14,7 @@ export default function Notification({
   return (
     <div className="border border-day-300 dark:border-night-300 py-4 px-6 rounded-md flex items-center">
       {icon ? (
-        <div className="text-3xl text-theme-200 dark:text-theme-100 mr-6">
-          {icon}
-        </div>
+        <div className="text-3xl text-theme-200 mr-6">{icon}</div>
       ) : (
         <></>
       )}
