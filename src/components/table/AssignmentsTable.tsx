@@ -59,7 +59,7 @@ export default function AssignmentCardsTable({
   const createHeader = (header: string, idx: number): ReactElement => {
     return (
       <>
-        <div className="-ml-3 absolute -top-10">
+        <div className="-ml-3 mb-2">
           <TextCard
             onClick={() => {
               setSortBy((sort) => {
@@ -185,59 +185,64 @@ export default function AssignmentCardsTable({
     <div className="_assignments-table flex">
       <CourseSelector courses={appData.courses} selected={''} />
 
-      <div className="_assignments-col-container flex w-fit relative group-1 bg-day-200 dark:bg-night-200 mt-10 border border-day-300 dark:border-night-300">
-        {assemble(data, sortBy).map((column, idx, array) => {
-          return (
-            <TableColumn
-              clickable={true}
-              cells={column.cells.map((str, idx2) => {
-                return {
-                  type: str instanceof GradebookCategory ? 'CATEGORY' : 'VALUE',
-                  element:
-                    column.type === 'GRADE' ? (
-                      str
-                    ) : (
-                      <span
-                        className={`h-8 whitespace-nowrap block ${
-                          str instanceof GradebookCategory ? 'mb-2' : 'mt-2'
-                        }`}
-                        key={idx2}
-                      >
-                        {str instanceof GradebookCategory ? (
-                          <span className="flex items-center">
-                            <span className="flex-inital absolute left-1/2 -translate-x-1/2">
-                              {str.name}
+      <div className="flex flex-col">
+        <div className="_assignments-col-container flex w-fit relative group-1">
+          {assemble(data, sortBy).map((column, idx, array) => {
+            return (
+              <TableColumn
+                outerBorders={true}
+                clickable={true}
+                cells={column.cells.map((str, idx2) => {
+                  return {
+                    type:
+                      str instanceof GradebookCategory ? 'CATEGORY' : 'VALUE',
+                    element:
+                      column.type === 'GRADE' ? (
+                        str
+                      ) : (
+                        <span
+                          className={`h-8 whitespace-nowrap block ${
+                            str instanceof GradebookCategory ? 'mb-2' : 'mt-2'
+                          }`}
+                          key={idx2}
+                        >
+                          {str instanceof GradebookCategory ? (
+                            <span className="flex items-center">
+                              <span className="flex-inital absolute left-1/2 -translate-x-1/2">
+                                {str.name}
+                              </span>
+                              <span className="flex-inital ml-auto">
+                                <GradeWithWeight
+                                  grade={str.weight.toString()}
+                                  weight={str.weight}
+                                />
+                              </span>
                             </span>
-                            <span className="flex-inital ml-auto">
-                              <GradeWithWeight
-                                grade={str.weight.toString()}
-                                weight={str.weight}
-                              />
-                            </span>
-                          </span>
-                        ) : (
-                          str
-                        )}
-                      </span>
-                    ),
-                };
-              })}
-              header={createHeader(column.header, idx)}
-              type={column.type}
-              key={idx}
-              setComponentShowing={createIsColumnShowing(idx)}
-              getSetComponentShowing={createGetSetIsColumnShowing(idx)}
-              amFirstColumn={idx === 0}
-              amLastColumn={idx === array.length - 1}
-              hoveredRow={hoveredRow}
-              onCellMouseOver={(idx2) => {
-                setHoveredRow(idx2);
-              }}
-              deltaSnapPoint={850 - width}
-              onResize={onResize}
-            />
-          );
-        })}
+                          ) : (
+                            str
+                          )}
+                        </span>
+                      ),
+                  };
+                })}
+                header={createHeader(column.header, idx)}
+                type={column.type}
+                key={idx}
+                setComponentShowing={createIsColumnShowing(idx)}
+                getSetComponentShowing={createGetSetIsColumnShowing(idx)}
+                amFirstColumn={idx === 0}
+                amLastColumn={idx === array.length - 1}
+                hoveredRow={hoveredRow}
+                onCellMouseOver={(idx2) => {
+                  setHoveredRow(idx2);
+                }}
+                deltaSnapPoint={850 - width}
+                onResize={onResize}
+              />
+            );
+          })}
+        </div>
+        <div className="h-full bg-day-200 dark:bg-night-200 border-r border-b border-day-300 dark:border-night-300"></div>
       </div>
     </div>
   );
