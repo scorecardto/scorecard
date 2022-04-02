@@ -230,7 +230,7 @@ export default function TableColumn({
       }`}
     >
       <div
-        className={`_table-column-header block mb-2 relative transition-opacity ${
+        className={`_table-column-header block relative transition-opacity ${
           isComponentDissapearing === 0 ? 'opacity-0 w-0' : 'opacity-100'
         }`}
         ref={colHeaderRef}

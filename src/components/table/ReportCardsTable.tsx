@@ -53,7 +53,7 @@ export default function ReportCardsTable({
   const createHeader = (header: string, idx: number): ReactElement => {
     return (
       <>
-        <div className="-ml-3 flex flex-row flex-nowrap justify-between">
+        <div className="-ml-3 mb-2 flex flex-row flex-nowrap justify-between whitespace-nowrap">
           <TextCard
             onClick={() => {
               setSortBy((sort) => {

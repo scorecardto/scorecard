@@ -7,10 +7,13 @@ import TableColumn, {
   ColumnStringContents,
   SetColumnShowingCallback,
 } from './TableColumn';
+import { AppData } from '@/lib/context/AppDataContext';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 import { transpose } from '@/lib/Util';
 
 type IAssignmentsTableProps = {
+  appData: AppData;
+  setAppData: React.Dispatch<React.SetStateAction<AppData | null>>;
   data: (IAssignmentCategory | ColumnStringContents[])[];
 };
 
@@ -19,7 +22,10 @@ type IAssignmentCategory = {
   weight: number;
 };
 
-export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
+export default function AssignmentCardsTable({
+  data,
+  appData,
+}: IAssignmentsTableProps) {
   const [, setShownColumns] = useState<boolean[]>(
     new Array(data.length).fill(true)
   );
@@ -53,7 +59,7 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
   const createHeader = (header: string, idx: number): ReactElement => {
     return (
       <>
-        <div className="-ml-3">
+        <div className="-ml-3 absolute -top-10">
           <TextCard
             onClick={() => {
               setSortBy((sort) => {
@@ -177,15 +183,9 @@ export default function AssignmentCardsTable({ data }: IAssignmentsTableProps) {
 
   return (
     <div className="_assignments-table flex">
-      <CourseSelector
-        courses={[
-          ['Biology', 'biology-AAAAAA'],
-          ['World Geography', 'world-geography-AAAAAA'],
-        ]}
-        selected={''}
-      />
+      <CourseSelector courses={appData.courses} selected={''} />
 
-      <div className="_assignments-col-container flex w-fit relative group-2">
+      <div className="_assignments-col-container flex w-fit relative group-2 bg-day-200 dark:bg-night-200 mt-10">
         {assemble(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn

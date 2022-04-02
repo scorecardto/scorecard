@@ -4,8 +4,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { IoResize, IoChevronForward } from 'react-icons/io5';
 
+import { Course } from '@/lib/types/Course';
+
 type ICourseSelectorProps = {
-  courses: [string, string][];
+  courses: Course[];
   selected: string;
 };
 
@@ -32,13 +34,13 @@ export default function CourseSelector({ courses }: ICourseSelectorProps) {
           </Link>
         </div>
         <div className="_course-selector-courses pt-10">
-          {courses.map((course, idx) => {
+          {courses.concat(courses).map((course, idx) => {
             return (
               <div
                 className="_course-selector-course-item py-2 pl-5 text-day-400 dark:text-night-400 bg-day-200 dark:bg-night-200 hover:bg-theme-100 dark:hover:bg-theme-200 hover:text-theme-200 dark:hover:text-theme-100 flex items-center"
                 key={idx}
               >
-                <span className="mr-2">{course[0]}</span>
+                <span className="mr-2">{course.name}</span>
                 <IoChevronForward />
               </div>
             );
