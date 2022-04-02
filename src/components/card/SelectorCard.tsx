@@ -72,7 +72,7 @@ export default function SelectorCard({
         </StaticCard>
       </span>
       <div
-        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 mt-2 transition-opacity-transform origin-top-right duration-200 z-20 top-8 right-0 whitespace-nowrap
+        className={`_seletor-selector absolute bg-day-100 dark:bg-night-100 border border-day-300 dark:border-night-300 rounded-md text-day-400 dark:text-day-400 mt-2 transition-opacity-transform origin-top-right duration-200 z-20 top-8 right-0 whitespace-nowrap overflow-hidden
         ${shown ? ' ' : 'hidden hover:block '}${
           !open ? 'scale-75 opacity-0' : ''
         }`}
