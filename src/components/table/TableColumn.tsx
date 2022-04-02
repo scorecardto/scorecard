@@ -36,6 +36,7 @@ export type Column = {
   deltaSnapPoint?: number;
   animated?: boolean;
   forceShow?: boolean;
+  outerBorders?: boolean;
 };
 
 export type ColumnStringContents = {
@@ -75,6 +76,7 @@ export default function TableColumn({
   animated,
   deltaSnapPoint,
   forceShow,
+  outerBorders,
 }: Column) {
   /**
    * Whitespace added to the column
@@ -225,7 +227,7 @@ export default function TableColumn({
 
   return (
     <div
-      className={`_table-column group-1 ${resizing ? 'cursor-col-resize' : ''}${
+      className={`_table-column group-2 ${resizing ? 'cursor-col-resize' : ''}${
         isComponentDissapearing === 0 ? '' : ''
       }`}
     >
@@ -238,7 +240,7 @@ export default function TableColumn({
         {header}
       </div>
 
-      <div className="_table-column-cells-wrapper flex w-fit group-1-first:border-l border-l-day-300 dark:border-l-night-300">
+      <div className="_table-column-cells-wrapper flex w-fit">
         <div
           className="_table-column-cells"
           ref={cellContainerRef}
@@ -274,7 +276,7 @@ export default function TableColumn({
                     delay: myRealIdx * 0.03,
                     duration: 0.3,
                   }}
-                  className={`_table-column-single-cell border-b py-1 first:border-t transition-colors ${
+                  className={`_table-column-single-cell border-b py-1 transition-colors ${
                     clickable ? 'cursor-pointer' : ''
                   } ${
                     inDeletionAction
@@ -284,18 +286,22 @@ export default function TableColumn({
                     type !== 'OTHER_FIELD'
                       ? ` text-day-700 dark:text-night-700 bg-day-200 dark:bg-night-200 ${
                           hoveredRow === myRealIdx && clickable
-                            ? 'group-2-hover:bg-day-250 group-2-hover:dark:bg-night-250'
+                            ? 'group-1-hover:bg-day-250 group-1-hover:dark:bg-night-250'
                             : ''
                         }`
                       : ` text-day-400 dark:text-night-400 bg-day-100 dark:bg-night-100 ${
                           hoveredRow === myRealIdx && clickable
-                            ? 'group-2-hover:bg-day-150 group-2-hover:dark:bg-night-150'
+                            ? 'group-1-hover:bg-day-150 group-1-hover:dark:bg-night-150'
                             : ''
                         }`
-                  }${
+                  } ${
                     cell.type === 'CATEGORY'
-                      ? ' absolute bg-day-200 dark:bg-night-200 z-10 border-day-300 dark:border-night-300 border-r w-full--1'
-                      : ' pl-4 pr-4 w-full'
+                      ? ` absolute bg-day-200 dark:bg-night-200 z-10 w-full`
+                      : ` pl-4 pr-4 w-full`
+                  } ${
+                    outerBorders
+                      ? 'group-3-first:border-t border-r group-2-first:border-l'
+                      : ''
                   }`}
                   onMouseOver={
                     onCellMouseOver &&
@@ -337,13 +343,11 @@ export default function TableColumn({
               );
 
               return (
-                <ConditionalLink
-                  href={cell.link}
-                  key={idx}
-                  enabled={cell.link != null}
-                >
-                  {inner}
-                </ConditionalLink>
+                <div className="group-3" key={idx}>
+                  <ConditionalLink href={cell.link} enabled={cell.link != null}>
+                    {inner}
+                  </ConditionalLink>
+                </div>
                 // <Link href={cell.link ?? '/'} key={idx}>
                 //   {inner}
                 // </Link>
@@ -370,7 +374,7 @@ export default function TableColumn({
           onMouseDown={mouseDownHandler}
         >
           <div
-            className={`_table-column-handle absolute top-0 right-0 h-full w-2 border-r border-r-day-300 dark:border-r-night-300 transition-colors duration-200 group-hover:border-r-blue-400 dark:group-hover:border-r-blue-400 group-hover:border-r-2 dark:group-hover:border-r-2 ${
+            className={`_table-column-handle absolute top-0 right-0 h-full w-2 border-r group-2-last:border-r-0 border-r-day-300 dark:border-r-night-300 transition-colors duration-200 group-hover:border-r-blue-400 dark:group-hover:border-r-blue-400 group-hover:border-r-2 group-2-last:group-hover:border-r-2 ${
               resizing
                 ? `${
                     inDeletionAction

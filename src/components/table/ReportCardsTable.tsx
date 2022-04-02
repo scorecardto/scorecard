@@ -274,11 +274,12 @@ export default function ReportCardsTable({
 
   return (
     <div className="_report-cards-table flex">
-      <div className="_report-cards-col-container flex w-fit group-2" ref={ref}>
+      <div className="_report-cards-col-container flex w-fit group-1" ref={ref}>
         {sorted ? (
           sorted.data.map((column, idx) => {
             return (
               <TableColumn
+                outerBorders={true}
                 cells={column.map((str, idx2) => {
                   return {
                     type: 'VALUE',
@@ -344,6 +345,7 @@ export default function ReportCardsTable({
           clickable={!editingEnabled}
           onResize={onResize}
           deltaSnapPoint={700 - width}
+          outerBorders={true}
         />
       </div>
     </div>

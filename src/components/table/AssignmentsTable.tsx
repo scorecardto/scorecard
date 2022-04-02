@@ -185,7 +185,7 @@ export default function AssignmentCardsTable({
     <div className="_assignments-table flex">
       <CourseSelector courses={appData.courses} selected={''} />
 
-      <div className="_assignments-col-container flex w-fit relative group-2 bg-day-200 dark:bg-night-200 mt-10">
+      <div className="_assignments-col-container flex w-fit relative group-1 bg-day-200 dark:bg-night-200 mt-10 border border-day-300 dark:border-night-300">
         {assemble(data, sortBy).map((column, idx, array) => {
           return (
             <TableColumn
