@@ -23,9 +23,9 @@ export default function Grade({ grade }: IGradeProps) {
   return typeof grade !== 'string' ? (
     <span className="h-8 whitespace-nowrap block mt-2 text-day-400 dark:text-night-400">
       {grade === undefined ? (
-        <IoWarning fontSize={20} className="ml-auto" />
-      ) : (
         <IoFlag fontSize={20} className="ml-auto" />
+      ) : (
+        <IoWarning fontSize={20} className="ml-auto" />
       )}
     </span>
   ) : (

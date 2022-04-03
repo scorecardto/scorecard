@@ -13,11 +13,13 @@ export default function InsightsControls({
   const tabs = [
     { name: 'Notifications', link: '/insights/notifications' },
     { name: 'Grade Point', link: '/insights/gpa' },
+    { name: 'Grade Testing', link: '/insights/testing' },
   ];
 
   const convertCurrentRoute = (route: string): number => {
     if (route === '/insights/notifications') return 0;
     if (route === '/insights/gpa') return 1;
+    if (route === '/insights/testing') return 2;
     return 0;
   };
 
