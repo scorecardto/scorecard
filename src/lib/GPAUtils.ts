@@ -8,6 +8,8 @@ export const getPointsFor = (
 ): number => {
   const asInt = typeof grade === 'string' ? parseInt(grade, 10) : grade;
 
+  if (asInt < 70) return 0;
+
   if (!Number.isNaN(asInt)) {
     return (asInt + (formula.weighted && weighted ? 10 : 0) - 60) / 10;
   }

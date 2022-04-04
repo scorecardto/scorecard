@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { NextSeo } from 'next-seo';
+import { IoFlask } from 'react-icons/io5';
 
 import CourseContainer from '@/components/testing/CourseContainer';
 import { AppDataContext } from '@/lib/context/AppDataContext';
+import { getGPA } from '@/lib/GPAUtils';
+import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -61,7 +64,7 @@ export default function Testing() {
       cellKey: '###',
       hash: '###',
       credit: 1,
-      grades: ['100', '90', '95', '95', '80', '75'],
+      grades: ['70', '90', '95', '95', '80', '75'],
       weighted: true,
       gradebook: new Array(6).fill(gradebook),
       otherFields: [],
@@ -71,13 +74,16 @@ export default function Testing() {
       cellKey: '@@@',
       hash: '@@@',
       credit: 2,
-      grades: ['100', '90', '95', '95', '80', '75'],
+      grades: ['100', '90', '95', '95', '60', '75'],
       weighted: true,
       gradebook: new Array(6).fill(gradebook),
       otherFields: [],
     },
   ];
 
+  // dummy data above
+
+  const [courses, setCourses] = useState<Course[]>([]);
   const { appData } = useContext(AppDataContext);
 
   return (
@@ -93,6 +99,23 @@ export default function Testing() {
             change would reflect your average or GPA.
           </p>
         </div>
+        {appData ? (
+          <div className="_testing-gpa w-full flex justify-center bg-theme-100 dark:bg-theme-200 text-theme-200 dark:text-theme-100 py-3">
+            <span className="flex items-center">
+              <IoFlask className="mr-3" />
+              <p>
+                Your GPA would be a{' '}
+                {getGPA(
+                  courses,
+                  appData.selectedGradingPeriod,
+                  appData.formula
+                ).toFixed(2)}
+              </p>
+            </span>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="_testing-course-container">
           {appData ? (
             assignments.map((course, idx) => (
@@ -100,6 +123,13 @@ export default function Testing() {
                 key={idx}
                 course={course}
                 selectedGradingPeriod={appData.selectedGradingPeriod}
+                update={(c) => {
+                  setCourses((a) => {
+                    const newArr = a.slice(0);
+                    newArr[idx] = c;
+                    return newArr;
+                  });
+                }}
               />
             ))
           ) : (

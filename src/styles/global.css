@@ -16,6 +16,20 @@
   letter-spacing: -.4px;
 }
 
+.slider {
+  -webkit-appearance: none;
+  @apply w-36 outline-0 my-0 mx-auto rounded-md h-1 block from-theme-600 to-theme-700 bg-gradient-to-tr;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  @apply h-4 w-4 bg-theme-200 rounded-full border border-day-150 dark:border-night-150 border-solid transition-transform
+}
+
+.slider::-webkit-slider-thumb:active {
+  transform: scale(1.5);
+}
+
 @layer components {
   .use-responsive-width {
     width: min(100%, 890px);
@@ -73,5 +87,7 @@
     --theme-600: #1c6fb3;
     --theme-700: #179c53;
     --theme-800: #066631;
+  }
+  .slider {
   }
 }

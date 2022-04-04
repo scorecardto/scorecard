@@ -1,41 +1,61 @@
+import { CategoryAssignments } from './types/CategoryAssignments';
 import { CourseAssignments } from './types/CourseAssignments';
 
+export const calculateCategory = (
+  category: CategoryAssignments
+): { average: number; dropped?: boolean } => {
+  let assignmentsAverage = 0;
+  let assignmentCredits = 0;
+
+  category.assignments.forEach((assignment) => {
+    if (assignment.dropped || assignment.weight <= 0 || assignment.grade === '')
+      return;
+
+    const gradeAsInt = parseInt(assignment.grade.toString(), 10);
+
+    if (!Number.isNaN(gradeAsInt)) {
+      assignmentsAverage += gradeAsInt * assignment.weight;
+    } else if (assignment.grade !== 'MSG') {
+      return;
+    }
+
+    assignmentCredits += assignment.weight;
+  });
+
+  if (assignmentCredits <= 0) return { average: 0, dropped: true };
+
+  return {
+    average: assignmentsAverage / assignmentCredits,
+  };
+};
+
 export const calculateAverage = (
-  gradebook: CourseAssignments,
-  gradingPeriod: number
+  categories: { average: number; dropped?: boolean; weight: number }[]
 ): number => {
   let categoriesAverage = 0;
   let categoryCredits = 0;
 
-  gradebook.gradebook[gradingPeriod]?.forEach((category) => {
-    let assignmentsAverage = 0;
-    let assignmentCredits = 0;
-
-    category.assignments.forEach((assignment) => {
-      if (
-        assignment.dropped ||
-        assignment.weight <= 0 ||
-        assignment.grade === ''
-      )
-        return;
-
-      const gradeAsInt = parseInt(assignment.grade.toString(), 10);
-
-      if (!Number.isNaN(gradeAsInt)) {
-        assignmentsAverage += gradeAsInt * assignment.weight;
-      } else if (assignment.grade !== 'MSG') {
-        return;
-      }
-
-      assignmentCredits += assignment.weight;
-    });
-
-    categoriesAverage +=
-      (assignmentsAverage / assignmentCredits) * category.category.weight;
-    categoryCredits += category.category.weight;
+  categories.forEach((category) => {
+    categoriesAverage += category.average;
+    categoryCredits += !category.dropped ? category.weight : 0;
   });
 
   if (categoryCredits <= 0) return -1;
 
   return categoriesAverage / categoryCredits;
+};
+
+export const calculateAll = (
+  gradebook: CourseAssignments,
+  gradingPeriod: number
+): number => {
+  return calculateAverage(
+    gradebook.gradebook[gradingPeriod]?.map((category) => {
+      const calculated = calculateCategory(category);
+      return {
+        ...calculated,
+        weight: category.category.weight,
+      };
+    }) ?? []
+  );
 };
