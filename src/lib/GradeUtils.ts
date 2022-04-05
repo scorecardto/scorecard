@@ -8,8 +8,13 @@ export const calculateCategory = (
   let assignmentCredits = 0;
 
   category.assignments.forEach((assignment) => {
-    if (assignment.dropped || assignment.weight <= 0 || assignment.grade === '')
+    if (
+      assignment.dropped ||
+      assignment.weight <= 0 ||
+      assignment.grade === ''
+    ) {
       return;
+    }
 
     const gradeAsInt = parseInt(assignment.grade.toString(), 10);
 
@@ -36,7 +41,7 @@ export const calculateAverage = (
   let categoryCredits = 0;
 
   categories.forEach((category) => {
-    categoriesAverage += category.average;
+    categoriesAverage += category.average * category.weight;
     categoryCredits += !category.dropped ? category.weight : 0;
   });
 

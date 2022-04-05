@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { motion, Variants } from 'framer-motion';
-import { IoChevronForward } from 'react-icons/io5';
-
-import Grade from '../grade/Grade';
+import FoldableChevron from '../interactive/FoldableChevron';
 import Slider from '../interactive/GradeSlider';
 import CourseGradesTester from './CourseGradesTester';
 import { Course } from '@/lib/types/Course';
@@ -20,11 +17,6 @@ export default function CourseContainer({
   selectedGradingPeriod,
   update,
 }: ICourseContainerProps) {
-  const variants: Variants = {
-    closed: { rotate: 0 },
-    open: { rotate: 90 },
-  };
-
   // const recalcAverage = calculateAverage(course, selectedGradingPeriod);
 
   const [expanded, setExpanded] = useState(false);
@@ -62,48 +54,42 @@ export default function CourseContainer({
   return (
     <div className="_course-container border-b border-day-300 dark:border-night-300">
       <div
-        className="flex justify-between py-2 pl-2 pr-4 hover:bg-day-150 dark:hover:bg-night-150"
+        className="flex justify-between pl-2 pr-4 hover:bg-day-150 dark:hover:bg-night-150"
         onClick={() => {
           setExpanded(!expanded);
         }}
       >
         <div className="flex items-center text-day-700 dark:text-night-700">
-          <motion.div
-            className={`text-day-400 dark:text-night-400 transition-colors duration-200 ease-out p-2 rounded-full text-sm`}
-            initial="closed"
-            animate={expanded ? 'open' : 'closed'}
-            variants={variants}
-          >
-            <IoChevronForward />
-          </motion.div>
+          <FoldableChevron expanded={expanded} />
           <p>{course.name}</p>
         </div>
-        <div
-          className="flex items-center"
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+
+        <span
+          className={`transition-opacity ${
+            !primary ? 'opacity-30' : 'opacity-100'
+          }`}
         >
           <Slider
             val={average?.toString() ?? '0'}
             min={0}
             max={100}
-            set={setAverage}
+            set={(n) => {
+              setPrimary(true);
+              setAverage(n);
+            }}
           />
-          <div className="w-16">
-            <Grade grade={average} />
-          </div>
-        </div>
+        </span>
       </div>
 
       {currentGrades != null ? (
         <CourseGradesTester
           assignments={currentGrades}
-          primary={!primary}
-          setPrimary={(p) => {
-            setPrimary(!p);
-          }}
+          primary={primary}
+          setPrimary={setPrimary}
           shown={expanded}
+          update={(u) => {
+            setAverage(u);
+          }}
         />
       ) : (
         <></>
