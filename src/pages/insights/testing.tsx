@@ -1,12 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 
 import { NextSeo } from 'next-seo';
-import { IoFlask } from 'react-icons/io5';
 
-import CourseContainer from '@/components/testing/CourseContainer';
-import { AppDataContext } from '@/lib/context/AppDataContext';
-import { getGPA } from '@/lib/GPAUtils';
-import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -81,10 +76,12 @@ export default function Testing() {
     },
   ];
 
+  Object.values(assignments);
+
   // dummy data above
 
-  const [courses, setCourses] = useState<Course[]>([]);
-  const { appData } = useContext(AppDataContext);
+  // const [courses, setCourses] = useState<Course[]>([]);
+  // const { appData } = useContext(AppDataContext);
 
   return (
     <div>
@@ -99,7 +96,7 @@ export default function Testing() {
             change would reflect your average or GPA.
           </p>
         </div>
-        {appData ? (
+        {/* {appData ? (
           <div className="_testing-gpa w-full flex justify-center bg-theme-100 dark:bg-theme-200 text-theme-200 dark:text-theme-100 py-3">
             <span className="flex items-center">
               <IoFlask className="mr-3" />
@@ -135,7 +132,7 @@ export default function Testing() {
           ) : (
             <></>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
