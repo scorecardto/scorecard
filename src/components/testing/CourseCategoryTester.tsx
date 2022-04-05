@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import FoldableChevron from '../interactive/FoldableChevron';
 import GradeSlider from '../interactive/GradeSlider';
 import CourseAssignmentTester from './CourseAssignmentTester';
+import { calculateCategory } from '@/lib/GradeUtils';
 import { CategoryAssignments } from '@/lib/types/CategoryAssignments';
 
 type ICourseCategoryTestProps = {
@@ -20,14 +21,12 @@ export default function CourseCategoryTester({
   parentPrimary,
   setParentPrimary,
 }: ICourseCategoryTestProps) {
-  // const [grades, setGrades] = useState<(string | number)[]>([]);
+  const [grades, setGrades] = useState<(string | number)[]>([]);
 
   const [newAverage, setNewAverage] = useState(originalAverage);
-  const [categoryIsParent, setCategoryIsParent] = useState(!parentPrimary);
+  const [categoryIsPrimary, setCategoryIsPrimary] = useState(true);
 
   useEffect(() => {
-    if (newAverage === originalAverage && parentPrimary) return;
-
     setAverage(newAverage);
     if (parentPrimary) {
       setParentPrimary(false);
@@ -37,29 +36,47 @@ export default function CourseCategoryTester({
 
   useEffect(() => {
     if (parentPrimary) {
-      setCategoryIsParent(false);
+      setCategoryIsPrimary(false);
       setNewAverage(originalAverage);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parentPrimary]);
 
+  useEffect(() => {
+    if (!categoryIsPrimary) {
+      setNewAverage(
+        calculateCategory({
+          category: assignments.category,
+          assignments: assignments.assignments.map((a, idx) => {
+            return {
+              ...a,
+              grade: grades[idx] ?? 0,
+              dropped: grades[idx] == null ? true : a.dropped,
+            };
+          }),
+        }).average
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [grades]);
+
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div
-      className="_course-category-tester"
-      onClick={() => {
-        setExpanded(!expanded);
-      }}
-    >
-      <div className="_course-category-tester-category pr-4 pl-6 flex justify-between items-center hover:bg-day-150 dark:hover:bg-night-150">
+    <div className="_course-category-tester">
+      <div
+        className="_course-category-tester-category pr-4 pl-6 flex justify-between items-center hover:bg-day-150 dark:hover:bg-night-150"
+        onClick={() => {
+          setExpanded(!expanded);
+        }}
+      >
         <div className="_category-name text-day-400 dark:text-night-400 flex items-center">
           <FoldableChevron expanded={expanded} />
           <span>{assignments.category.name}</span>
         </div>
         <span
           className={`transition-opacity ${
-            parentPrimary && categoryIsParent ? 'opacity-30' : 'opacity-100'
+            parentPrimary || !categoryIsPrimary ? 'opacity-30' : 'opacity-100'
           }`}
         >
           <GradeSlider
@@ -67,7 +84,7 @@ export default function CourseCategoryTester({
             max={100}
             set={(n) => {
               setNewAverage(n);
-              setCategoryIsParent(true);
+              setCategoryIsPrimary(true);
             }}
             val={newAverage.toString()}
           />
@@ -80,8 +97,15 @@ export default function CourseCategoryTester({
               <CourseAssignmentTester
                 key={idx}
                 assignment={a}
-                parentPrimary={parentPrimary}
-                setParentPrimary={setParentPrimary}
+                parentPrimary={categoryIsPrimary || parentPrimary}
+                setParentPrimary={setCategoryIsPrimary}
+                setGrade={(n) => {
+                  setGrades((g) => {
+                    const newArr = g.slice(0);
+                    newArr[idx] = n;
+                    return newArr;
+                  });
+                }}
               />
             );
           })}
