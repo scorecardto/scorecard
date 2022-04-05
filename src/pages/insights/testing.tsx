@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { NextSeo } from 'next-seo';
 
+import TCourse from '@/components/testing/TCourse';
+import { AppDataContext } from '@/lib/context/AppDataContext';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -76,12 +78,10 @@ export default function Testing() {
     },
   ];
 
-  Object.values(assignments);
-
   // dummy data above
 
   // const [courses, setCourses] = useState<Course[]>([]);
-  // const { appData } = useContext(AppDataContext);
+  const { appData } = useContext(AppDataContext);
 
   return (
     <div>
@@ -96,6 +96,23 @@ export default function Testing() {
             change would reflect your average or GPA.
           </p>
         </div>
+        {appData ? (
+          <div className="flex-col flex gap-4">
+            {assignments.map((course, idx) => {
+              return (
+                <TCourse
+                  course={course}
+                  setCourse={() => {}}
+                  selectedGradingPeriod={appData.selectedGradingPeriod}
+                  key={idx}
+                  index={idx}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <></>
+        )}
         {/* {appData ? (
           <div className="_testing-gpa w-full flex justify-center bg-theme-100 dark:bg-theme-200 text-theme-200 dark:text-theme-100 py-3">
             <span className="flex items-center">

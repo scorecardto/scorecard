@@ -16,7 +16,7 @@ export default function FoldableChevron({ expanded }: IFoldableChevronProps) {
   return (
     <motion.div
       className={`text-day-400 dark:text-night-400 transition-colors duration-200 ease-out p-2 rounded-full text-sm`}
-      initial="closed"
+      initial={false}
       animate={expanded ? 'open' : 'closed'}
       variants={variants}
     >
