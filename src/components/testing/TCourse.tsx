@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { motion } from 'framer-motion';
 
 import Grade from '../grade/Grade';
 import FoldableChevron from '../interactive/FoldableChevron';
+import TAssignments from './TAssignments';
 import TAverage from './TAverage';
 import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
 type ITCourseProps = {
   course: CourseAssignments;
-  setCourse(arg0: Course): void;
+  update(arg0: Course): void;
   selectedGradingPeriod: number;
   index: number;
 };
 
 export default function TCourse({
   course,
+  update,
   selectedGradingPeriod,
   index,
 }: ITCourseProps) {
@@ -57,17 +59,21 @@ export default function TCourse({
 
   const [myCourse, setMyCourse] = useState(course);
 
-  const handleSetAverage = (n: string | number) => {
-    setMyCourse((c) => {
-      const grades = c.grades.slice(0);
-      grades[selectedGradingPeriod] = n;
+  useEffect(() => {
+    update(myCourse);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myCourse]);
 
-      return {
-        ...c,
-        grades,
-      };
-    });
+  const handleSet = (nc: CourseAssignments) => {
+    setMyCourse(nc);
   };
+
+  useEffect(() => {
+    if (editingContext === 'COURSE') {
+      setMyCourse(course);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingContext]);
 
   return (
     <motion.div
@@ -99,7 +105,7 @@ export default function TCourse({
             <FoldableChevron expanded={expanded} />
           </span>
           <span className="_T-course-name text-day-700 dark:text-night-700">
-            {course.name}
+            {myCourse.name}
           </span>
         </div>
 
@@ -130,16 +136,21 @@ export default function TCourse({
         <div
           className={`_T-course-tester border border-day-300 dark:border-night-300 rounded-b-md`}
         >
-          {editingContext === 'COURSE' ? (
-            <div className="py-4 px-4">
+          <div className="py-4 px-4">
+            {editingContext === 'COURSE' ? (
               <TAverage
-                average={myCourse.grades[selectedGradingPeriod] ?? ''}
-                setAverage={handleSetAverage}
+                course={myCourse}
+                selectedGradingPeriod={selectedGradingPeriod}
+                update={handleSet}
               />
-            </div>
-          ) : (
-            <></>
-          )}
+            ) : (
+              <TAssignments
+                course={myCourse}
+                selectedGradingPeriod={selectedGradingPeriod}
+                update={handleSet}
+              />
+            )}
+          </div>
         </div>
       ) : (
         <></>

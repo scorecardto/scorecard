@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { NextSeo } from 'next-seo';
+import { IoFlask } from 'react-icons/io5';
 
 import TCourse from '@/components/testing/TCourse';
 import { AppDataContext } from '@/lib/context/AppDataContext';
+import { getGPA } from '@/lib/GPAUtils';
+import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -80,7 +83,7 @@ export default function Testing() {
 
   // dummy data above
 
-  // const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const { appData } = useContext(AppDataContext);
 
   return (
@@ -97,18 +100,36 @@ export default function Testing() {
           </p>
         </div>
         {appData ? (
-          <div className="flex-col flex gap-4">
-            {assignments.map((course, idx) => {
-              return (
-                <TCourse
-                  course={course}
-                  setCourse={() => {}}
-                  selectedGradingPeriod={appData.selectedGradingPeriod}
-                  key={idx}
-                  index={idx}
-                />
-              );
-            })}
+          <div>
+            <div className="flex items-center justify-center text-theme-200 bg-theme-100 py-3 gap-2 mb-4 rounded-md">
+              <span>
+                <IoFlask />
+              </span>
+              <span>{`Your GPA would be a ${getGPA(
+                courses,
+                appData.selectedGradingPeriod,
+                appData.formula
+              ).toFixed(2)}`}</span>
+            </div>
+            <div className="flex-col flex gap-4">
+              {assignments.map((course, idx) => {
+                return (
+                  <TCourse
+                    course={course}
+                    selectedGradingPeriod={appData.selectedGradingPeriod}
+                    key={idx}
+                    index={idx}
+                    update={(c) => {
+                      setCourses((a) => {
+                        const newArr = a.slice(0);
+                        newArr[idx] = c;
+                        return newArr;
+                      });
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
         ) : (
           <></>
