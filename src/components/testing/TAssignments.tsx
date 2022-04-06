@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
+import TAssignmentRow from './TAssignmentRow';
 import { calculateAverage, calculateCategory } from '@/lib/GradeUtils';
+import { Assignment } from '@/lib/types/Assignment';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
 type ITAssignmentsProps = {
@@ -14,7 +16,7 @@ export default function TAssignments({
   selectedGradingPeriod,
   update,
 }: ITAssignmentsProps) {
-  const updateAverage = (): void => {
+  const getUpdatedAverage = (): (string | number)[] => {
     const n = calculateAverage(
       (course.gradebook[selectedGradingPeriod] ?? []).map((c) => {
         return { ...calculateCategory(c), weight: c.category.weight };
@@ -24,10 +26,38 @@ export default function TAssignments({
     const grades = course.grades.slice(0);
     grades[selectedGradingPeriod] = n;
 
+    return grades;
+  };
+
+  const updateAverage = (): void => {
     update({
       ...course,
-      grades,
+      grades: getUpdatedAverage(),
     });
+  };
+
+  const createUpdateAssignment = (
+    categoryIdx: number,
+    assignmentIdx: number
+  ): {
+    function(arg0: Assignment): void;
+  } => {
+    return {
+      function: (a: Assignment) => {
+        const gradebook = course.gradebook.slice(0);
+
+        const categories = gradebook[selectedGradingPeriod]?.slice(0) ?? [];
+
+        if (categories[categoryIdx] != null) {
+          // @ts-ignore
+          categories[categoryIdx].assignments[assignmentIdx] = a;
+        }
+
+        gradebook[selectedGradingPeriod] = categories;
+
+        update({ ...course, gradebook, grades: getUpdatedAverage() });
+      },
+    };
   };
 
   useEffect(() => {
@@ -36,6 +66,30 @@ export default function TAssignments({
   }, []);
 
   return (
-    <div className="_TAssignments flex justify-between items-center"></div>
+    <div className="_TAssignments">
+      {(course.gradebook[selectedGradingPeriod] ?? []).map(
+        (category, categoryIdx) => {
+          return (
+            <div className="_TCategory" key={categoryIdx}>
+              <div className="_TCategory-name">{category.category.name}</div>
+              <div className="_TCategory-items">
+                {category.assignments.map((assignment, assignmentIdx) => {
+                  return (
+                    <TAssignmentRow
+                      setAssignment={
+                        createUpdateAssignment(categoryIdx, assignmentIdx)
+                          .function
+                      }
+                      assignment={assignment}
+                      key={assignmentIdx}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        }
+      )}
+    </div>
   );
 }
