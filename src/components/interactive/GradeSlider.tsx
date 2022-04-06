@@ -1,18 +1,16 @@
 import React from 'react';
 
-import Grade from '../grade/Grade';
-
 type IGradeSliderProps = {
   val: string;
   min: number;
   max: number;
-  set: React.Dispatch<React.SetStateAction<number | string>>;
+  set(arg0: string | number): void;
 };
 
 export default function GradeSlider({ val, min, max, set }: IGradeSliderProps) {
   return (
     <div
-      className="flex items-center pl-4 py-1"
+      className="_grade-slider"
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -28,9 +26,6 @@ export default function GradeSlider({ val, min, max, set }: IGradeSliderProps) {
           set(e.target.value);
         }}
       />
-      <div className="w-16">
-        <Grade grade={val} alwaysOpaque />
-      </div>
     </div>
   );
 }

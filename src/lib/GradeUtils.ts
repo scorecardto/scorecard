@@ -64,3 +64,19 @@ export const calculateAll = (
     }) ?? []
   );
 };
+
+export const parseNumberRevert = (n: string | number): number | string => {
+  if (typeof n === 'number') return n;
+
+  const asInt = parseInt(n, 10);
+  if (Number.isNaN(asInt)) return n;
+  return asInt;
+};
+
+export const parseNumberForce = (n: string | number): number | undefined => {
+  if (typeof n === 'number') return n;
+
+  const asInt = parseInt(n, 10);
+  if (Number.isNaN(asInt)) return undefined;
+  return asInt;
+};

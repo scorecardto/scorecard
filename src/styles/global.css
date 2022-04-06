@@ -18,7 +18,7 @@
 
 .slider {
   -webkit-appearance: none;
-  @apply w-36 outline-0 my-0 mx-auto rounded-md h-1 block from-theme-600 to-theme-700 bg-gradient-to-tr;
+  @apply w-96 outline-0 my-0 mx-auto rounded-md h-1 block from-theme-600 to-theme-700 bg-gradient-to-tr;
 }
 
 .slider::-webkit-slider-thumb {
