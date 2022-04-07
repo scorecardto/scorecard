@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
@@ -12,7 +12,7 @@ export default function TAssignmentRow({
   assignment,
   setAssignment,
 }: ITAssignmentRowProps) {
-  const [focus, setFocus] = useState(false);
+  // const [setFocus] = useState(false);
 
   const inputRef = React.createRef<HTMLDivElement>();
 
@@ -86,44 +86,44 @@ export default function TAssignmentRow({
   };
 
   const generateRightSide = () => {
-    if (focus) {
-      return generateSuggestions().map((btn, idx) => {
-        return (
-          <div
-            className={`_input-suggestion-card mr-2 h-fit ${
-              btn.lightHighlight
-                ? 'bg-theme-200 text-day-100'
-                : 'bg-theme-100 text-theme-200'
-            } ${
-              btn.darkHighlight
-                ? 'dark:bg-theme-200 dark:text-theme-100'
-                : 'dark:text-theme-200 dark:bg-night-150'
-            } w-fit px-1.5 py-0.5 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden`}
-            key={idx}
-            onMouseDown={(e) => {
-              if (e.button === 0) {
-                btn.fn();
-              }
-            }}
-          >
-            <p className="overflow-hidden text-ellipsis">{btn.title}</p>
-          </div>
-        );
-      });
-    }
-    if (
-      assignment.dropped ||
-      assignment.weight <= 0 ||
-      assignment.grade === ''
-    ) {
+    // if (true) {
+    return generateSuggestions().map((btn, idx) => {
       return (
-        <div className="text-day-400 dark:text-night-400 mr-4">
-          (not counted)
+        <div
+          className={`_input-suggestion-card mr-2 h-fit hidden group-hover:block ${
+            btn.lightHighlight
+              ? 'bg-theme-200 text-day-100'
+              : 'bg-theme-100 text-theme-200'
+          } ${
+            btn.darkHighlight
+              ? 'dark:bg-theme-200 dark:text-theme-100'
+              : 'dark:text-theme-200 dark:bg-night-150'
+          } w-fit px-1.5 py-0.5 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden`}
+          key={idx}
+          onMouseDown={(e) => {
+            if (e.button === 0) {
+              btn.fn();
+            }
+          }}
+        >
+          <p className="overflow-hidden text-ellipsis">{btn.title}</p>
         </div>
       );
-    }
+    });
+    // }
+    // if (
+    //   assignment.dropped ||
+    //   assignment.weight <= 0 ||
+    //   assignment.grade === ''
+    // ) {
+    //   return (
+    //     <div className="text-day-400 dark:text-night-400 mr-4">
+    //       (not counted)
+    //     </div>
+    //   );
+    // }
 
-    return <></>;
+    // return <></>;
     // {
     //   return focus ? (
 
@@ -135,7 +135,7 @@ export default function TAssignmentRow({
 
   return (
     <div
-      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
+      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4 group"
       onClick={() => {
         inputRef.current?.focus();
       }}
@@ -144,14 +144,14 @@ export default function TAssignmentRow({
         {assignment.name}
       </span>
       <span>
-        <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group">
+        <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse ">
           <span>
             <div
               onFocus={() => {
-                setFocus(true);
+                // setFocus(true);
               }}
               onBlur={() => {
-                setFocus(false);
+                // setFocus(false);
               }}
               ref={inputRef}
               className="_TAssignmentRow-input whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors focus:border-theme-200 text-day-700 dark:text-night-700"
