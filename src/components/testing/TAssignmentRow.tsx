@@ -130,7 +130,7 @@ export default function TAssignmentRow({
 
   return (
     <div
-      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4 group"
+      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
       onClick={() => {
         inputRef.current?.focus();
       }}
