@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
+import { IoMenuOutline } from 'react-icons/io5';
+
+import Checkbox from '../interactive/Checkbox';
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
 
@@ -90,7 +93,7 @@ export default function TAssignmentRow({
       return generateSuggestions().map((btn, idx) => {
         return (
           <div
-            className={`_input-suggestion-card mr-2 h-fit ${
+            className={`_input-suggestion-card h-fit ${
               btn.lightHighlight
                 ? 'bg-theme-200 text-day-100'
                 : 'bg-theme-100 text-theme-200'
@@ -111,17 +114,6 @@ export default function TAssignmentRow({
         );
       });
     }
-    if (
-      assignment.dropped ||
-      assignment.weight <= 0 ||
-      assignment.grade === ''
-    ) {
-      return (
-        <div className="text-day-400 dark:text-night-400 mr-4">
-          (not counted)
-        </div>
-      );
-    }
 
     return <></>;
     // {
@@ -133,6 +125,9 @@ export default function TAssignmentRow({
     // })}
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const originalAssignment = useMemo<Assignment>(() => assignment, []);
+
   return (
     <div
       className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
@@ -140,11 +135,37 @@ export default function TAssignmentRow({
         inputRef.current?.focus();
       }}
     >
-      <span className="_TAssignmentRow-name text-day-700 dark:text-night-700">
-        {assignment.name}
+      <span className="_TAssignmentRow-left text-day-700 dark:text-night-700 flex items-center gap-4">
+        <Checkbox
+          checked={!assignment.dropped}
+          editingEnabled={true}
+          onClick={(b) => {
+            setAssignment({ ...assignment, dropped: !b });
+          }}
+          cancelEvent={true}
+        />
+        <span>{assignment.name}</span>
       </span>
       <span>
-        <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group">
+        <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group items-center gap-2">
+          <span className="hover:bg-theme-100 hover:dark:bg-night-250 p-1 rounded-md relative">
+            {JSON.stringify({
+              ...originalAssignment,
+              dropped: !!originalAssignment.dropped,
+              grade: 0,
+            }) !==
+            JSON.stringify({
+              ...assignment,
+              grade: 0,
+              dropped: !!assignment.dropped,
+            }) ? (
+              <span className="bg-theme-200 w-2 h-2 block rounded-full absolute right-1" />
+            ) : (
+              <></>
+            )}
+
+            <IoMenuOutline className="text-xl text-day-400 dark:text-night-400" />
+          </span>
           <span>
             <div
               onFocus={() => {
@@ -165,7 +186,7 @@ export default function TAssignmentRow({
               role={'textbox'}
             />
           </span>
-          <div className="_TAssignmentRow-input-suggestions flex flex-row text-sm items-center">
+          <div className="_TAssignmentRow-input-suggestions flex flex-row text-sm items-center gap-2">
             {generateRightSide()}
           </div>
         </div>

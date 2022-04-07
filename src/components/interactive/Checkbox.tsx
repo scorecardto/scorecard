@@ -6,18 +6,20 @@ type ICheckboxProps = {
   checked: boolean;
   editingEnabled: boolean;
   onClick(arg0: boolean): void;
+  cancelEvent?: boolean;
 };
 
 export default function Checkbox({
   checked,
   editingEnabled,
   onClick,
+  cancelEvent,
 }: ICheckboxProps) {
   const [mouseDown, setMouseDown] = useState(false);
   return (
     <div
-      onMouseDown={() => {
-        if (!editingEnabled) return;
+      onMouseDown={(e) => {
+        if (!editingEnabled || e.button !== 0) return;
 
         setMouseDown(true);
 
@@ -28,8 +30,12 @@ export default function Checkbox({
 
         document.addEventListener('mouseup', upCallback);
       }}
-      onClick={() => {
+      onClick={(e) => {
         if (editingEnabled) onClick(!checked);
+        if (cancelEvent) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
       }}
       className={`text-day-100 w-5 h-5 flex items-center justify-center rounded-sm text-sm transition-background-transform duration-200 ${(() => {
         if (!checked) {
