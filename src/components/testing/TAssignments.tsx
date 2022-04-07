@@ -71,7 +71,9 @@ export default function TAssignments({
         (category, categoryIdx) => {
           return (
             <div className="_TCategory" key={categoryIdx}>
-              <div className="_TCategory-name">{category.category.name}</div>
+              <div className="_TCategory-name h-12 flex items-center">
+                {category.category.name}
+              </div>
               <div className="_TCategory-items">
                 {category.assignments.map((assignment, assignmentIdx) => {
                   return (

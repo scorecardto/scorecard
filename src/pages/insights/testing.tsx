@@ -101,7 +101,7 @@ export default function Testing() {
         </div>
         {appData ? (
           <div>
-            <div className="flex items-center justify-center text-theme-200 bg-theme-100 py-3 gap-2 mb-4 rounded-md">
+            <div className="flex items-center justify-center text-theme-200 bg-theme-100 dark:text-theme-100 dark:bg-theme-200 py-3 gap-2 mb-4 rounded-md">
               <span>
                 <IoFlask />
               </span>
