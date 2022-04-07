@@ -16,29 +16,133 @@ export default function TAssignmentRow({
 
   const inputRef = React.createRef<HTMLDivElement>();
 
-  useEffect(() => {
+  const updateInput = (n?: string) => {
     if (inputRef.current) {
       // @ts-ignore
-      inputRef.current.textContent = assignment.grade.toString();
+      inputRef.current.textContent = n ?? assignment.grade.toString();
     }
+  };
+
+  useEffect(() => {
+    updateInput();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const generateSuggestions = (): { title: string; fn(): void }[] => {
+  const generateSuggestions = (): {
+    title: string;
+    fn(): void;
+    lightHighlight?: boolean;
+    darkHighlight?: boolean;
+  }[] => {
     const returnable = [
       {
-        title: 'Drop',
+        title: assignment.dropped ? 'Undrop' : 'Drop',
         fn: () => {
-          setAssignment({ ...assignment, dropped: true, grade: 0 });
+          setAssignment({ ...assignment, dropped: !assignment.dropped });
         },
+        lightHighlight: assignment.dropped,
+        darkHighlight: true,
       },
     ];
+
+    const parsed = parseNumberRevert(assignment.grade);
+
+    if (typeof parsed === 'number' && parsed < 70) {
+      returnable.push({
+        title: 'Passing',
+        fn: () => {
+          setAssignment({ ...assignment, grade: 70 });
+          updateInput('70');
+        },
+        lightHighlight: false,
+        darkHighlight: !assignment.dropped,
+      });
+    }
+
+    if (typeof parsed === 'number' && parsed < 100) {
+      returnable.push({
+        title: 'Half Back',
+        fn: () => {
+          const halfBack = Math.round((100 + parsed) / 2);
+          setAssignment({ ...assignment, grade: halfBack });
+          updateInput(halfBack.toString());
+        },
+        lightHighlight: false,
+        darkHighlight: !assignment.dropped,
+      });
+
+      returnable.push({
+        title: '100',
+        fn: () => {
+          setAssignment({ ...assignment, grade: 100 });
+          updateInput('100');
+        },
+        lightHighlight: false,
+        darkHighlight: !assignment.dropped,
+      });
+    }
+
     return returnable;
   };
 
+  const generateRightSide = () => {
+    if (focus) {
+      return generateSuggestions().map((btn, idx) => {
+        return (
+          <div
+            className={`_input-suggestion-card mr-2 h-fit ${
+              btn.lightHighlight
+                ? 'bg-theme-200 text-day-100'
+                : 'bg-theme-100 text-theme-200'
+            } ${
+              btn.darkHighlight
+                ? 'dark:bg-theme-200 dark:text-theme-100'
+                : 'dark:text-theme-200 dark:bg-night-150'
+            } w-fit px-1.5 py-0.5 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden`}
+            key={idx}
+            onMouseDown={(e) => {
+              if (e.button === 0) {
+                btn.fn();
+              }
+            }}
+          >
+            <p className="overflow-hidden text-ellipsis">{btn.title}</p>
+          </div>
+        );
+      });
+    }
+    if (
+      assignment.dropped ||
+      assignment.weight <= 0 ||
+      assignment.grade === ''
+    ) {
+      return (
+        <div className="text-day-400 dark:text-night-400 mr-4">
+          (not counted)
+        </div>
+      );
+    }
+
+    return <></>;
+    // {
+    //   return focus ? (
+
+    //   ) : (
+    //     <></>
+    //   );
+    // })}
+  };
+
   return (
-    <div className="_TAssignmentRow flex justify-between h-12 items-center">
-      <span className="_TAssignmentRow-name">{assignment.name}</span>
+    <div
+      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
+      onClick={() => {
+        inputRef.current?.focus();
+      }}
+    >
+      <span className="_TAssignmentRow-name text-day-700 dark:text-night-700">
+        {assignment.name}
+      </span>
       <span>
         <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group">
           <span>
@@ -50,7 +154,7 @@ export default function TAssignmentRow({
                 setFocus(false);
               }}
               ref={inputRef}
-              className="_TAssignmentRow-input whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors focus:border-theme-200"
+              className="_TAssignmentRow-input whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors focus:border-theme-200 text-day-700 dark:text-night-700"
               onInput={(e) => {
                 setAssignment({
                   ...assignment,
@@ -62,23 +166,7 @@ export default function TAssignmentRow({
             />
           </span>
           <div className="_TAssignmentRow-input-suggestions flex flex-row text-sm items-center">
-            {generateSuggestions().map((btn, idx) => {
-              return focus ? (
-                <div
-                  className="_input-suggestion-card mr-2 h-fit bg-theme-100 text-theme-200 dark:bg-theme-200 dark:text-theme-100 w-fit px-1.5 py-0.5 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden"
-                  key={idx}
-                  onMouseDown={(e) => {
-                    if (e.button === 0) {
-                      btn.fn();
-                    }
-                  }}
-                >
-                  <p className="overflow-hidden text-ellipsis">{btn.title}</p>
-                </div>
-              ) : (
-                <></>
-              );
-            })}
+            {generateRightSide()}
           </div>
         </div>
       </span>

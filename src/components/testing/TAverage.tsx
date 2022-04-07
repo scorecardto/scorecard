@@ -25,7 +25,7 @@ export default function TAverage({
   };
 
   return (
-    <div className="_TAverage flex justify-between items-center">
+    <div className="_TAverage flex justify-between items-center py-4 px-4">
       <GradeSlider
         max={100}
         min={0}

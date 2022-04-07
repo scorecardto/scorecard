@@ -136,21 +136,19 @@ export default function TCourse({
         <div
           className={`_T-course-tester border border-day-300 dark:border-night-300 rounded-b-md`}
         >
-          <div className="py-4 px-4">
-            {editingContext === 'COURSE' ? (
-              <TAverage
-                course={myCourse}
-                selectedGradingPeriod={selectedGradingPeriod}
-                update={handleSet}
-              />
-            ) : (
-              <TAssignments
-                course={myCourse}
-                selectedGradingPeriod={selectedGradingPeriod}
-                update={handleSet}
-              />
-            )}
-          </div>
+          {editingContext === 'COURSE' ? (
+            <TAverage
+              course={myCourse}
+              selectedGradingPeriod={selectedGradingPeriod}
+              update={handleSet}
+            />
+          ) : (
+            <TAssignments
+              course={myCourse}
+              selectedGradingPeriod={selectedGradingPeriod}
+              update={handleSet}
+            />
+          )}
         </div>
       ) : (
         <></>

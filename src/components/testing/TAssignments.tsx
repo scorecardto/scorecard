@@ -71,7 +71,7 @@ export default function TAssignments({
         (category, categoryIdx) => {
           return (
             <div className="_TCategory" key={categoryIdx}>
-              <div className="_TCategory-name h-12 flex items-center">
+              <div className="_TCategory-name h-12 flex items-center text-day-400 dark:text-night-400 px-12">
                 {category.category.name}
               </div>
               <div className="_TCategory-items">
