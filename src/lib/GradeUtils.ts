@@ -65,16 +65,20 @@ export const calculateAll = (
   );
 };
 
-export const parseNumberRevert = (n: string | number): number | string => {
-  if (typeof n === 'number') return n;
+export const parseNumberRevert = (
+  n: string | number | undefined
+): number | string | undefined => {
+  if (typeof n === 'number' || n === undefined) return n;
 
   const asInt = parseInt(n, 10);
   if (Number.isNaN(asInt)) return n;
   return asInt;
 };
 
-export const parseNumberForce = (n: string | number): number | undefined => {
-  if (typeof n === 'number') return n;
+export const parseNumberForce = (
+  n: string | number | undefined
+): number | undefined => {
+  if (typeof n === 'number' || n === undefined) return n;
 
   const asInt = parseInt(n, 10);
   if (Number.isNaN(asInt)) return undefined;

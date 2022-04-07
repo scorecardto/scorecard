@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 
 import TAssignmentRow from './TAssignmentRow';
-import { calculateAverage, calculateCategory } from '@/lib/GradeUtils';
+import {
+  calculateAverage,
+  calculateCategory,
+  parseNumberRevert,
+} from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
@@ -61,7 +65,16 @@ export default function TAssignments({
   };
 
   useEffect(() => {
-    updateAverage();
+    let calcAvg = parseNumberRevert(getUpdatedAverage()[selectedGradingPeriod]);
+    if (typeof calcAvg === 'number') calcAvg = Math.round(calcAvg);
+
+    let real = parseNumberRevert(course.grades[selectedGradingPeriod]);
+    if (typeof real === 'number') real = Math.round(real);
+
+    if (calcAvg !== real) {
+      // add a these dont match screen
+      updateAverage();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

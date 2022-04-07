@@ -6,12 +6,11 @@ import Grade from '../grade/Grade';
 import FoldableChevron from '../interactive/FoldableChevron';
 import TAssignments from './TAssignments';
 import TAverage from './TAverage';
-import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
 type ITCourseProps = {
   course: CourseAssignments;
-  update(arg0: Course): void;
+  update(arg0: CourseAssignments): void;
   selectedGradingPeriod: number;
   index: number;
 };
@@ -69,9 +68,7 @@ export default function TCourse({
   };
 
   useEffect(() => {
-    if (editingContext === 'COURSE') {
-      setMyCourse(course);
-    }
+    setMyCourse(course);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingContext]);
 

@@ -166,7 +166,7 @@ export default function TAssignmentRow({
 
             <IoMenuOutline className="text-xl text-day-400 dark:text-night-400" />
           </span>
-          <span>
+          <span className="relative">
             <div
               onFocus={() => {
                 setFocus(true);
@@ -179,12 +179,20 @@ export default function TAssignmentRow({
               onInput={(e) => {
                 setAssignment({
                   ...assignment,
-                  grade: parseNumberRevert(e.currentTarget.textContent ?? ''),
+                  grade:
+                    parseNumberRevert(e.currentTarget.textContent ?? '') ?? '',
                 });
               }}
               contentEditable={true}
               role={'textbox'}
             />
+
+            {originalAssignment.grade.toString() !==
+            assignment.grade.toString() ? (
+              <span className="bg-theme-200 w-3 h-3 block rounded-full absolute -right-1 -top-1" />
+            ) : (
+              <></>
+            )}
           </span>
           <div className="_TAssignmentRow-input-suggestions flex flex-row text-sm items-center gap-2">
             {generateRightSide()}

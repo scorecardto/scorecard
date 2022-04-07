@@ -6,7 +6,6 @@ import { IoFlask } from 'react-icons/io5';
 import TCourse from '@/components/testing/TCourse';
 import { AppDataContext } from '@/lib/context/AppDataContext';
 import { getGPA } from '@/lib/GPAUtils';
-import { Course } from '@/lib/types/Course';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 import GradebookCategory from '@/lib/types/GradebookCategory';
 
@@ -83,7 +82,7 @@ export default function Testing() {
 
   // dummy data above
 
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CourseAssignments[]>([]);
   const { appData } = useContext(AppDataContext);
 
   return (
