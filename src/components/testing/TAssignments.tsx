@@ -68,18 +68,22 @@ export default function TAssignments({
     };
   };
 
-  const [averagesMatch, setAveragesMatch] = useState<boolean | undefined>(
-    undefined
-  );
-
-  useEffect(() => {
+  const calcAveragesMatch = (): boolean => {
     let calcAvg = parseNumberRevert(getUpdatedAverage()[selectedGradingPeriod]);
     if (typeof calcAvg === 'number') calcAvg = Math.round(calcAvg);
 
     let real = parseNumberRevert(course.grades[selectedGradingPeriod]);
     if (typeof real === 'number') real = Math.round(real);
 
-    setAveragesMatch(calcAvg === real);
+    return calcAvg === real;
+  };
+
+  const [averagesMatch, setAveragesMatch] = useState<boolean>(
+    calcAveragesMatch()
+  );
+
+  useEffect(() => {
+    setAveragesMatch(calcAveragesMatch());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGradingPeriod]);
 
