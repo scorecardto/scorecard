@@ -26,7 +26,7 @@ export default function InsightsControls({
   const selected = convertCurrentRoute(currentRoute);
 
   return (
-    <div className="_insights-selector flex relative w-fit mt-5">
+    <div className="_insights-selector flex relative w-fit mt-5 whitespace-nowrap">
       {tabs.map((tab, idx) => {
         return (
           <div

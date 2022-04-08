@@ -62,7 +62,7 @@ export default function Testing() {
       category: new GradebookCategory('Total Points', 100),
       assignments: [
         { name: 'Homework', grade: '100', weight: 1, otherFields: [] },
-        { name: 'Project', grade: '94', weight: 4, otherFields: [] },
+        { name: 'Project', grade: '100', weight: 4, otherFields: [] },
       ],
     },
   ];
@@ -73,7 +73,7 @@ export default function Testing() {
       cellKey: '###',
       hash: '###',
       credit: 1,
-      grades: ['70', '90', '95', '95', '80', '95'],
+      grades: ['70', '90', '95', '95', '80', '100'],
       weighted: true,
       gradebook: [...new Array(5).fill(gradebook), gradebook2],
       otherFields: [],

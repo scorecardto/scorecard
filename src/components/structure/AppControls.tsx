@@ -47,7 +47,7 @@ export default function AppControls({
         <h1 className="_app-controls-header text-day-700 dark:text-night-700 text-4xl font-bold mt-10">
           {pageTitle}
         </h1>
-        <div className="_app_controls-tabs-left flex justify-between items-center">
+        <div className="_app_controls-tabs-left flex justify-between items-center flex-wrap gap-3">
           <div className="flex gap-3">
             <Link href="/dashboard">
               <a className="border-none">

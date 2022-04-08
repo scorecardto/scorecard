@@ -85,6 +85,10 @@ export default function TCourse({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editingContext]);
 
+  useEffect(() => {
+    setEditingContext('COURSE');
+  }, [selectedGradingPeriod]);
+
   return (
     <div
       className="_T-course"
