@@ -57,15 +57,25 @@ export default function Testing() {
     },
   ];
 
+  const gradebook2 = [
+    {
+      category: new GradebookCategory('Total Points', 100),
+      assignments: [
+        { name: 'Homework', grade: '100', weight: 1, otherFields: [] },
+        { name: 'Project', grade: '94', weight: 4, otherFields: [] },
+      ],
+    },
+  ];
+
   const assignments: CourseAssignments[] = [
     {
       name: 'Course',
       cellKey: '###',
       hash: '###',
       credit: 1,
-      grades: ['70', '90', '95', '95', '80', '75'],
+      grades: ['70', '90', '95', '95', '80', '95'],
       weighted: true,
-      gradebook: new Array(6).fill(gradebook),
+      gradebook: [...new Array(5).fill(gradebook), gradebook2],
       otherFields: [],
     },
     {

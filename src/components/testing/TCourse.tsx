@@ -28,6 +28,15 @@ export default function TCourse({
   >('COURSE');
 
   const [tabHover, setTabHover] = useState(false);
+  const [animate, setAnimate] = useState(true);
+
+  useEffect(() => {
+    setAnimate(false);
+  }, [selectedGradingPeriod]);
+
+  useEffect(() => {
+    if (!animate) setAnimate(true);
+  }, [animate]);
 
   const tab = (
     <motion.div
@@ -35,7 +44,7 @@ export default function TCourse({
       className="bg-theme-200 w-full h-1 rounded-t-md mt-1 relative z-10"
       transition={{
         type: 'spring',
-        duration: tabHover ? 0.5 : 0,
+        duration: tabHover && animate ? 0.5 : 0,
         bounce: 0.4,
       }}
     />
@@ -78,7 +87,7 @@ export default function TCourse({
       layoutId={`_T-course-${index}`}
       transition={{
         type: 'spring',
-        duration: tabHover ? 0 : 0.5,
+        duration: tabHover || !animate ? 0 : 0.5,
       }}
       onMouseEnter={() => {
         setTabHover(true);
