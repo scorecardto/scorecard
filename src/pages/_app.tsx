@@ -9,9 +9,7 @@ import Head from 'next/head';
 import Header from '@/components/structure/Header';
 import { AppConfig } from '@/lib/AppConfig';
 import { updateColorScheme } from '@/lib/ColorSchemeHandler';
-import { AlertGroupContext } from '@/lib/context/AlertGroup';
 import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
-import { ConfirmAlertData } from '@/lib/types/AlertData';
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
   const url = `https://scorecard.to${router.route}`;
@@ -21,15 +19,9 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
   }, []);
 
   const [appData, setAppData] = useState<AppData | null>(null);
-  const [alerts, setAlerts] = useState<ConfirmAlertData[]>([]);
 
   const appDataProvider = useMemo(
     () => ({ appData, setAppData }),
-    [appData, setAppData]
-  );
-
-  const alertsProvider = useMemo(
-    () => ({ alerts, setAlerts }),
     [appData, setAppData]
   );
 
@@ -155,7 +147,6 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
       />
       <div>
         <AppDataContext.Provider value={appDataProvider}>
-          <AlertGroupContext.Provider value={alertsProvider} />
           <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
 
           <AnimateSharedLayout>

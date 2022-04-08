@@ -141,6 +141,10 @@ export default function TCourse({
             />
           ) : (
             <TAssignments
+              setEditingContext={(n) => {
+                setTabHover(true);
+                setEditingContext(n);
+              }}
               course={myCourse}
               selectedGradingPeriod={selectedGradingPeriod}
               update={handleSet}
