@@ -157,12 +157,15 @@ export default function TAssignmentRow({
 
   return (
     <div
-      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
-      onClick={() => {
-        inputRef.current?.focus();
+      className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4 _TAssignmentRow-auto-focus"
+      onClick={(e) => {
+        // @ts-ignore
+        if (e.target?.classList?.contains('_TAssignmentRow-auto-focus')) {
+          inputRef.current?.focus();
+        }
       }}
     >
-      <span className="_TAssignmentRow-left text-day-700 dark:text-night-700 flex items-center gap-4">
+      <span className="_TAssignmentRow-left text-day-700 dark:text-night-700 flex items-center gap-4 _TAssignmentRow-auto-focus">
         <Checkbox
           checked={!assignment.dropped}
           editingEnabled={true}
@@ -171,7 +174,7 @@ export default function TAssignmentRow({
           }}
           cancelEvent={true}
         />
-        <span>{assignment.name}</span>
+        <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
       </span>
       <span>
         <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group items-center gap-2">
