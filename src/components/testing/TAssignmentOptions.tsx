@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { IoMenuOutline } from 'react-icons/io5';
 
+import Checkbox from '../interactive/Checkbox';
 import ScalingInput from '../interactive/ScalingInput';
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
@@ -18,7 +19,6 @@ export default function TAssignmentOptions({
   setAssignment,
 }: ITAssignmentOptionsProps) {
   const [weight, setWeight] = useState(assignment.weight.toString());
-  // const [dropped, setDropped] = useState(assignment.dropped);
 
   useEffect(() => {
     const parsed = parseNumberRevert(weight, true);
@@ -58,7 +58,7 @@ export default function TAssignmentOptions({
   return (
     <div className="relative">
       <div
-        className="w-8 h-8 hover:bg-theme-100 rounded-lg flex items-center justify-center relative"
+        className="w-8 h-8 hover:bg-theme-100 dark:hover:bg-night-250 rounded-lg flex items-center justify-center relative"
         onClick={() => {
           if (animateState === -2) {
             setAnimateState(0);
@@ -85,24 +85,38 @@ export default function TAssignmentOptions({
       </div>
 
       <div
-        className={`_TAssignmentOptions absolute bg-day-100 dark:bg-night-100 border border-day-300 dark:border-night-300 z-10 p-5 transition-opacity-transform duration-200 origin-top-right right-0 top-6 rounded-md ${
+        className={`_TAssignmentOptions absolute pb-2 bg-day-100 dark:bg-night-100 border border-day-300 dark:border-night-300 z-10 transition-opacity-transform duration-200 origin-top-right right-0 top-6 rounded-md text-day-400 dark:text-night-400 ${
           animateState === -2 ? 'hidden' : ''
         } ${animateState !== 1 ? 'scale-75 opacity-0' : ''}`}
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
-        <p>Weight</p>
+        <p className="px-5 py-2 text-day-700 dark:text-night-700">Options</p>
 
-        <ScalingInput
-          checkValidity={() => {
-            return typeof parseNumberRevert(weight, true) === 'number';
-          }}
-          update={(n) => {
-            setWeight(n);
-          }}
-          value={weight}
-        />
+        <div className="flex items-center gap-4 px-5 py-2 border-t border-day-300 dark:border-night-300">
+          <p>Weight</p>
+          <ScalingInput
+            checkValidity={() => {
+              return typeof parseNumberRevert(weight, true) === 'number';
+            }}
+            update={(n) => {
+              setWeight(n);
+            }}
+            value={weight}
+          />
+        </div>
+
+        <div className="flex items-center gap-4 px-5 py-2 border-t border-day-300 dark:border-night-300">
+          <p>Dropped</p>
+          <Checkbox
+            checked={!!assignment.dropped}
+            editingEnabled={true}
+            onClick={(n) => {
+              setAssignment({ ...assignment, dropped: n });
+            }}
+          />
+        </div>
       </div>
     </div>
   );
