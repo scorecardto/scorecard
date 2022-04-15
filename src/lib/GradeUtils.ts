@@ -66,12 +66,13 @@ export const calculateAll = (
 };
 
 export const parseNumberRevert = (
-  n: string | number | undefined
+  n: string | number | undefined,
+  strict?: boolean
 ): number | string | undefined => {
   if (typeof n === 'number' || n === undefined) return n;
 
   const asInt = parseInt(n, 10);
-  if (Number.isNaN(asInt)) return n;
+  if (Number.isNaN(asInt) || (strict && Number.isNaN(+n))) return n;
   return asInt;
 };
 

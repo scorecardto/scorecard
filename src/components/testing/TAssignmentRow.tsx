@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { IoMenuOutline } from 'react-icons/io5';
-
 import Checkbox from '../interactive/Checkbox';
+import TAssignmentOptions from './TAssignmentOptions';
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
 
@@ -17,19 +16,17 @@ export default function TAssignmentRow({
 }: ITAssignmentRowProps) {
   const [focus, setFocus] = useState(false);
 
-  const inputRef = React.createRef<HTMLDivElement>();
+  const widthRef = React.createRef<HTMLDivElement>();
+
+  const inputRef = React.createRef<HTMLInputElement>();
 
   const updateInput = (n?: string) => {
     if (inputRef.current) {
-      // @ts-ignore
-      inputRef.current.textContent = n ?? assignment.grade.toString();
+      inputRef.current.value = n ?? assignment.grade.toString();
     }
   };
 
-  useEffect(() => {
-    updateInput();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [width, setWidth] = useState(0);
 
   const generateSuggestions = (): {
     title: string;
@@ -128,6 +125,36 @@ export default function TAssignmentRow({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const originalAssignment = useMemo<Assignment>(() => assignment, []);
 
+  const getGradeIsValid = (): boolean => {
+    const parsed = parseNumberRevert(assignment.grade);
+
+    if (typeof parsed === 'number' && !Number.isNaN(+assignment.grade)) {
+      return parsed >= 0;
+    }
+
+    return ['PND', 'MSG', 'EXC', ''].includes(
+      assignment.grade.toString().toUpperCase()
+    );
+  };
+  // useEffect(() => {
+  //   if (optionsShown) {
+  //     const onClick = () => {
+  //       setOptionsShown(false);
+  //     };
+
+  //     document.addEventListener('click', onClick);
+
+  //     return () => {
+  //       document.removeEventListener('click', onClick);
+  //     };
+  //   }
+  //   return () => {};
+  // }, [optionsShown]);
+
+  useEffect(() => {
+    setWidth(widthRef.current?.clientWidth ?? 0);
+  }, [assignment.grade, widthRef]);
+
   return (
     <div
       className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4"
@@ -148,44 +175,42 @@ export default function TAssignmentRow({
       </span>
       <span>
         <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group items-center gap-2">
-          <span className="hover:bg-theme-100 hover:dark:bg-night-250 p-1 rounded-md relative">
-            {JSON.stringify({
-              ...originalAssignment,
-              dropped: !!originalAssignment.dropped,
-              grade: 0,
-            }) !==
-            JSON.stringify({
-              ...assignment,
-              grade: 0,
-              dropped: !!assignment.dropped,
-            }) ? (
-              <span className="bg-theme-200 w-2 h-2 block rounded-full absolute right-1" />
-            ) : (
-              <></>
-            )}
-
-            <IoMenuOutline className="text-xl text-day-400 dark:text-night-400" />
-          </span>
+          <TAssignmentOptions
+            assignment={assignment}
+            originalAssignment={originalAssignment}
+            setAssignment={setAssignment}
+          />
           <span className="relative">
-            <div
+            <input
+              style={{ width: width != null ? width + 18 : width }}
+              ref={inputRef}
               onFocus={() => {
                 setFocus(true);
               }}
               onBlur={() => {
                 setFocus(false);
               }}
-              ref={inputRef}
-              className="_TAssignmentRow-input whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors focus:border-theme-200 text-day-700 dark:text-night-700"
+              className={`_TAssignmentRow-input whitespace-nowrap outline-none py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors ${
+                getGradeIsValid()
+                  ? 'focus:border-theme-200'
+                  : 'focus:border-red-400'
+              } text-day-700 dark:text-night-700`}
               onInput={(e) => {
                 setAssignment({
                   ...assignment,
                   grade:
-                    parseNumberRevert(e.currentTarget.textContent ?? '') ?? '',
+                    parseNumberRevert(e.currentTarget.value ?? '', true) ?? '',
                 });
               }}
-              contentEditable={true}
               role={'textbox'}
+              value={assignment.grade.toString()}
             />
+            <div
+              ref={widthRef}
+              className="w-fit whitespace-pre invisible absolute top-0 left-0"
+            >
+              {assignment.grade.toString()}
+            </div>
 
             {originalAssignment.grade.toString() !==
             assignment.grade.toString() ? (
