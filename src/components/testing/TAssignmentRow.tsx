@@ -28,12 +28,18 @@ export default function TAssignmentRow({
 
   const [width, setWidth] = useState(0);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const originalAssignment = useMemo<Assignment>(() => assignment, []);
+
   const generateSuggestions = (): {
     title: string;
     fn(): void;
     lightHighlight?: boolean;
     darkHighlight?: boolean;
   }[] => {
+    const revertable =
+      JSON.stringify(assignment) !== JSON.stringify(originalAssignment);
+
     const returnable = [
       {
         title: assignment.dropped ? 'Undrop' : 'Drop',
@@ -41,9 +47,20 @@ export default function TAssignmentRow({
           setAssignment({ ...assignment, dropped: !assignment.dropped });
         },
         lightHighlight: assignment.dropped,
-        darkHighlight: true,
+        darkHighlight: assignment.dropped || !revertable,
       },
     ];
+
+    if (revertable) {
+      returnable.push({
+        title: 'Revert',
+        fn: () => {
+          setAssignment(originalAssignment);
+        },
+        lightHighlight: true,
+        darkHighlight: true,
+      });
+    }
 
     const parsed = parseNumberRevert(assignment.grade);
 
@@ -55,7 +72,7 @@ export default function TAssignmentRow({
           updateInput('70');
         },
         lightHighlight: false,
-        darkHighlight: !assignment.dropped,
+        darkHighlight: !assignment.dropped && !revertable,
       });
     }
 
@@ -68,7 +85,7 @@ export default function TAssignmentRow({
           updateInput(halfBack.toString());
         },
         lightHighlight: false,
-        darkHighlight: !assignment.dropped,
+        darkHighlight: !assignment.dropped && !revertable,
       });
 
       returnable.push({
@@ -78,7 +95,7 @@ export default function TAssignmentRow({
           updateInput('100');
         },
         lightHighlight: false,
-        darkHighlight: !assignment.dropped,
+        darkHighlight: !assignment.dropped && !revertable,
       });
     }
 
@@ -97,7 +114,7 @@ export default function TAssignmentRow({
             } ${
               btn.darkHighlight
                 ? 'dark:bg-theme-200 dark:text-theme-100'
-                : 'dark:text-theme-200 dark:bg-night-150'
+                : 'dark:text-theme-200 dark:bg-night-250'
             } w-fit px-1.5 py-0.5 rounded-md transition-colors cursor-pointer font-normal whitespace-nowrap overflow-hidden`}
             key={idx}
             onMouseDown={(e) => {
@@ -121,9 +138,6 @@ export default function TAssignmentRow({
     //   );
     // })}
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const originalAssignment = useMemo<Assignment>(() => assignment, []);
 
   const getGradeIsValid = (): boolean => {
     const parsed = parseNumberRevert(assignment.grade);
