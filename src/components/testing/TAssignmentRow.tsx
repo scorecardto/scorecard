@@ -42,6 +42,18 @@ export default function TAssignmentRow({
     lightHighlight?: boolean;
     darkHighlight?: boolean;
   }[] => {
+    if (assignment.grade === 'Enter a Grade') {
+      return ['70', '80', '90', '100'].map((g) => {
+        return {
+          title: g,
+          fn: () => {
+            setAssignment({ ...assignment, grade: g });
+          },
+          darkHighlight: true,
+        };
+      });
+    }
+
     const revertable =
       JSON.stringify(assignment) !== JSON.stringify(originalAssignment);
 
@@ -151,7 +163,7 @@ export default function TAssignmentRow({
       return parsed >= 0;
     }
 
-    return ['PND', 'MSG', 'EXC', ''].includes(
+    return ['PND', 'MSG', 'EXC', '', 'ENTER A GRADE'].includes(
       assignment.grade.toString().toUpperCase()
     );
   };
@@ -174,6 +186,39 @@ export default function TAssignmentRow({
     setWidth(widthRef.current?.clientWidth ?? 0);
   }, [assignment.grade, widthRef]);
 
+  const [assignmentName, setAssignmentName] = useState(<></>);
+
+  useEffect(() => {
+    setAssignmentName(
+      removeMe ? (
+        <Renameable
+          editingEnabled={true}
+          setName={(n) => {
+            setAssignment({ ...assignment, name: n });
+          }}
+        >
+          {assignment.name}
+        </Renameable>
+      ) : (
+        <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
+      )
+    );
+    // if (removeMe) {
+    //   console.log('assignment name update', assignment.name);
+    //   setAssignmentName(
+    //     <Renameable
+    //       editingEnabled={true}
+    //       setName={(n) => {
+    //         setAssignment({ ...assignment, name: n });
+    //       }}
+    //     >
+    //       {assignment.name}
+    //     </Renameable>
+    //   );
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assignment.name]);
+
   return (
     <div
       className="_TAssignmentRow flex justify-between h-12 items-center hover:bg-day-150 dark:hover:bg-night-150 focus-within:bg-day-150  focus-within:dark:bg-night-150 pl-12 pr-4 _TAssignmentRow-auto-focus"
@@ -193,20 +238,24 @@ export default function TAssignmentRow({
           }}
           cancelEvent={true}
         />
+        {assignmentName}
         {removeMe ? (
-          <>
-            <Renameable editingEnabled={true} setName={() => {}}>
-              {assignment.name}
-            </Renameable>
-            <button
-              onClick={removeMe}
-              className={`bg-theme-200 text-day-100 w-6 h-6 flex items-center justify-center align-middle text-sm rounded-lg`}
+          /* <Renameable
+              editingEnabled={true}
+              setName={(n) => {
+                setAssignment({ ...assignment, name: n });
+              }}
             >
-              <IoClose />
-            </button>
-          </>
+              {assignment.name}
+            </Renameable> */
+          <button
+            onClick={removeMe}
+            className={`bg-theme-200 text-day-100 w-6 h-6 flex items-center justify-center align-middle text-sm rounded-lg`}
+          >
+            <IoClose />
+          </button>
         ) : (
-          <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
+          <></>
         )}
       </span>
       <span>

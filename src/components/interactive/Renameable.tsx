@@ -69,7 +69,9 @@ export default function Renameable({
     setReady(true);
   }, [widthRef]);
 
-  console.log('render');
+  useEffect(() => {
+    setInput(children);
+  }, [children]);
 
   return (
     <div
