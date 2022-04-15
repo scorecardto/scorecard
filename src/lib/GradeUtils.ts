@@ -16,7 +16,7 @@ export const calculateCategory = (
       return;
     }
 
-    const gradeAsInt = parseInt(assignment.grade.toString(), 10);
+    const gradeAsInt = Math.max(parseInt(assignment.grade.toString(), 10), 0);
 
     if (!Number.isNaN(gradeAsInt)) {
       assignmentsAverage += gradeAsInt * assignment.weight;
@@ -47,7 +47,7 @@ export const calculateAverage = (
 
   if (categoryCredits <= 0) return -1;
 
-  return categoriesAverage / categoryCredits;
+  return Math.min(120, categoriesAverage / categoryCredits);
 };
 
 export const calculateAll = (
