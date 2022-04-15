@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
+import { IoClose } from 'react-icons/io5';
+
 import Checkbox from '../interactive/Checkbox';
+import Renameable from '../interactive/Renameable';
 import TAssignmentOptions from './TAssignmentOptions';
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
@@ -8,11 +11,13 @@ import { Assignment } from '@/lib/types/Assignment';
 type ITAssignmentRowProps = {
   assignment: Assignment;
   setAssignment(arg0: Assignment): void;
+  removeMe?(): void;
 };
 
 export default function TAssignmentRow({
   assignment,
   setAssignment,
+  removeMe,
 }: ITAssignmentRowProps) {
   const [focus, setFocus] = useState(false);
 
@@ -188,7 +193,21 @@ export default function TAssignmentRow({
           }}
           cancelEvent={true}
         />
-        <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
+        {removeMe ? (
+          <>
+            <Renameable editingEnabled={true} setName={() => {}}>
+              {assignment.name}
+            </Renameable>
+            <button
+              onClick={removeMe}
+              className={`bg-theme-200 text-day-100 w-6 h-6 flex items-center justify-center align-middle text-sm rounded-lg`}
+            >
+              <IoClose />
+            </button>
+          </>
+        ) : (
+          <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
+        )}
       </span>
       <span>
         <div className="_TAssignmentRow-input-wrapper flex flex-row-reverse group items-center gap-2">

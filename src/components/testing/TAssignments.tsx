@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import { motion } from 'framer-motion';
 
-import TAssignmentRow from './TAssignmentRow';
+import TCategory from './TCategory';
 import {
+  calculateAll,
   calculateAverage,
   calculateCategory,
   parseNumberRevert,
 } from '@/lib/GradeUtils';
-import { Assignment } from '@/lib/types/Assignment';
+import { CategoryAssignments } from '@/lib/types/CategoryAssignments';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
 type ITAssignmentsProps = {
@@ -44,26 +45,43 @@ export default function TAssignments({
     });
   };
 
-  const createUpdateAssignment = (
-    categoryIdx: number,
-    assignmentIdx: number
+  const createUpdateCategory = (
+    categoryIdx: number
   ): {
-    function(arg0: Assignment): void;
+    function(arg0: CategoryAssignments): void;
   } => {
     return {
-      function: (a: Assignment) => {
-        const gradebook = course.gradebook.slice(0);
+      function: (a: CategoryAssignments) => {
+        const grades = course.grades.slice(0);
 
-        const categories = gradebook[selectedGradingPeriod]?.slice(0) ?? [];
+        const allCategories = course.gradebook.slice(0);
 
-        if (categories[categoryIdx] != null) {
-          // @ts-ignore
-          categories[categoryIdx].assignments[assignmentIdx] = a;
-        }
+        const categories = allCategories[selectedGradingPeriod]?.slice(0) ?? [];
 
-        gradebook[selectedGradingPeriod] = categories;
+        categories[categoryIdx] = a;
 
-        update({ ...course, gradebook, grades: getUpdatedAverage() });
+        allCategories[selectedGradingPeriod] = categories;
+
+        grades[selectedGradingPeriod] = calculateAll(
+          {
+            ...course,
+            gradebook: allCategories,
+          },
+          selectedGradingPeriod
+        ).toString();
+
+        // const gradebook = course.gradebook.slice(0);
+
+        // const categories = gradebook[selectedGradingPeriod]?.slice(0) ?? [];
+
+        // if (categories[categoryIdx] != null) {
+        //   // @ts-ignore
+        //   categories[categoryIdx].assignments = a.assignments;
+        // }
+
+        // gradebook[selectedGradingPeriod] = categories;
+
+        update({ ...course, grades });
       },
     };
   };
@@ -100,29 +118,12 @@ export default function TAssignments({
               {(course.gradebook[selectedGradingPeriod] ?? []).map(
                 (category, categoryIdx) => {
                   return (
-                    <div className="_TCategory" key={categoryIdx}>
-                      <div className="_TCategory-name h-12 flex items-center text-day-400 dark:text-night-400 px-12">
-                        {category.category.name}
-                      </div>
-                      <div className="_TCategory-items">
-                        {category.assignments.map(
-                          (assignment, assignmentIdx) => {
-                            return (
-                              <TAssignmentRow
-                                setAssignment={
-                                  createUpdateAssignment(
-                                    categoryIdx,
-                                    assignmentIdx
-                                  ).function
-                                }
-                                assignment={assignment}
-                                key={assignmentIdx}
-                              />
-                            );
-                          }
-                        )}
-                      </div>
-                    </div>
+                    <TCategory
+                      category={category}
+                      categoryIdx={categoryIdx}
+                      update={createUpdateCategory(categoryIdx).function}
+                      key={categoryIdx}
+                    />
                   );
                 }
               )}

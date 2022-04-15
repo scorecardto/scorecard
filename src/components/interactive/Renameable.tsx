@@ -69,6 +69,8 @@ export default function Renameable({
     setReady(true);
   }, [widthRef]);
 
+  console.log('render');
+
   return (
     <div
       className={`_renameable flex flex-row cursor-auto items-center w-fit mr-0`}
@@ -86,7 +88,7 @@ export default function Renameable({
               style={{ maxWidth: inputMaxWidth }}
               className={`mr-4 outline-none transition-background-padding duration-300 rounded-md resize-none h-8 w-fit box-content ${
                 currentlyEditing
-                  ? 'bg-theme-100 dark:bg-night-150 px-2'
+                  ? 'bg-theme-100 dark:bg-night-250 px-2'
                   : 'bg-transparent'
               }`}
               autoFocus
