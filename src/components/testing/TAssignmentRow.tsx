@@ -207,7 +207,7 @@ export default function TAssignmentRow({
               onBlur={() => {
                 setFocus(false);
               }}
-              className={`_TAssignmentRow-input whitespace-nowrap outline-none py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors ${
+              className={`_TAssignmentRow-input whitespace-nowrap outline-none py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors bg-day-100 dark:bg-night-100 ${
                 getGradeIsValid()
                   ? 'focus:border-theme-200'
                   : 'focus:border-red-400'

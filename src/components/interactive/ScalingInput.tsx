@@ -22,10 +22,10 @@ export default function ScalingInput({
   }, [value, widthRef]);
 
   return (
-    <div className="_scaling-input relative">
+    <div className="_scaling-input relative ">
       <input
         style={{ width: width != null ? width + 18 : undefined }}
-        className={`whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors ${
+        className={`whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors bg-day-100 dark:bg-night-100 ${
           checkValidity(value)
             ? 'focus:border-theme-200'
             : 'focus:border-red-400'
