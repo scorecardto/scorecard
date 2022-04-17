@@ -186,38 +186,27 @@ export default function TAssignmentRow({
     setWidth(widthRef.current?.clientWidth ?? 0);
   }, [assignment.grade, widthRef]);
 
-  const [assignmentName, setAssignmentName] = useState(<></>);
+  // const [assignmentName, setAssignmentName] = useState(<></>);
 
-  useEffect(() => {
-    setAssignmentName(
-      removeMe ? (
-        <Renameable
-          editingEnabled={true}
-          setName={(n) => {
-            setAssignment({ ...assignment, name: n });
-          }}
-        >
-          {assignment.name}
-        </Renameable>
-      ) : (
-        <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
-      )
-    );
-    // if (removeMe) {
-    //   console.log('assignment name update', assignment.name);
-    //   setAssignmentName(
-    //     <Renameable
-    //       editingEnabled={true}
-    //       setName={(n) => {
-    //         setAssignment({ ...assignment, name: n });
-    //       }}
-    //     >
-    //       {assignment.name}
-    //     </Renameable>
-    //   );
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assignment.name]);
+  // useEffect(() => {
+  //   setAssignmentName(
+
+  //   );
+  //   // if (removeMe) {
+  //   //   console.log('assignment name update', assignment.name);
+  //   //   setAssignmentName(
+  //   //     <Renameable
+  //   //       editingEnabled={true}
+  //   //       setName={(n) => {
+  //   //         setAssignment({ ...assignment, name: n });
+  //   //       }}
+  //   //     >
+  //   //       {assignment.name}
+  //   //     </Renameable>
+  //   //   );
+  //   // }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [assignment.name]);
 
   return (
     <div
@@ -238,7 +227,18 @@ export default function TAssignmentRow({
           }}
           cancelEvent={true}
         />
-        {assignmentName}
+        {removeMe ? (
+          <Renameable
+            editingEnabled={true}
+            setName={(n) => {
+              setAssignment({ ...assignment, name: n });
+            }}
+          >
+            {assignment.name}
+          </Renameable>
+        ) : (
+          <span className="_TAssignmentRow-auto-focus">{assignment.name}</span>
+        )}
         {removeMe ? (
           /* <Renameable
               editingEnabled={true}
