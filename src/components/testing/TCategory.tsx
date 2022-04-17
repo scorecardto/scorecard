@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { IoAdd } from 'react-icons/io5';
+
 import TAssignmentRow from './TAssignmentRow';
 import { Assignment } from '@/lib/types/Assignment';
 import { CategoryAssignments } from '@/lib/types/CategoryAssignments';
@@ -32,27 +34,30 @@ export default function TCategory({
 
   return (
     <div className="_TCategory" key={categoryIdx}>
-      <div className="_TCategory-name h-12 flex items-center text-day-400 dark:text-night-400 px-12">
+      <div className="_TCategory-name h-12 flex items-center text-day-400 dark:text-night-400 pl-12 pr-4 justify-between">
         <p>{category.category.name}</p>
-        <button
-          onClick={() => {
-            setAddedAssignments([
-              ...addedAssignments,
-              {
-                name:
-                  addedAssignmentCounter === 1
-                    ? 'New Assignment'
-                    : `New Assignment ${addedAssignmentCounter}`,
-                grade: 'Enter a Grade',
-                weight: 1,
-                otherFields: [],
-              },
-            ]);
-            setAddedAssignmentCounter(addedAssignmentCounter + 1);
-          }}
-        >
-          Add
-        </button>
+        <label className="flex items-center gap-1 bg-theme-100 text-theme-200 py-1 px-2 rounded-md text-sm">
+          <IoAdd />
+          <button
+            onClick={() => {
+              setAddedAssignments([
+                ...addedAssignments,
+                {
+                  name:
+                    addedAssignmentCounter === 1
+                      ? 'New Assignment'
+                      : `New Assignment ${addedAssignmentCounter}`,
+                  grade: 'Enter a Grade',
+                  weight: 1,
+                  otherFields: [],
+                },
+              ]);
+              setAddedAssignmentCounter(addedAssignmentCounter + 1);
+            }}
+          >
+            Add
+          </button>
+        </label>
       </div>
       <div className="_TCategory-items">
         {existingAssignments.map((assignment, assignmentIdx) => {
