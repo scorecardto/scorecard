@@ -11,12 +11,14 @@ type ITAssignmentOptionsProps = {
   assignment: Assignment;
   originalAssignment: Assignment;
   setAssignment(arg0: Assignment): void;
+  removeMe?(): void;
 };
 
 export default function TAssignmentOptions({
   assignment,
   originalAssignment,
   setAssignment,
+  removeMe,
 }: ITAssignmentOptionsProps) {
   const [weight, setWeight] = useState(assignment.weight.toString());
 
@@ -72,11 +74,11 @@ export default function TAssignmentOptions({
           dropped: !!originalAssignment.dropped,
           grade: 0,
         }) !==
-        JSON.stringify({
-          ...assignment,
-          grade: 0,
-          dropped: !!assignment.dropped,
-        }) ? (
+          JSON.stringify({
+            ...assignment,
+            grade: 0,
+            dropped: !!assignment.dropped,
+          }) && !removeMe ? (
           <span className="bg-theme-200 w-2 h-2 block rounded-full absolute right-1 top-1.5" />
         ) : (
           <></>
@@ -117,6 +119,19 @@ export default function TAssignmentOptions({
             }}
           />
         </div>
+
+        {removeMe ? (
+          <div className="border-t border-day-300 dark:border-night-300 pl-5 pr-12 pt-2">
+            <button
+              onClick={removeMe}
+              className="bg-theme-200 text-day-100 py-1 px-3 rounded-md whitespace-nowrap"
+            >
+              Remove Me
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

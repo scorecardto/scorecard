@@ -72,7 +72,7 @@ export default function TAssignmentRow({
       returnable.push({
         title: 'Revert',
         fn: () => {
-          setAssignment(originalAssignment);
+          setAssignment({ ...originalAssignment, name: assignment.name });
         },
         lightHighlight: true,
         darkHighlight: true,
@@ -264,6 +264,7 @@ export default function TAssignmentRow({
             assignment={assignment}
             originalAssignment={originalAssignment}
             setAssignment={setAssignment}
+            removeMe={removeMe}
           />
           <span className="relative">
             <input
@@ -298,7 +299,7 @@ export default function TAssignmentRow({
             </div>
 
             {originalAssignment.grade.toString() !==
-            assignment.grade.toString() ? (
+              assignment.grade.toString() && !removeMe ? (
               <span className="bg-theme-200 w-3 h-3 block rounded-full absolute -right-1 -top-1" />
             ) : (
               <></>
