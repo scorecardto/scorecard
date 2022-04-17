@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TAssignmentRow from './TAssignmentRow';
 import { Assignment } from '@/lib/types/Assignment';
@@ -21,6 +21,14 @@ export default function TCategory({
 
   const [addedAssignments, setAddedAssignments] = useState<Assignment[]>([]);
   const [addedAssignmentCounter, setAddedAssignmentCounter] = useState(1);
+
+  useEffect(() => {
+    update({
+      category: category.category,
+      assignments: existingAssignments.concat(addedAssignments),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addedAssignments]);
 
   return (
     <div className="_TCategory" key={categoryIdx}>
@@ -81,10 +89,6 @@ export default function TCategory({
                 assignments[assignmentIdx] = n;
 
                 setAddedAssignments(assignments);
-                update({
-                  category: category.category,
-                  assignments: existingAssignments.concat(assignment),
-                });
               }}
               assignment={assignment}
               key={assignmentIdx}

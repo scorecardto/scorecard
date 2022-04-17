@@ -52,6 +52,8 @@ export default function TAssignments({
   } => {
     return {
       function: (a: CategoryAssignments) => {
+        console.log('category was updated', a);
+
         const grades = course.grades.slice(0);
 
         const allCategories = course.gradebook.slice(0);
