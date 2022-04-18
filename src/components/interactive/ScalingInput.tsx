@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 type IScalingInputProps = {
   checkValidity(n: string): boolean;
+  checkFade?(n: string): boolean;
   update(n: string): void;
   onFocusChange?(n: boolean): void;
   value: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
 };
 
 export default function ScalingInput({
@@ -12,6 +14,8 @@ export default function ScalingInput({
   onFocusChange,
   checkValidity,
   update,
+  checkFade,
+  inputRef,
 }: IScalingInputProps) {
   const widthRef = React.createRef<HTMLDivElement>();
 
@@ -22,14 +26,19 @@ export default function ScalingInput({
   }, [value, widthRef]);
 
   return (
-    <div className="_scaling-input relative ">
+    <label className="_scaling-input relative ">
       <input
+        ref={inputRef}
         style={{ width: width != null ? width + 18 : undefined }}
         className={`whitespace-nowrap outline-none w-fit py-1 px-2 border border-day-300 dark:border-night-300 rounded-lg transition-colors bg-day-100 dark:bg-night-100 ${
           checkValidity(value)
             ? 'focus:border-theme-200'
             : 'focus:border-red-400'
-        } text-day-700 dark:text-night-700`}
+        } ${
+          checkFade && !checkFade(value)
+            ? 'text-day-400 dark:text-night-400'
+            : 'text-day-700 dark:text-night-700'
+        }`}
         value={value}
         onFocus={() => {
           onFocusChange?.(true);
@@ -48,6 +57,6 @@ export default function ScalingInput({
       >
         {value}
       </div>
-    </div>
+    </label>
   );
 }

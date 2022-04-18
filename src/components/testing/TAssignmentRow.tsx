@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { IoClose } from 'react-icons/io5';
 
 import Checkbox from '../interactive/Checkbox';
 import Renameable from '../interactive/Renameable';
+import ScalingInput from '../interactive/ScalingInput';
 import TAssignmentOptions from './TAssignmentOptions';
 import { parseNumberRevert } from '@/lib/GradeUtils';
 import { Assignment } from '@/lib/types/Assignment';
@@ -21,8 +22,6 @@ export default function TAssignmentRow({
 }: ITAssignmentRowProps) {
   const [focus, setFocus] = useState(false);
 
-  const widthRef = React.createRef<HTMLDivElement>();
-
   const inputRef = React.createRef<HTMLInputElement>();
 
   const updateInput = (n?: string) => {
@@ -30,8 +29,6 @@ export default function TAssignmentRow({
       inputRef.current.value = n ?? assignment.grade.toString();
     }
   };
-
-  const [width, setWidth] = useState(0);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const originalAssignment = useMemo<Assignment>(() => assignment, []);
@@ -156,16 +153,14 @@ export default function TAssignmentRow({
     // })}
   };
 
-  const getGradeIsValid = (): boolean => {
-    const parsed = parseNumberRevert(assignment.grade);
+  const getGradeIsValid = (n: string): boolean => {
+    const parsed = parseNumberRevert(n);
 
-    if (typeof parsed === 'number' && !Number.isNaN(+assignment.grade)) {
+    if (typeof parsed === 'number' && !Number.isNaN(n)) {
       return parsed >= 0;
     }
 
-    return ['PND', 'MSG', 'EXC', '', 'ENTER A GRADE'].includes(
-      assignment.grade.toString().toUpperCase()
-    );
+    return ['PND', 'MSG', 'EXC', '', 'ENTER A GRADE'].includes(n.toUpperCase());
   };
   // useEffect(() => {
   //   if (optionsShown) {
@@ -181,10 +176,6 @@ export default function TAssignmentRow({
   //   }
   //   return () => {};
   // }, [optionsShown]);
-
-  useEffect(() => {
-    setWidth(widthRef.current?.clientWidth ?? 0);
-  }, [assignment.grade, widthRef]);
 
   // const [assignmentName, setAssignmentName] = useState(<></>);
 
@@ -267,7 +258,23 @@ export default function TAssignmentRow({
             removeMe={removeMe}
           />
           <span className="relative">
-            <input
+            <ScalingInput
+              inputRef={inputRef}
+              onFocusChange={setFocus}
+              value={assignment.grade.toString()}
+              checkValidity={getGradeIsValid}
+              update={(n) => {
+                const newAssignment = {
+                  ...assignment,
+                  // @ts-ignore
+                  grade: parseNumberRevert(n, true) ?? '',
+                };
+
+                setAssignment(newAssignment);
+              }}
+              checkFade={(n) => n.toUpperCase() !== 'ENTER A GRADE'}
+            />
+            {/* <input
               style={{ width: width != null ? width + 18 : width }}
               ref={inputRef}
               onFocus={() => {
@@ -298,7 +305,7 @@ export default function TAssignmentRow({
               className="w-fit whitespace-pre invisible absolute top-0 left-0"
             >
               {assignment.grade.toString()}
-            </div>
+            </div> */}
 
             {originalAssignment.grade.toString() !==
               assignment.grade.toString() && !removeMe ? (
