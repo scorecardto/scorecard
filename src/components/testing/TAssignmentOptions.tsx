@@ -109,7 +109,7 @@ export default function TAssignmentOptions({
           />
         </div>
 
-        <div className="flex items-center gap-4 px-5 py-2 border-t border-day-300 dark:border-night-300">
+        <div className="flex items-center gap-4 px-5 border-t border-day-300 dark:border-night-300">
           <p>Dropped</p>
           <Checkbox
             checked={!!assignment.dropped}
@@ -119,19 +119,6 @@ export default function TAssignmentOptions({
             }}
           />
         </div>
-
-        {removeMe ? (
-          <div className="border-t border-day-300 dark:border-night-300 pl-5 pr-12 pt-2">
-            <button
-              onClick={removeMe}
-              className="bg-theme-200 text-day-100 py-1 px-3 rounded-md whitespace-nowrap"
-            >
-              Remove Me
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
       </div>
     </div>
   );

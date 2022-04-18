@@ -59,7 +59,7 @@ export default function TCategory({
     >
       <div className="_TCategory-name h-12 flex items-center text-day-400 dark:text-night-400 pl-12 pr-4 justify-between">
         <p>{category.category.name}</p>
-        <label className="flex items-center gap-1 bg-theme-100 text-theme-200 py-1 px-2 rounded-md text-sm">
+        <label className="flex items-center gap-1 bg-theme-100 dark:bg-night-250 dark:text-theme-100 text-theme-200 py-1 px-2 rounded-md text-sm">
           <IoAdd />
           <button
             onClick={() => {
