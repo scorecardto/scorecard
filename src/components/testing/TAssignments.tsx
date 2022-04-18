@@ -70,6 +70,9 @@ export default function TAssignments({
           selectedGradingPeriod
         ).toString();
 
+        if (grades[selectedGradingPeriod] === '-1')
+          grades[selectedGradingPeriod] = 'NG';
+
         categories[categoryIdx] = real; // assign new to correct category FOR CALCULATION
         allCategories[selectedGradingPeriod] = categories; // replace category of grading period
 
