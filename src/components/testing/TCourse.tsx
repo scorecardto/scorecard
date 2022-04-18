@@ -89,6 +89,12 @@ export default function TCourse({
     setEditingContext('COURSE');
   }, [selectedGradingPeriod]);
 
+  useEffect(() => {
+    if (!expanded) {
+      setEditingContext('COURSE');
+    }
+  }, [expanded]);
+
   return (
     <div
       className="_T-course"

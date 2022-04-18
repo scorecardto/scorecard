@@ -1,6 +1,7 @@
 import React from 'react';
 
 import GradeSlider from '../interactive/GradeSlider';
+import TAverageOptions from './TAverageOptions';
 import { CourseAssignments } from '@/lib/types/CourseAssignments';
 
 type ITAverageProps = {
@@ -24,6 +25,10 @@ export default function TAverage({
     });
   };
 
+  const setCourse = (n: CourseAssignments): void => {
+    update(n);
+  };
+
   return (
     <div className="_TAverage flex justify-between items-center py-4 px-4">
       <GradeSlider
@@ -32,9 +37,11 @@ export default function TAverage({
         set={setAverage}
         val={(course.grades[selectedGradingPeriod] ?? 0).toString()}
       />
-      <span className="text-sm text-day-400 dark:text-night-400">
-        More Options
-      </span>
+      <TAverageOptions
+        course={course}
+        setCourse={setCourse}
+        selectedGradingPeriod={selectedGradingPeriod}
+      />
     </div>
   );
 }
