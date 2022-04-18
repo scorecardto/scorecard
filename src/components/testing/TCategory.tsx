@@ -9,7 +9,7 @@ import { CategoryAssignments } from '@/lib/types/CategoryAssignments';
 type ITCategoryProps = {
   category: CategoryAssignments;
   categoryIdx: number;
-  update(arg0: CategoryAssignments): void;
+  update(real: CategoryAssignments, calculate: CategoryAssignments): void;
 };
 
 export default function TCategory({
@@ -25,12 +25,32 @@ export default function TCategory({
   const [addedAssignmentCounter, setAddedAssignmentCounter] = useState(1);
 
   useEffect(() => {
-    update({
-      category: category.category,
-      assignments: existingAssignments.concat(addedAssignments),
-    });
+    update(
+      {
+        category: category.category,
+        assignments: existingAssignments,
+      },
+      {
+        category: category.category,
+        assignments: existingAssignments.concat(addedAssignments),
+      }
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addedAssignments]);
+
+  useEffect(() => {
+    update(
+      {
+        category: category.category,
+        assignments: existingAssignments,
+      },
+      {
+        category: category.category,
+        assignments: existingAssignments.concat(addedAssignments),
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existingAssignments]);
 
   return (
     <div
@@ -72,10 +92,6 @@ export default function TCategory({
                 assignments[assignmentIdx] = n;
 
                 setExistingAssignments(assignments);
-                update({
-                  category: category.category,
-                  assignments: assignments.concat(addedAssignments),
-                });
               }}
               assignment={assignment}
               key={assignmentIdx}

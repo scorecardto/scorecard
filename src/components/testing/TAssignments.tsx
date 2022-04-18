@@ -48,21 +48,19 @@ export default function TAssignments({
   const createUpdateCategory = (
     categoryIdx: number
   ): {
-    function(arg0: CategoryAssignments): void;
+    function(real: CategoryAssignments, calculate: CategoryAssignments): void;
   } => {
     return {
-      function: (a: CategoryAssignments) => {
-        console.log('category was updated', a);
+      function: (real: CategoryAssignments, calculate: CategoryAssignments) => {
+        const grades = course.grades.slice(0); // list of averages
+        const allCategories = course.gradebook.slice(0); // list of categories across grading periods
+        const categories = allCategories[selectedGradingPeriod]?.slice(0) ?? []; // list of categories in this grading period
 
-        const grades = course.grades.slice(0);
+        categories[categoryIdx] = calculate; // assign new to correct category FOR CALCULATION
+        allCategories[selectedGradingPeriod] = categories; // replace category of grading period
 
-        const allCategories = course.gradebook.slice(0);
-
-        const categories = allCategories[selectedGradingPeriod]?.slice(0) ?? [];
-
-        categories[categoryIdx] = a;
-
-        allCategories[selectedGradingPeriod] = categories;
+        // console.log(categories.map((c) => c.assignments));
+        // console.log(categories.map((c) => calculateCategory(c)));
 
         grades[selectedGradingPeriod] = calculateAll(
           {
@@ -71,6 +69,9 @@ export default function TAssignments({
           },
           selectedGradingPeriod
         ).toString();
+
+        categories[categoryIdx] = real; // assign new to correct category FOR CALCULATION
+        allCategories[selectedGradingPeriod] = categories; // replace category of grading period
 
         // const gradebook = course.gradebook.slice(0);
 
@@ -83,7 +84,7 @@ export default function TAssignments({
 
         // gradebook[selectedGradingPeriod] = categories;
 
-        update({ ...course, grades });
+        update({ ...course, grades, gradebook: allCategories });
       },
     };
   };

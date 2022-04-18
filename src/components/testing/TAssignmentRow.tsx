@@ -282,11 +282,13 @@ export default function TAssignmentRow({
                   : 'focus:border-red-400'
               } text-day-700 dark:text-night-700`}
               onInput={(e) => {
-                setAssignment({
+                const newAssignment = {
                   ...assignment,
-                  grade:
-                    parseNumberRevert(e.currentTarget.value ?? '', true) ?? '',
-                });
+                  // @ts-ignore
+                  grade: parseNumberRevert(e.target.value ?? '', true) ?? '',
+                };
+
+                setAssignment(newAssignment);
               }}
               role={'textbox'}
               value={assignment.grade.toString()}

@@ -115,7 +115,7 @@ export default function TAssignmentOptions({
             checked={!!assignment.dropped}
             editingEnabled={true}
             onClick={(n) => {
-              setAssignment({ ...assignment, dropped: n });
+              setAssignment({ ...assignment, grade: 100, dropped: n });
             }}
           />
         </div>
