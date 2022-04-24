@@ -9,7 +9,8 @@ type IHeaderProps = {
 };
 
 export default function Header({ currentRoute, pageTitle }: IHeaderProps) {
-  const routeInApp = !currentRoute.startsWith('/about');
+  const routeInApp =
+    currentRoute !== '/login' && !currentRoute.startsWith('/about');
 
   const { appData, setAppData } = useContext(AppDataContext);
 

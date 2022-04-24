@@ -10,6 +10,8 @@ import Header from '@/components/structure/Header';
 import { AppConfig } from '@/lib/AppConfig';
 import { updateColorScheme } from '@/lib/ColorSchemeHandler';
 import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
+import { AuthContext, AuthState } from '@/lib/context/AuthContext';
+import { auth } from '@/lib/firebase';
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
   const url = `https://scorecard.to${router.route}`;
@@ -24,6 +26,20 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
     () => ({ appData, setAppData }),
     [appData, setAppData]
   );
+
+  const [authState, setAuthState] = useState<AuthState>({ currentUser: null });
+
+  const authProvider = useMemo(
+    () => ({ auth: authState, setAuth: setAuthState }),
+    [authState, setAuthState]
+  );
+
+  useEffect(() => {
+    return auth.onAuthStateChanged((user) => {
+      setAuthState({ ...authState, currentUser: user });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setAppData({
@@ -146,13 +162,18 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
         canonical={url}
       />
       <div>
-        <AppDataContext.Provider value={appDataProvider}>
-          <Header currentRoute={router.route} pageTitle={pageProps.pageTitle} />
+        <AuthContext.Provider value={authProvider}>
+          <AppDataContext.Provider value={appDataProvider}>
+            <Header
+              currentRoute={router.route}
+              pageTitle={pageProps.pageTitle}
+            />
 
-          <AnimateSharedLayout>
-            <Component {...pageProps} cannonical={url} key={url} />
-          </AnimateSharedLayout>
-        </AppDataContext.Provider>
+            <AnimateSharedLayout>
+              <Component {...pageProps} cannonical={url} key={url} />
+            </AnimateSharedLayout>
+          </AppDataContext.Provider>
+        </AuthContext.Provider>
       </div>
     </>
   );
