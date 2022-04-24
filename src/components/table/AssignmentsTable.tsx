@@ -204,17 +204,19 @@ export default function AssignmentCardsTable({
                         str
                       ) : (
                         <span
-                          className={`h-8 whitespace-nowrap block ${
-                            str instanceof GradebookCategory ? 'mb-2' : 'mt-2'
+                          className={`h-8 whitespace-nowrap ${
+                            str instanceof GradebookCategory
+                              ? 'my-1 flex items-center w-full'
+                              : 'mt-2 block'
                           }`}
                           key={idx2}
                         >
                           {str instanceof GradebookCategory ? (
-                            <span className="flex items-center">
+                            <span className="flex items-center justify-end w-full">
                               <span className="flex-inital absolute left-1/2 -translate-x-1/2">
                                 {str.name}
                               </span>
-                              <span className="flex-inital ml-auto">
+                              <span className="block">
                                 <GradeWithWeight
                                   grade={str.weight.toString()}
                                   weight={str.weight}

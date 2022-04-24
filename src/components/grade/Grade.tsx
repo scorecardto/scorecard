@@ -2,6 +2,8 @@ import React from 'react';
 
 import { IoFlag, IoHelp, IoWarning } from 'react-icons/io5';
 
+import { parseNumberRevert } from '@/lib/GradeUtils';
+
 type IGradeProps = {
   grade: any;
   alwaysOpaque?: boolean;
@@ -15,14 +17,17 @@ const isGradeHigh = (
 };
 
 export default function Grade({ grade, alwaysOpaque }: IGradeProps) {
-  const parsed = Number.parseInt(grade, 10);
-  const gradeDisplay = Number.isNaN(parsed) ? 'unsure' : isGradeHigh(grade, 85);
+  const parsed = parseNumberRevert(grade, true);
+  const gradeDisplay =
+    typeof parsed !== 'number' ? 'unsure' : isGradeHigh(grade, 85);
+  const myGrade =
+    grade == null || grade.toString().trim() === '' ? 'NG' : grade;
 
   return (
     <div className="_grade-wrapper">
-      {typeof grade !== 'string' ? (
+      {typeof myGrade !== 'string' ? (
         <span className="h-8 whitespace-nowrap block mt-2 text-day-400 dark:text-night-400">
-          {grade === undefined ? (
+          {myGrade === undefined ? (
             <IoFlag fontSize={20} className="ml-auto" />
           ) : (
             <IoWarning fontSize={20} className="ml-auto" />
@@ -34,7 +39,7 @@ export default function Grade({ grade, alwaysOpaque }: IGradeProps) {
             gradeDisplay === 'high' || alwaysOpaque ? '' : 'opacity-50'
           }`}
         >
-          {Number.isNaN(parsed) ? grade : parsed.toFixed(0)}
+          {typeof parsed !== 'number' ? myGrade : parsed.toFixed(0)}
           {gradeDisplay === 'unsure' ? (
             <span className="absolute w-5 h-5 bg-theme-800 -right-1 -bottom-1 rounded-full flex justify-center items-center">
               <IoHelp fontSize={14} />

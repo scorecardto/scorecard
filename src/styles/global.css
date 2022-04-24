@@ -16,6 +16,9 @@
   letter-spacing: -.4px;
 }
 
+b {
+@apply font-medium;
+}
 .alert-showing {
   @apply overflow-hidden;
 }
