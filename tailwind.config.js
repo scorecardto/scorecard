@@ -91,6 +91,7 @@ module.exports = {
       },
       animation: {
         'tooltip-appear': 'tooltip-appear 0.15s ease-in',
+        'page-appear': 'page-appear 0.15s ease-in',
       },
       keyframes: {
         'tooltip-appear': {
@@ -103,6 +104,14 @@ module.exports = {
             opacity: '100%',
             transform:
               'translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(1)) scaleY(1)',
+          },
+        },
+        'page-appear': {
+          '0%': {
+            opacity: '0%',
+          },
+          '100%': {
+            opacity: '100%',
           },
         },
       },

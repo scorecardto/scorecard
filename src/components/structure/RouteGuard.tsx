@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
+import RouterLoading from './RouterLoading';
 import { AuthContext } from '@/lib/context/AuthContext';
 import { auth } from '@/lib/firebase';
 
@@ -86,5 +87,5 @@ export default function RouteGuard({ children }: IRouteGuardProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return checked ? children : <>Loading</>;
+  return <RouterLoading done={checked}>{children}</RouterLoading>;
 }
