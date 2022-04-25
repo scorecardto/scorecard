@@ -12,6 +12,7 @@ import { AppConfig } from '@/lib/AppConfig';
 import { updateColorScheme } from '@/lib/ColorSchemeHandler';
 import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
 import { AuthContext, AuthState } from '@/lib/context/AuthContext';
+import { HistoryContext, History } from '@/lib/context/HistoryContext';
 import { auth } from '@/lib/firebase';
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
@@ -115,6 +116,18 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
     });
   }, []);
 
+  const [history, setHistory] = useState<History>([]);
+
+  const historyProvider = useMemo(
+    () => ({ history, setHistory }),
+    [history, setHistory]
+  );
+
+  useEffect(() => {
+    setHistory([...history, router.route]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.route]);
+
   return (
     <>
       <Head>
@@ -165,18 +178,20 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
       <div>
         <AuthContext.Provider value={authProvider}>
           <AppDataContext.Provider value={appDataProvider}>
-            <RouteGuard>
-              <>
-                <Header
-                  currentRoute={router.route}
-                  pageTitle={pageProps.pageTitle}
-                />
+            <HistoryContext.Provider value={historyProvider}>
+              <RouteGuard>
+                <>
+                  <Header
+                    currentRoute={router.route}
+                    pageTitle={pageProps.pageTitle}
+                  />
 
-                <AnimateSharedLayout>
-                  <Component {...pageProps} cannonical={url} key={url} />
-                </AnimateSharedLayout>
-              </>
-            </RouteGuard>
+                  <AnimateSharedLayout>
+                    <Component {...pageProps} cannonical={url} key={url} />
+                  </AnimateSharedLayout>
+                </>
+              </RouteGuard>
+            </HistoryContext.Provider>
           </AppDataContext.Provider>
         </AuthContext.Provider>
       </div>
