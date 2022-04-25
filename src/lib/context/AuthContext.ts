@@ -1,6 +1,11 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 
-import { GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  User,
+  UserCredential,
+} from 'firebase/auth';
 
 import { auth } from '../firebase';
 
@@ -16,8 +21,8 @@ export type AuthProvider = {
 
 const provider = new GoogleAuthProvider();
 
-export const signInWithGoogle = () => {
-  signInWithPopup(auth, provider).then(() => {});
+export const signInWithGoogle = (): Promise<UserCredential> => {
+  return signInWithPopup(auth, provider);
 };
 
 export type AuthState = {

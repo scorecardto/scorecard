@@ -23,7 +23,14 @@ export default function AuthPanel(_: IAuthPanelProps) {
 
         <div className="flex flex-col gap-2">
           <Auth3rdPartyButton
-            onClick={signInWithGoogle}
+            onClick={() => {
+              signInWithGoogle().then((user) => {
+                authContext.setAuth({
+                  ...authContext.auth,
+                  currentUser: user.user,
+                });
+              });
+            }}
             label="Continue with Google"
             backgroundColor="#e86f5e"
             dark="#e65b43"

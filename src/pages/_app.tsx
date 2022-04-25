@@ -7,6 +7,7 @@ import '../styles/global.css';
 import Head from 'next/head';
 
 import Header from '@/components/structure/Header';
+import RouteGuard from '@/components/structure/RouteGuard';
 import { AppConfig } from '@/lib/AppConfig';
 import { updateColorScheme } from '@/lib/ColorSchemeHandler';
 import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
@@ -164,14 +165,18 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
       <div>
         <AuthContext.Provider value={authProvider}>
           <AppDataContext.Provider value={appDataProvider}>
-            <Header
-              currentRoute={router.route}
-              pageTitle={pageProps.pageTitle}
-            />
+            <RouteGuard>
+              <>
+                <Header
+                  currentRoute={router.route}
+                  pageTitle={pageProps.pageTitle}
+                />
 
-            <AnimateSharedLayout>
-              <Component {...pageProps} cannonical={url} key={url} />
-            </AnimateSharedLayout>
+                <AnimateSharedLayout>
+                  <Component {...pageProps} cannonical={url} key={url} />
+                </AnimateSharedLayout>
+              </>
+            </RouteGuard>
           </AppDataContext.Provider>
         </AuthContext.Provider>
       </div>
