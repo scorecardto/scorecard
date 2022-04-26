@@ -3,13 +3,14 @@ import React, { useContext } from 'react';
 import { IoLogoGoogle } from 'react-icons/io5';
 
 import Auth3rdPartyButton from './Auth3rdPartyButton';
+import AuthEmailForm from './AuthEmailForm';
 import { AuthContext, signInWithGoogle } from '@/lib/context/AuthContext';
 
 type IAuthPanelProps = {
   tab: 'LOGIN' | 'SIGNUP';
 };
 
-export default function AuthPanel(_: IAuthPanelProps) {
+export default function AuthPanel({ tab }: IAuthPanelProps) {
   const authContext = useContext(AuthContext);
 
   return (
@@ -45,6 +46,8 @@ export default function AuthPanel(_: IAuthPanelProps) {
           >
             <IoKey />
   </Auth3rdPartyButton> */}
+
+          <AuthEmailForm newUser={tab === 'SIGNUP'} />
         </div>
       </div>
     </div>
