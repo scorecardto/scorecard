@@ -20,8 +20,6 @@ export default function AuthPanel({ tab }: IAuthPanelProps) {
           Login to Scorecard
         </h3>
 
-        {authContext.auth.currentUser?.email ?? 'No email'}
-
         <div className="flex flex-col gap-2">
           <Auth3rdPartyButton
             onClick={() => {

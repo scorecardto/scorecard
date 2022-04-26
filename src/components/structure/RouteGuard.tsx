@@ -16,7 +16,7 @@ export const getRouteType = (
 ): 'ABOUT' | 'APP' | 'UNDEFINED' | 'AUTH' => {
   const stdRoute = route.replace(/\/+$/, '');
 
-  if (stdRoute === '/login') return 'AUTH';
+  if (stdRoute === '/login' || stdRoute === '/signup') return 'AUTH';
   if (stdRoute.startsWith('/about')) return 'ABOUT';
   if (stdRoute.startsWith('/insights') || stdRoute === '/dashboard') {
     return 'APP';
