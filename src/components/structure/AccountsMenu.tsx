@@ -4,7 +4,7 @@ import { IoLogOutOutline, IoPeopleOutline } from 'react-icons/io5';
 
 import StaticCard from '../card/StaticCard';
 import ContextMenu, { ContextMenuState } from '../interactive/ContextMenu';
-import { AuthContext } from '@/lib/context/AuthContext';
+import { AuthContext, signOut } from '@/lib/context/AuthContext';
 
 export default function AccountsMenu() {
   const [accountsContextShowing, setAccountsContextShowing] =
@@ -47,7 +47,7 @@ export default function AccountsMenu() {
             icon={<IoLogOutOutline />}
             colored={false}
             onClick={() => {
-              auth.setAuth({ ...auth.auth, currentUser: null });
+              signOut();
               setAccountsContextShowing('CLOSING');
             }}
           >

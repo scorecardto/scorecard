@@ -25,6 +25,10 @@ export const signInWithGoogle = (): Promise<UserCredential> => {
   return signInWithPopup(auth, provider);
 };
 
+export const signOut = (): Promise<void> => {
+  return auth.signOut();
+};
+
 export type AuthState = {
   currentUser: User | null;
 };
