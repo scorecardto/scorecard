@@ -1,18 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { IoLogoGoogle } from 'react-icons/io5';
 
 import Auth3rdPartyButton from './Auth3rdPartyButton';
 import AuthEmailForm from './AuthEmailForm';
-import { AuthContext, signInWithGoogle } from '@/lib/context/AuthContext';
 
 type IAuthPanelProps = {
   tab: 'LOGIN' | 'SIGNUP';
 };
 
 export default function AuthPanel({ tab }: IAuthPanelProps) {
-  const authContext = useContext(AuthContext);
-
   return (
     <div className="w-full h-full flex justify-center items-center absolute top-0 bottom-0">
       <div>
@@ -23,12 +20,25 @@ export default function AuthPanel({ tab }: IAuthPanelProps) {
         <div className="flex flex-col gap-2">
           <Auth3rdPartyButton
             onClick={() => {
-              signInWithGoogle().then((user) => {
-                authContext.setAuth({
-                  ...authContext.auth,
-                  currentUser: user.user,
-                });
-              });
+              const newWindow = window.open(
+                '/login/with-google',
+                '_blank',
+                `location=yes,toolbar=no,statusbar==yes,resizable=yes,width=500,height=600,top=${Math.max(
+                  (window.screen.availHeight - 600) / 2,
+                  0
+                ).toString()},left=${Math.max(
+                  (window.screen.availWidth - 500) / 2,
+                  0
+                ).toString()}`
+              );
+
+              const subscription = () => {
+                if (newWindow?.closed) {
+                  newWindow?.removeEventListener('unload', subscription);
+                }
+              };
+
+              newWindow?.addEventListener('unload', subscription);
             }}
             label="Continue with Google"
             backgroundColor="#e86f5e"

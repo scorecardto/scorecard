@@ -1,8 +1,10 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 
 import {
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
   User,
   UserCredential,
 } from 'firebase/auth';
@@ -19,10 +21,21 @@ export type AuthProvider = {
   setAuth: Dispatch<SetStateAction<AuthState>>;
 };
 
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGoogle = (): Promise<UserCredential> => {
-  return signInWithPopup(auth, provider);
+  return signInWithRedirect(auth, googleProvider);
+};
+
+export const signInWithEmail = (
+  email: string,
+  password: string,
+  newUser: boolean
+): Promise<UserCredential> => {
+  if (newUser) {
+    return createUserWithEmailAndPassword(auth, email, password);
+  }
+  return signInWithEmailAndPassword(auth, email, password);
 };
 
 export const signOut = (): Promise<void> => {

@@ -13,9 +13,10 @@ type IRouteGuardProps = {
 
 export const getRouteType = (
   route: string
-): 'ABOUT' | 'APP' | 'UNDEFINED' | 'AUTH' => {
+): 'ABOUT' | 'APP' | 'UNDEFINED' | 'AUTH' | 'AUTH_EXTERNAL' => {
   const stdRoute = route.replace(/\/+$/, '');
 
+  if (stdRoute === '/login/with-google') return 'AUTH_EXTERNAL';
   if (stdRoute === '/login' || stdRoute === '/signup') return 'AUTH';
   if (stdRoute.startsWith('/about')) return 'ABOUT';
   if (stdRoute.startsWith('/insights') || stdRoute === '/dashboard') {
@@ -50,6 +51,13 @@ export default function RouteGuard({ children }: IRouteGuardProps) {
 
     const routeType = getRouteType(router.route);
 
+    if (routeType === 'AUTH_EXTERNAL') {
+      if (!currentUser) {
+        setChecked(true);
+        return;
+      }
+      window.close();
+    }
     if (routeType === 'AUTH') {
       if (!currentUser) {
         setChecked(true);
