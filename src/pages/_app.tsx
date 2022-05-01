@@ -13,6 +13,7 @@ import { updateColorScheme } from '@/lib/ColorSchemeHandler';
 import { AppData, AppDataContext } from '@/lib/context/AppDataContext';
 import { AuthContext, AuthState } from '@/lib/context/AuthContext';
 import { HistoryContext, History } from '@/lib/context/HistoryContext';
+import { getData } from '@/lib/DbHandler';
 import { auth } from '@/lib/firebase';
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
@@ -127,6 +128,12 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
     setHistory([...history, router.route]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.route]);
+
+  useEffect(() => {
+    if (authState.currentUser) {
+      getData(authState.currentUser.uid);
+    }
+  }, [authState.currentUser]);
 
   return (
     <>
