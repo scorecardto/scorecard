@@ -1,17 +1,27 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import { db } from './firebase';
+import { SyncedAppData } from './types/SyncedAppData';
 
-// const DEFAULT_INITIAL_DATA = {
+const generateDefaultData = (): SyncedAppData => {
+  return {
+    blocks: [],
+    devices: [], // implement getting current device
+    settings: {
+      formula: {
+        weighted: true,
+      },
+    },
+  };
+};
 
-// }
 export const getData = async (userId: string) => {
-  const user = await doc(db, 'users', userId);
-  const userRef = await getDoc(user);
+  const userDoc = await doc(db, 'users', userId);
+  const user = await getDoc(userDoc);
 
-  if (userRef.exists()) {
-    console.log(userRef.data());
+  if (user.exists()) {
+    console.log(user.data());
   } else {
-    console.log("User doesn't exist yet");
+    await setDoc(userDoc, generateDefaultData());
   }
 };
