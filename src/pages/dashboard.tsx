@@ -21,11 +21,11 @@ const Dashboard = () => {
         <CompactNotificationCenter
           notification={
             {
-              assignment: 'Unit Test',
-              course: 'Geometry',
+              assignment: 'Project',
+              course: 'Art',
               grade: '96',
-              newAverage: 100,
-              oldAverage: 99,
+              newAverage: 94,
+              oldAverage: 93,
             }
             // undefined
           }

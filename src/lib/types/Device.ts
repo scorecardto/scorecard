@@ -1,8 +1,10 @@
+import { OperatingSystem } from 'detect-browser';
+
 export type Device = {
   interalName: string;
-  customName: string;
-  deviceType:
-    | 'IPHONE'
+  customName?: string;
+  browser:
+    | 'IOS'
     | 'ANDROID'
     | 'SAFARI'
     | 'OPERA'
@@ -11,5 +13,7 @@ export type Device = {
     | 'EDGE'
     | 'BRAVE'
     | 'OTHER_BROWSER'
-    | 'UFO'; // we love being quirky like tha
+    | 'UFO'; // we love being quirky like that
+  os: OperatingSystem | NodeJS.Platform | 'UFO';
+  version: string;
 };

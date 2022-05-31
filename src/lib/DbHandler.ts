@@ -1,12 +1,26 @@
+import { detect } from 'detect-browser';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import { db } from './firebase';
 import { SyncedAppData } from './types/SyncedAppData';
+import { createInternalDeviceName, extractBrowser } from './Util';
 
 const generateDefaultData = (): SyncedAppData => {
+  const myDevice = detect();
+
+  const browser = extractBrowser(myDevice?.name ?? 'UFO');
+  const os = myDevice?.os ?? 'UFO';
+
   return {
     blocks: [],
-    devices: [], // implement getting current device
+    devices: [
+      {
+        os,
+        browser,
+        version: myDevice?.version ?? 'Unspecified',
+        interalName: createInternalDeviceName(browser, os),
+      },
+    ],
     settings: {
       formula: {
         weighted: true,

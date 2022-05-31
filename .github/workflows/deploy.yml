@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  workflow_dispatch:
+    inputs:
+        logLevel:
+          description: 'Log level'     
+          required: true
+          default: 'warning'
+        tags:
+          description: 'Test scenario tags'  
+  push:
+    branches: [ master ]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Installing packages
+      run: npm install
+    - name: Get content file
+      run: npm run build
+    - name: Export
+      run: npm run export
+      env:
+        NEXT_PUBLIC_BASE_PATH: /web
+    - run: touch ./out/.nojekyll
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@3.5.9
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: out

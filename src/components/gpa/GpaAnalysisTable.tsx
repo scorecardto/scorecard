@@ -182,7 +182,11 @@ export default function GpaAnalysisTable({
 
     points.push(getPointsFor(grade, course.weighted, formula));
 
-    effect.push(gpa - getGPA(coursesWithout, selectedGradingPeriod, formula));
+    effect.push(
+      Math.round(
+        (gpa - getGPA(coursesWithout, selectedGradingPeriod, formula)) * 100
+      ) / 100
+    );
   });
 
   return (
