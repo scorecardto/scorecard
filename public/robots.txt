@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /dashboard/*
-Disallow: /mobile/*
-Disallow: /assets/*
