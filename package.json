@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.193",
     "next": "12.2.0",
     "next-seo": "^5.4.0",
     "react": "18.2.0",
