@@ -5,13 +5,17 @@ const App: NextPage = () => {
   const [data, setData] = useState(undefined);
 
   if (typeof window !== "undefined") {
-    chrome.runtime
-      .sendMessage("fkpgodekaimcnfknnkgkkdclfodblifl", {
-        message: "hello world!",
-      })
-      .then((response) => {
-        setData(response);
-      });
+    try {
+      chrome.runtime
+        .sendMessage("fkpgodekaimcnfknnkgkkdclfodblifl", {
+          message: "hello world!",
+        })
+        .then((response) => {
+          setData(response);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
