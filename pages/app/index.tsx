@@ -6,13 +6,15 @@ const App: NextPage = () => {
 
   if (typeof window !== "undefined") {
     try {
-      chrome.runtime
-        .sendMessage("fkpgodekaimcnfknnkgkkdclfodblifl", {
+      chrome.runtime.sendMessage(
+        "fkpgodekaimcnfknnkgkkdclfodblifl",
+        {
           message: "hello world!",
-        })
-        .then((response) => {
+        },
+        (response) => {
           setData(response);
-        });
+        }
+      );
     } catch (e) {
       console.log(e);
     }
