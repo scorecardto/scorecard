@@ -12,6 +12,8 @@ const App: NextPage = () => {
           message: "hello world!",
         },
         (response) => {
+          console.log("got a response", response);
+
           setData(response);
         }
       );
