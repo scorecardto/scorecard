@@ -4,8 +4,6 @@ import { DefaultSeo } from "next-seo";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  const url = `https://scorecard.to${router.route}`;
-
   return (
     <>
       <Head>
@@ -45,16 +43,16 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         openGraph={{
           type: "website",
           locale: "en",
-          url,
+          url: `https://scorecard.to${router.route}`,
           title: "Scorecard",
           description:
             "Scorecard: Free Gradebook Viewer for Frontline with Grade Testing, History, and GPA.",
           site_name: "Scorecard",
           images: [],
         }}
-        canonical={url}
+        canonical={`https://scorecard.to${router.route}`}
       />
-      <Component {...pageProps} cannonical={url} key={url} />
+      <Component {...pageProps} />
     </>
   );
 }

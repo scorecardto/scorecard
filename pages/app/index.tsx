@@ -14,20 +14,20 @@ const App: NextPage = () => {
   const [loadState, setLoadState] = useState<AppLoadState>("LOADING");
 
   useEffect(() => {
+    console.log("/app route loaded");
+  }, []);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
-      if (window["chrome"] && chrome.runtime?.["sendMessage"]) {
-        chrome.runtime.sendMessage(
-          "fkpgodekaimcnfknnkgkkdclfodblifl",
-          { type: "getData" },
-          (response) => {
-            if (response.version === "0.1") {
-              setData(response.data);
-              setLoadState("DONE");
-            } else {
-              setLoadState("ERR_EXT_VERSION");
-            }
-          }
-        );
+      if (window["chrome"]) {
+        if (chrome.runtime?.["sendMessage"]) {
+          const port = chrome.runtime.connect(
+            "fkpgodekaimcnfknnkgkkdclfodblifl"
+          );
+          console.log(port);
+        } else {
+          setLoadState("ERR_EXT_NOT_INSTALLED");
+        }
       } else {
         setLoadState("ERR_BROWSER");
       }
