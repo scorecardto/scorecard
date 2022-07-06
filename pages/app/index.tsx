@@ -15,14 +15,18 @@ const App: NextPage = () => {
 
   if (typeof window !== "undefined") {
     if (window["chrome"] && chrome.runtime?.["sendMessage"]) {
-      chrome.runtime.sendMessage({ type: "getData" }, (response) => {
-        if (response.version === "0.1") {
-          setData(response.data);
-          setLoadState("DONE");
-        } else {
-          setLoadState("ERR_EXT_VERSION");
+      chrome.runtime.sendMessage(
+        "fkpgodekaimcnfknnkgkkdclfodblifl",
+        { type: "getData" },
+        (response) => {
+          if (response.version === "0.1") {
+            setData(response.data);
+            setLoadState("DONE");
+          } else {
+            setLoadState("ERR_EXT_VERSION");
+          }
         }
-      });
+      );
     } else {
       setLoadState("ERR_BROWSER");
     }
