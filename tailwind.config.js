@@ -33,7 +33,35 @@ module.exports = {
     fontFamily: {
       sans: ["DMSans", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      colors: {
+        accent: {
+          100: "#F1F8FF",
+          200: "#E1EFFF",
+          300: "#56A2E9",
+          400: "#4F86D9",
+          500: "#7C4FB6",
+          600: "#485D72",
+          700: "#3B5269",
+        },
+        "mono-l": {
+          100: "#FFFFFF",
+          200: "#FAFAFA",
+          300: "#F4F4F4",
+          400: "#C9C9C9",
+          500: "#909090",
+          600: "#333333",
+        },
+        "mono-d": {
+          100: "#2D3136",
+          200: "#383B3F",
+          300: "#3E4145",
+          400: "#454A52",
+          500: "#909090",
+          600: "#FFFFFF",
+        },
+      },
+    },
   },
   plugins: [
     require("tailwindcss-children"),

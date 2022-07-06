@@ -7,5 +7,13 @@ body {
 }
 
 h1 {
-  @apply font-semibold text-4xl;
+  @apply font-semibold text-4xl text-mono-l-600 dark:text-mono-d-600;
+}
+
+b {
+  @apply text-mono-l-600 dark:text-mono-d-600 font-medium;
+}
+
+p {
+  @apply text-mono-l-500 dark:text-mono-d-500;
 }
