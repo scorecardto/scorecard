@@ -5,7 +5,7 @@ import Toolbar from "./Toolbar";
 export default function Summary() {
   return (
     <div className="w-full">
-      <div className="max-w-6xl mx-auto px-8">
+      <div className="max-w-6xl mx-auto px-8 flex flex-col gap-8 pt-8">
         <h1>Your Scorecard</h1>
 
         <div className="flex flex-row justify-between items-end gap-8">
@@ -18,6 +18,8 @@ export default function Summary() {
           <Toolbar />
         </div>
       </div>
+
+      <div className="w-full h-20 bg-mono-l-200 dark:bg-mono-d-200"></div>
     </div>
   );
 }
