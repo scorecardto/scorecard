@@ -47,7 +47,7 @@ module.exports = {
         "mono-l": {
           100: "#FFFFFF",
           200: "#FAFAFA",
-          300: "#F4F4F4",
+          300: "#eaeaea",
           350: "#e9e9e9",
           400: "#C9C9C9",
           500: "#909090",
