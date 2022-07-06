@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type AppLoadState =
   | "LOADING"
@@ -13,24 +13,26 @@ const App: NextPage = () => {
 
   const [loadState, setLoadState] = useState<AppLoadState>("LOADING");
 
-  if (typeof window !== "undefined") {
-    if (window["chrome"] && chrome.runtime?.["sendMessage"]) {
-      chrome.runtime.sendMessage(
-        "fkpgodekaimcnfknnkgkkdclfodblifl",
-        { type: "getData" },
-        (response) => {
-          if (response.version === "0.1") {
-            setData(response.data);
-            setLoadState("DONE");
-          } else {
-            setLoadState("ERR_EXT_VERSION");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window["chrome"] && chrome.runtime?.["sendMessage"]) {
+        chrome.runtime.sendMessage(
+          "fkpgodekaimcnfknnkgkkdclfodblifl",
+          { type: "getData" },
+          (response) => {
+            if (response.version === "0.1") {
+              setData(response.data);
+              setLoadState("DONE");
+            } else {
+              setLoadState("ERR_EXT_VERSION");
+            }
           }
-        }
-      );
-    } else {
-      setLoadState("ERR_BROWSER");
+        );
+      } else {
+        setLoadState("ERR_BROWSER");
+      }
     }
-  }
+  }, []);
 
   return (
     <div>
