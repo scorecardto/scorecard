@@ -1,4 +1,5 @@
 import { IoTrendingUp } from "react-icons/io5";
+import CourseCard from "./CourseCard";
 import NotificationSummary from "./NotificationSummary";
 import Toolbar from "./Toolbar";
 
@@ -19,7 +20,17 @@ export default function Summary() {
         </div>
       </div>
 
-      <div className="w-full h-20 bg-mono-l-200 dark:bg-mono-d-200"></div>
+      <div className="w-full bg-mono-l-200 dark:bg-mono-d-200">
+        <div className="max-w-6xl mx-auto p-8 relative">
+          <div className="flex gap-8 overflow-hidden flex-wrap">
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+            <CourseCard />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

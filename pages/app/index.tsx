@@ -58,7 +58,7 @@ const App: NextPage = () => {
   }, []);
 
   return (
-    <div className="fixed w-full h-full top-0 left-0">
+    <div>
       {loadState === "LOADING" && <p>Loading...</p>}
       {loadState === "ERR_BROWSER" && (
         <p>Sorry, your browser is not compatible.</p>

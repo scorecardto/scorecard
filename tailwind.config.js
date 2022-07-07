@@ -34,6 +34,9 @@ module.exports = {
       sans: ["DMSans", "sans-serif"],
     },
     extend: {
+      maxWidth: {
+        "6xl": "68rem",
+      },
       colors: {
         accent: {
           100: "#F1F8FF",
@@ -46,7 +49,7 @@ module.exports = {
         },
         "mono-l": {
           100: "#FFFFFF",
-          200: "#FAFAFA",
+          200: "#f4f4f4",
           300: "#eaeaea",
           350: "#e9e9e9",
           400: "#C9C9C9",
