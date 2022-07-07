@@ -32,6 +32,7 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ["DMSans", "sans-serif"],
+      mono: ["AnekKannada", "monospace"],
     },
     extend: {
       maxWidth: {
@@ -49,6 +50,7 @@ module.exports = {
         },
         "mono-l": {
           100: "#FFFFFF",
+          150: "#FAFAFA",
           200: "#f4f4f4",
           300: "#eaeaea",
           350: "#e9e9e9",
@@ -58,6 +60,7 @@ module.exports = {
         },
         "mono-d": {
           100: "#2D3136",
+          150: "#23272b",
           200: "#383B3F",
           300: "#3E4145",
           350: "#37393d",
@@ -122,6 +125,13 @@ module.exports = {
           fontStyle: "italic",
           fontWeight: 700,
           src: "url(font/DMSans-BoldItalic.ttf)",
+        },
+      });
+
+      addBase({
+        "@font-face": {
+          fontFamily: "AnekKannada",
+          src: "url(font/AnekKannada.ttf)",
         },
       });
     }),

@@ -22,12 +22,15 @@ export default function Summary() {
 
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200">
         <div className="max-w-6xl mx-auto p-8 relative">
-          <div className="flex gap-8 overflow-hidden flex-wrap">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <CourseCard
+              onClick={() => {}}
+              courseName="Course Name"
+              description1="Description Line 1"
+              description2="Description Line 2"
+              grade="100"
+              id="course-id"
+            />
           </div>
         </div>
       </div>
