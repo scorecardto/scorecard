@@ -4,7 +4,7 @@ export default function Toolbar() {
   return (
     <div className="flex-none my-4">
       <MQ query="(min-width: 1024px)">
-        <div className="flex flex-row transition-colors gap-0.5 children:px-8 children:py-3 children:bg-accent-100 dark:children:bg-accent-600 children:text-accent-300 dark:children:text-white children:transition-colors rounded-lg overflow-hidden cursor-pointer bg-accent-200 dark:bg-accent-700 border-accent-200 dark:border-accent-700 border">
+        <div className="flex flex-row gap-0.5 children:px-8 children:py-3 children:bg-accent-100 dark:children:bg-accent-600 children:text-accent-300 dark:children:text-white rounded-lg overflow-hidden cursor-pointer bg-accent-200 dark:bg-accent-700 border-accent-200 dark:border-accent-700 border">
           <div className="hover:bg-accent-200 dark:hover:bg-accent-700">
             GPA Calculator
           </div>
@@ -15,7 +15,7 @@ export default function Toolbar() {
       </MQ>
 
       <MQ query="(min-width: 1024px)" invert>
-        <div className="flex flex-col gap-2 children:cursor-pointer children:rounded-md children:transition-colors">
+        <div className="flex flex-col gap-2 children:cursor-pointer children:rounded-md">
           <div className="px-8 py-3 bg-accent-100 hover:bg-accent-200 dark:bg-accent-600 dark:hover:bg-accent-700 text-accent-300 dark:text-white border border-accent-200 dark:border-accent-700">
             GPA Calculator
           </div>

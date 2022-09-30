@@ -19,14 +19,11 @@ const App: NextPage = () => {
 
   const connectChrome = () => {
     const port = chrome.runtime.connect(EXTENSION_ID);
-    console.log(port);
+
+    console.log(port.sender);
 
     port.onMessage.addListener((msg) => {
-      console.log("got message: ", msg);
-
-      if (msg == null) {
-        setLoadState("ERR_EXT_NOT_INSTALLED");
-      } else if (msg.type === "handshake") {
+      if (msg.type === "handshake") {
         if (msg.version === 0.1) {
           setLoadState("DONE");
         } else {
