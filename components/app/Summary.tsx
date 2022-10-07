@@ -43,7 +43,7 @@ export default function Summary() {
                   courseName={course.name}
                   description1={course.key}
                   description2=" "
-                  grade={course.grades[0]?.value ?? "NG"}
+                  grade={course.grades[data.gradingPeriod]?.value ?? "NG"}
                   id={course.key}
                 />
               );
