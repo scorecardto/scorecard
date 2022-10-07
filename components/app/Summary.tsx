@@ -46,6 +46,7 @@ export default function Summary() {
                   grade={course.grades[data.gradingPeriod]?.value ?? "NG"}
                   id={course.key}
                 />
+                //
               );
             })}
           </div>
