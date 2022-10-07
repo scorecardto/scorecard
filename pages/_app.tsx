@@ -2,8 +2,29 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { DefaultSeo } from "next-seo";
 import "../styles/globals.css";
+import { GradebookRecord, LoadingContext, DataContext } from "scorecard-types";
+import { useMemo, useState } from "react";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  const [data, setData] = useState<GradebookRecord | null>(null);
+  const [gradingPeriod, setGradingPeriod] = useState<number>(0);
+
+  const dataContext = useMemo(
+    () => ({
+      data,
+      setData,
+      gradingPeriod,
+      setGradingPeriod,
+    }),
+    [data, gradingPeriod, setGradingPeriod]
+  );
+
+  const [loading, setLoading] = useState(false);
+
+  const reloadContent = () => {
+    // do nothing
+  };
+
   return (
     <>
       <Head>
@@ -52,7 +73,12 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         }}
         canonical={`https://scorecard.to${router.route}`}
       />
-      <Component {...pageProps} />
+
+      <LoadingContext.Provider value={{ loading, setLoading, reloadContent }}>
+        <DataContext.Provider value={dataContext}>
+          <Component {...pageProps} />
+        </DataContext.Provider>
+      </LoadingContext.Provider>
     </>
   );
 }

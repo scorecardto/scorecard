@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
-import { Course } from "scorecard-types";
+import { useContext, useEffect, useState } from "react";
+import { Course, DataContext } from "scorecard-types";
 import Summary from "../../components/app/Summary";
 
 type AppLoadState =
@@ -15,7 +15,7 @@ const EXTENSION_ID = "fkpgodekaimcnfknnkgkkdclfodblifl";
 const App: NextPage = () => {
   const [loadState, setLoadState] = useState<AppLoadState>("LOADING");
 
-  const [courses, setCourses] = useState<Course[] | undefined>(undefined);
+  const dataContext = useContext(DataContext);
 
   const connectChrome = () => {
     const port = chrome.runtime.connect(EXTENSION_ID);
@@ -30,7 +30,9 @@ const App: NextPage = () => {
           setLoadState("ERR_EXT_VERSION");
         }
       } else if (msg.type === "setCourses") {
-        setCourses(msg.courses);
+        console.log(msg.record);
+
+        dataContext.setData(msg.record);
       }
     });
   };

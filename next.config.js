@@ -3,4 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
-module.exports = nextConfig;
+const withTM = require("next-transpile-modules")(["scorecard-types"]);
+
+module.exports = withTM(nextConfig);
