@@ -11,8 +11,10 @@ export default function ExtensionConnector(props: {
   loadState: [AppLoadState, React.Dispatch<React.SetStateAction<AppLoadState>>];
   children: React.ReactNode;
   onMessage: (message: any, port: chrome.runtime.Port) => void;
+  onConnect: (port: chrome.runtime.Port) => void;
 }) {
   const EXTENSION_ID = "fkpgodekaimcnfknnkgkkdclfodblifl";
+  const CURRENT_VERSION = 0.1;
 
   const [load, setLoad] = props.loadState;
 
@@ -21,19 +23,15 @@ export default function ExtensionConnector(props: {
 
     port.onMessage.addListener((msg, port) => {
       if (msg.type === "handshake") {
-        if (msg.version === 0.1) {
+        if (msg.version === CURRENT_VERSION) {
           setLoad("DONE");
+          props.onConnect(port);
         } else {
           setLoad("ERR_EXT_VERSION");
         }
       }
 
       props.onMessage(msg, port);
-      //    else if (msg.type === "setCourses") {
-      //     console.log(msg.record);
-
-      //     dataContext.setData(msg.record);
-      //   }
     });
   };
 

@@ -11,6 +11,10 @@ const App: NextPage = () => {
 
   const loadState = useState<AppLoadState>("LOADING");
 
+  const onConnect = (port: chrome.runtime.Port) => {
+    port.postMessage({ type: "getCourses" });
+  };
+
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setCourses") {
       dataContext.setData(msg.record);
@@ -18,7 +22,11 @@ const App: NextPage = () => {
   };
 
   return (
-    <ExtensionConnector onMessage={onMessage} loadState={loadState}>
+    <ExtensionConnector
+      onMessage={onMessage}
+      loadState={loadState}
+      onConnect={onConnect}
+    >
       <Summary />
     </ExtensionConnector>
   );
