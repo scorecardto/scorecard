@@ -1,12 +1,13 @@
 import type { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
 import { Course, DataContext } from "scorecard-types";
+import Setup from "../../components/app/setup/Setup";
 import Summary from "../../components/app/Summary";
 import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
 
-const App: NextPage = () => {
+const Login: NextPage = () => {
   const dataContext = useContext(DataContext);
 
   const loadState = useState<AppLoadState>("LOADING");
@@ -19,9 +20,9 @@ const App: NextPage = () => {
 
   return (
     <ExtensionConnector onMessage={onMessage} loadState={loadState}>
-      <Summary />
+      <Setup />
     </ExtensionConnector>
   );
 };
 
-export default App;
+export default Login;
