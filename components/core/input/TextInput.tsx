@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { IoCloseCircle } from "react-icons/io5";
+import { IoCloseCircle, IoSearchOutline } from "react-icons/io5";
 
 export default function TextInput(props: {
   value: string;
@@ -7,8 +7,9 @@ export default function TextInput(props: {
   placeholder?: string;
   label?: string;
   password?: boolean;
+  icon?: React.ReactNode;
 }) {
-  const { value, setValue, placeholder, label, password } = props;
+  const { value, setValue, placeholder, label, password, icon } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -22,8 +23,15 @@ export default function TextInput(props: {
           onChange={(e) => setValue(e.target.value)}
           type={password ? "password" : "text"}
           placeholder={placeholder}
-          className="w-full bg-mono-l-100 border border-mono-l-300 rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 transition-colors placeholder:text-mono-l-400 font-os"
+          className={`w-full bg-mono-l-100 border border-mono-l-300 rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 transition-colors placeholder:text-mono-l-400 font-os ${
+            icon ? "pl-10" : ""
+          }`}
         />
+        {icon && (
+          <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
+            {icon}
+          </div>
+        )}
         {value.length > 0 && (
           <IoCloseCircle
             onClick={(e) => {

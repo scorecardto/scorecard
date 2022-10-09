@@ -3,6 +3,7 @@ import { SetupContext } from "../../core/context/SetupContext";
 import MQ from "../../core/MQ";
 import Image from "next/image";
 import TextInput from "../../core/input/TextInput";
+import SearchSelect from "../../core/input/SearchSelect";
 
 export default function Setup() {
   const setupContext = useContext(SetupContext);
@@ -35,6 +36,7 @@ export default function Setup() {
       </div>
       <div className="w-full lg:w-3/5 h-full bg-accent-100 lg:pt-72 pt-10 ">
         <div className="max-w-md flex flex-col gap-4 mx-auto">
+          <SearchSelect />
           <TextInput
             value={username}
             setValue={setUsername}
