@@ -6,8 +6,16 @@ import TextInput from "../../core/input/TextInput";
 import SearchSelect from "../../core/input/SearchSelect";
 import DistrictSearch from "../../core/input/DistrictSearch";
 import { useEffect } from "react";
+import Loading from "../../core/util/Loading";
+import assert from "assert";
 
-export default function Setup() {
+export default function Setup(props: {
+  checkSetup(
+    host: string,
+    username: string,
+    password: string
+  ): Promise<boolean>;
+}) {
   const setupContext = useContext(SetupContext);
 
   const [district, setDistrict] = useState<string | undefined>("");
@@ -21,6 +29,9 @@ export default function Setup() {
   }, [district, username, password]);
 
   const valid = district && username && password;
+
+  const [checking, setChecking] = useState(false);
+
   return (
     <div className="flex flex-col lg:flex-row h-full">
       <div className="w-full lg:w-2/5 lg:h-full bg-mono-l-100 py-10 lg:pt-48 px-10">
@@ -62,18 +73,33 @@ export default function Setup() {
             placeholder="Your password will not be stored online"
           />
           <div className="mx-auto">
-            <button
-              className={`py-2 px-4 from-accent-400 to-accent-500 rounded-md ${
-                valid
-                  ? "bg-gradient-to-tr text-white"
-                  : "bg-mono-l-300 text-mono-l-400 cursor-not-allowed"
-              }`}
-              onClick={() => {
-                setIncorrectLogin(true);
-              }}
-            >
-              Continue
-            </button>
+            {checking ? (
+              <Loading />
+            ) : (
+              <button
+                className={`py-2 px-4 from-accent-400 to-accent-500 rounded-md ${
+                  valid
+                    ? "bg-gradient-to-tr text-white"
+                    : "bg-mono-l-300 text-mono-l-400 cursor-not-allowed"
+                }`}
+                onClick={() => {
+                  setChecking(true);
+                  assert(district != null);
+
+                  props
+                    .checkSetup(district, username, password)
+                    .then((valid) => {
+                      setChecking(false);
+
+                      if (!valid) {
+                        setIncorrectLogin(true);
+                      }
+                    });
+                }}
+              >
+                Continue
+              </button>
+            )}
           </div>
         </div>
       </div>

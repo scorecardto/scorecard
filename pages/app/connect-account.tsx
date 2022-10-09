@@ -10,20 +10,50 @@ import { SetupContext } from "../../components/core/context/SetupContext";
 
 const Login: NextPage = () => {
   const setupContext = useContext(SetupContext);
-  //   const setupContext = useContext(SetupStateContext);
   const loadState = useState<AppLoadState>("LOADING");
+
+  const [port, setPort] = useState<chrome.runtime.Port | null>(null);
 
   const onConnect = (port: chrome.runtime.Port) => {
     port.postMessage({ type: "requestSetup" });
+    setPort(port);
   };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setSetup") {
-      console.log(msg);
-
       setupContext.setSetup(msg.setup);
     }
   };
+
+  function checkSetup(
+    host: string,
+    username: string,
+    password: string
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      console.log("checking for ", host, username, password, port);
+
+      if (port) {
+        port.postMessage({
+          type: "requestLoginValidation",
+          host,
+          username,
+          password,
+        });
+
+        const listener = (message: any) => {
+          if (message.type === "validLoginResponse") {
+            resolve(message.valid);
+            port.onMessage.removeListener(listener);
+          }
+        };
+
+        port.onMessage.addListener(listener);
+      } else {
+        resolve(false);
+      }
+    });
+  }
 
   return (
     <ExtensionConnector
@@ -31,7 +61,7 @@ const Login: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
-      <Setup />
+      <Setup checkSetup={checkSetup} />
     </ExtensionConnector>
   );
 };
