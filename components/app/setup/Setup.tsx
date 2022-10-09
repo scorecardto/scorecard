@@ -4,6 +4,7 @@ import MQ from "../../core/MQ";
 import Image from "next/image";
 import TextInput from "../../core/input/TextInput";
 import SearchSelect from "../../core/input/SearchSelect";
+import DistrictSearch from "../../core/input/DistrictSearch";
 
 export default function Setup() {
   const setupContext = useContext(SetupContext);
@@ -29,14 +30,14 @@ export default function Setup() {
           </div>
           <p className="max-w-sm">
             Enter your student account details to continue. Your Frontline login
-            is not stored online and your grades will not be visible to
+            is not stored online, and your grades will not be visible to
             Scorecard.
           </p>
         </div>
       </div>
       <div className="w-full lg:w-3/5 h-full bg-accent-100 lg:pt-72 pt-10 ">
         <div className="max-w-md flex flex-col gap-4 mx-auto">
-          <SearchSelect />
+          <DistrictSearch />
           <TextInput
             value={username}
             setValue={setUsername}
