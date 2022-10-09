@@ -29,10 +29,8 @@ const Login: NextPage = () => {
     host: string,
     username: string,
     password: string
-  ): Promise<boolean> {
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
-      console.log("checking for ", host, username, password, port);
-
       if (port) {
         port.postMessage({
           type: "requestLoginValidation",
@@ -43,14 +41,14 @@ const Login: NextPage = () => {
 
         const listener = (message: any) => {
           if (message.type === "validLoginResponse") {
-            resolve(message.valid);
+            resolve(message.result);
             port.onMessage.removeListener(listener);
           }
         };
 
         port.onMessage.addListener(listener);
       } else {
-        resolve(false);
+        resolve("NO_PORT");
       }
     });
   }
