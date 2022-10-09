@@ -5,6 +5,7 @@ import Image from "next/image";
 import TextInput from "../../core/input/TextInput";
 import SearchSelect from "../../core/input/SearchSelect";
 import DistrictSearch from "../../core/input/DistrictSearch";
+import { useEffect } from "react";
 
 export default function Setup() {
   const setupContext = useContext(SetupContext);
@@ -12,6 +13,12 @@ export default function Setup() {
   const [district, setDistrict] = useState<string | undefined>("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [incorrectLogin, setIncorrectLogin] = useState(true);
+
+  useEffect(() => {
+    setIncorrectLogin(false);
+  }, [district, username, password]);
 
   const valid = district && username && password;
   return (
@@ -50,6 +57,7 @@ export default function Setup() {
             value={password}
             setValue={setPassword}
             password={true}
+            error={incorrectLogin}
             label="Password"
             placeholder="Your password will not be stored online"
           />
@@ -60,6 +68,9 @@ export default function Setup() {
                   ? "bg-gradient-to-tr text-white"
                   : "bg-mono-l-300 text-mono-l-400 cursor-not-allowed"
               }`}
+              onClick={() => {
+                setIncorrectLogin(true);
+              }}
             >
               Continue
             </button>

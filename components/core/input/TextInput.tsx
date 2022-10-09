@@ -10,6 +10,7 @@ export default function TextInput(props: {
   icon?: React.ReactNode;
   onFocus?: () => void;
   focused?: boolean;
+  error?: boolean;
 }) {
   const {
     value,
@@ -20,6 +21,7 @@ export default function TextInput(props: {
     icon,
     onFocus,
     focused,
+    error,
   } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -35,9 +37,13 @@ export default function TextInput(props: {
           onChange={(e) => setValue(e.target.value)}
           type={password ? "password" : "text"}
           placeholder={placeholder}
-          className={`w-full bg-mono-l-100 border rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 transition-colors placeholder:text-mono-l-400 font-os ${
+          className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 transition-colors placeholder:text-mono-l-400 font-os ${
             icon ? "pl-10 " : ""
-          }${focused ? "border-accent-300" : "border-mono-l-300"}`}
+          }${focused ? "border-accent-300 " : ""}${
+            !focused && error ? "focus:border-mono-l-300 border-red-500 " : ""
+          }${!focused && !error ? "border-mono-l-300" : ""}${
+            error ? "bg-red-100 focus:bg-mono-l-100" : "bg-mono-l-100"
+          }`}
         />
         {icon && (
           <div className="absolute top-1/2 left-4 transform -translate-y-1/2">

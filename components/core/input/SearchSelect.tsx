@@ -27,13 +27,19 @@ export default function SearchSelect(props: {
   const [displaySuggestions, setDisplaySuggestions] = useState(false);
 
   const onFocus = () => {
+    setError(false);
     setDisplaySuggestions(true);
   };
+
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (displaySuggestions) {
       const handleClick = (e: any) => {
         if (e.target == null || !ref.current?.contains(e.target)) {
+          if (search) {
+            setError(true);
+          }
           setDisplaySuggestions(false);
         }
       };
@@ -43,6 +49,7 @@ export default function SearchSelect(props: {
         document.removeEventListener("click", handleClick);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displaySuggestions, ref]);
 
   return (
@@ -55,13 +62,14 @@ export default function SearchSelect(props: {
       ) : (
         <>
           <TextInput
+            error={error}
             label={label}
             focused={displaySuggestions}
             onFocus={onFocus}
             value={search}
             setValue={setSearch}
             placeholder={placeholder}
-            icon={<IoSearchOutline className="text-mono-l-500" />}
+            icon={<IoSearchOutline className={"text-mono-l-500"} />}
           />
           {displaySuggestions && (
             <div className="w-full absolute z-20 bg-mono-l-100 border-mono-l-300 border rounded-md mt-2 overflow-hidden">
