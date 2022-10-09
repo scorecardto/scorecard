@@ -12,7 +12,7 @@ const App: NextPage = () => {
   const loadState = useState<AppLoadState>("LOADING");
 
   const onConnect = (port: chrome.runtime.Port) => {
-    port.postMessage({ type: "getCourses" });
+    port.postMessage({ type: "requestCourses" });
   };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {

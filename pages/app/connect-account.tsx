@@ -6,17 +6,22 @@ import Summary from "../../components/app/Summary";
 import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
+import { SetupContext } from "../../components/core/context/SetupContext";
 
 const Login: NextPage = () => {
-  const dataContext = useContext(DataContext);
-
+  const setupContext = useContext(SetupContext);
+  //   const setupContext = useContext(SetupStateContext);
   const loadState = useState<AppLoadState>("LOADING");
 
-  const onConnect = (port: chrome.runtime.Port) => {};
+  const onConnect = (port: chrome.runtime.Port) => {
+    port.postMessage({ type: "requestSetup" });
+  };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
-    if (msg.type === "setCourses") {
-      dataContext.setData(msg.record);
+    if (msg.type === "setSetup") {
+      console.log(msg);
+
+      setupContext.setSetup(msg.setup);
     }
   };
 

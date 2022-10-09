@@ -1746,7 +1746,7 @@
     "loose-envify" "^1.1.0"
 
 "scorecard-types@github:scorecardto/types":
-  "resolved" "git+ssh://git@github.com/scorecardto/types.git#f455263bc82ceb9f6d2fced271b1fcc752fa8a0a"
+  "resolved" "git+ssh://git@github.com/scorecardto/types.git#854863f111ec9c34aba3c40d0cb86af8c01fa855"
   "version" "0.0.1"
 
 "semver@^6.3.0":

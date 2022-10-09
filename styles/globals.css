@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+body,
+html,
+#__next {
+  height: 100%;
+}
 body {
   letter-spacing: -0.02em;
 }
