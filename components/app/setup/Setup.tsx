@@ -9,9 +9,11 @@ import DistrictSearch from "../../core/input/DistrictSearch";
 export default function Setup() {
   const setupContext = useContext(SetupContext);
 
+  const [district, setDistrict] = useState<string | undefined>("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const valid = district && username && password;
   return (
     <div className="flex flex-col lg:flex-row h-full">
       <div className="w-full lg:w-2/5 lg:h-full bg-mono-l-100 py-10 lg:pt-48 px-10">
@@ -37,7 +39,7 @@ export default function Setup() {
       </div>
       <div className="w-full lg:w-3/5 h-full bg-accent-100 lg:pt-72 pt-10 ">
         <div className="max-w-md flex flex-col gap-4 mx-auto">
-          <DistrictSearch />
+          <DistrictSearch value={district} setValue={setDistrict} />
           <TextInput
             value={username}
             setValue={setUsername}
@@ -51,6 +53,17 @@ export default function Setup() {
             label="Password"
             placeholder="Your password will not be stored online"
           />
+          <div className="mx-auto">
+            <button
+              className={`py-2 px-4 from-accent-400 to-accent-500 rounded-md ${
+                valid
+                  ? "bg-gradient-to-tr text-white"
+                  : "bg-mono-l-300 text-mono-l-400 cursor-not-allowed"
+              }`}
+            >
+              Continue
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -2,10 +2,18 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { IoClose, IoCloseCircle, IoCloseCircleOutline } from "react-icons/io5";
+import {
+  IoClose,
+  IoCloseCircle,
+  IoCloseCircleOutline,
+  IoSadOutline,
+} from "react-icons/io5";
 import SearchSelect from "./SearchSelect";
 
-export default function DistrictSearch() {
+export default function DistrictSearch(props: {
+  value: string | undefined;
+  setValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+}) {
   const [districts, setDistricts] = useState<any>();
 
   useEffect(() => {
@@ -16,54 +24,81 @@ export default function DistrictSearch() {
 
   return (
     <SearchSelect
+      value={props.value}
+      setValue={props.setValue}
       label="School or District"
-      placeholder="Search for your schohol or district"
+      placeholder="Search for your school or district"
     >
-      {(setValue, setComponent) => {
+      {(search, setValue, setComponent) => {
+        const districtList = districts?.districts?.filter((district: any) => {
+          return (
+            district.name.toLowerCase().includes(search.toLowerCase()) &&
+            district.url
+          );
+        });
+
         return (
-          <div className="flex flex-col px-2 py-1">
-            {districts?.districts &&
-              districts?.districts?.map((district: any, idx: number) => {
-                return (
-                  <div
-                    key={idx}
-                    className="py-1 group cursor-pointer"
-                    onClick={() => {
-                      setValue(district.url);
-                      setComponent(
-                        <div className="bg-white py-4 px-4 rounded-md border border-mono-l-300 flex items-center justify-between">
-                          <div>
-                            <p className="text-mono-l-600 font-os">
-                              {district.name}
-                            </p>
-                            <p className="text-mono-l-500 font-os">
-                              {district.url}
-                            </p>
+          <div className="border-b-8 border-b-mono-l-100">
+            <div className="flex flex-col px-2 max-h-80 overflow-scroll">
+              {districtList && districtList.length > 0 ? (
+                districtList.map((district: any, idx: number) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="pt-2 group cursor-pointer"
+                      onClick={() => {
+                        setValue(district.url);
+                        setComponent(
+                          <div className="bg-white py-4 px-4 rounded-md border border-mono-l-300 flex items-center justify-between">
+                            <div>
+                              <p className="text-mono-l-600 font-os">
+                                {district.name}
+                              </p>
+                              <p className="text-mono-l-500 font-os">
+                                {district.url}
+                              </p>
+                            </div>
+                            <div
+                              className="p-1 rounded-md hover:bg-mono-l-200 mr-4 cursor-pointer"
+                              onClick={() => {
+                                setValue(undefined);
+                                setComponent(null);
+                              }}
+                            >
+                              <IoCloseCircle className="text-mono-l-500" />
+                            </div>
                           </div>
-                          <div
-                            className="p-1 rounded-md hover:bg-mono-l-200 mr-4 cursor-pointer"
-                            onClick={() => {
-                              setValue(undefined);
-                              setComponent(null);
-                            }}
-                          >
-                            <IoCloseCircle className="text-mono-l-500" />
-                          </div>
-                        </div>
-                      );
-                    }}
-                  >
-                    <div className="bg-mono-l-200 rounded-md py-2 px-4 font-os group-hover:bg-accent-300">
-                      <p className="text-mono-l-600 group-hover:text-white">
-                        {district.name}
-                      </p>
-                      <p className="group-hover:text-mono-l-300">
-                        {district.url}
-                      </p>
+                        );
+                      }}
+                    >
+                      <div className="bg-mono-l-200 rounded-md py-2 px-4 font-os group-hover:bg-accent-300">
+                        <p className="text-mono-l-600 group-hover:text-white">
+                          {district.name}
+                        </p>
+                        <p className="group-hover:text-mono-l-300">
+                          {district.url}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              ) : (
+                <div className="flex flex-col gap-2 items-center pt-4 pb-2">
+                  <p className="text-mono-l-500 font-os">No results found</p>
+                  <p className="text-mono-l-500 font-os">
+                    Last updated{" "}
+                    {new Date(districts?.lastUpdated).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         );
       }}

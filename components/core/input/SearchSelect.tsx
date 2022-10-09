@@ -7,14 +7,19 @@ type setValueType = React.Dispatch<React.SetStateAction<string | undefined>>;
 type setComponentType = React.Dispatch<React.SetStateAction<React.ReactNode>>;
 
 export default function SearchSelect(props: {
-  children(arg0: setValueType, arg1: setComponentType): React.ReactNode;
+  children(
+    arg0: string,
+    arg1: setValueType,
+    arg2: setComponentType
+  ): React.ReactNode;
   label?: string;
   placeholder?: string;
+  value: string | undefined;
+  setValue: setValueType;
 }) {
-  const { label, placeholder } = props;
+  const { label, placeholder, value, setValue } = props;
 
   const [search, setSearch] = useState("");
-  const [value, setValue] = useState<string | undefined>(undefined);
   const [component, setComponent] = useState<React.ReactNode>(<></>);
 
   let ref = React.createRef<HTMLDivElement>();
@@ -59,8 +64,8 @@ export default function SearchSelect(props: {
             icon={<IoSearchOutline className="text-mono-l-500" />}
           />
           {displaySuggestions && (
-            <div className="w-full absolute z-20 bg-mono-l-100 border-mono-l-300 border rounded-md mt-2">
-              {props.children(setValue, setComponent)}
+            <div className="w-full absolute z-20 bg-mono-l-100 border-mono-l-300 border rounded-md mt-2 overflow-hidden">
+              {props.children(search, setValue, setComponent)}
             </div>
           )}
         </>
