@@ -1,0 +1,1322 @@
+{
+  "LAST_UPDATED": "1665287797000",
+
+  "status": "success",
+  "data": {
+    "pageInfo": { "totalResults": 55, "resultsPerPage": 55 },
+    "districts": [
+      {
+        "_id": "558302b838d192b02e9f3a4c",
+        "name": "Abilene ISD",
+        "altName": "Abilene",
+        "id": "221901",
+        "accounts": {
+          "substitute": {
+            "url": "https://abileneisd.erp.frontlineeducation.com/mobilesub/selfserve",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://abileneisd.erp.frontlineeducation.com/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://abileneisd.erp.frontlineeducation.com/mobileteacher/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://abileneisd.erp.frontlineeducation.com/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://abileneisd.erp.frontlineeducation.com/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583035938d192b02e9f3d6d",
+        "name": "Alvin ISD",
+        "altName": "Alvin",
+        "id": "020901",
+        "accounts": {
+          "student": {
+            "url": "https://teamsapp.alvinisd.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teamsapp.alvinisd.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583046d38d192b02e9f3dff",
+        "name": "Arlington ISD",
+        "altName": "Arlington",
+        "id": "220901",
+        "accounts": {
+          "principal": {
+            "url": "https://is-teams.aisd.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://is-teams.aisd.net/mobileteacher/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://is-teams.aisd.net/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://is-teams.aisd.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://is-teams.aisd.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583043238d192b02e9f3dd9",
+        "name": "Austin ISD",
+        "altName": "Austin",
+        "id": "227901",
+        "accounts": {
+          "teacher": {
+            "url": "https://teams.austinisd.org/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://teams.austinisd.org/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://grades.austinisd.org/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://grades.austinisd.org/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302de38d192b02e9f3d18",
+        "name": "Beaumont ISD",
+        "altName": "Beaumont",
+        "id": "123910",
+        "accounts": {
+          "time Card": {
+            "url": "https://beaumont.teams.hosting/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://beaumont.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://beaumont.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583035538d192b02e9f3d6b",
+        "name": "Brazosport ISD",
+        "altName": "Brazosport",
+        "id": "020905",
+        "accounts": {
+          "principal": {
+            "url": "https://brazosport.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://brazosport.teams.hosting/mobilesub/selfserve",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://brazosport.teams.hosting/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://brazosport.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://brazosport.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b55",
+        "name": "Canutillo ISD",
+        "altName": "Canutillo",
+        "id": "071907",
+        "accounts": {
+          "student": {
+            "url": "https://teams.canutillo-isd.org/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.canutillo-isd.org/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bc38d192b02e9f3b89",
+        "name": "Canyon ISD",
+        "altName": "Canyon",
+        "id": "191901",
+        "accounts": {
+          "student": {
+            "url": "https://teams.canyonisd.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.canyonisd.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b60",
+        "name": "Carrollton-Farmers Branch ISD",
+        "altName": "Carrollton-Farmers Branch",
+        "id": "057903",
+        "accounts": {
+          "teacher": {
+            "pages": [],
+            "url": "https://cfb.tx01.teams360.net/mobileteacher"
+          },
+          "principal": {
+            "pages": [],
+            "url": "https://cfb.tx01.teams360.net/mobileemployee/principal"
+          },
+          "substitute": {
+            "url": "https://cfb.tx01.teams360.net/mobilesub/selfserve",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://cfb.tx01.teams360.net/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://cfb.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://cfb.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589ecfe2444293361057841",
+        "name": "Cityscape Schools",
+        "altName": "Cityscape",
+        "id": "057841",
+        "accounts": {
+          "student": {
+            "url": "https://cityscape.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://cityscape.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b5d",
+        "name": "DeSoto ISD",
+        "altName": "DeSoto",
+        "id": "057906",
+        "accounts": {
+          "employee": {
+            "url": "https://desoto.teams.hosting/mobileemp/punch/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://desoto.teams.hosting/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://desoto.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://desoto.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://desoto.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302b738d192b02e9f3a24",
+        "name": "Denison ISD",
+        "altName": "Denison",
+        "id": "091903",
+        "accounts": {
+          "Parent": {
+            "url": "https://denison.erp.frontlineeducation.com/mobile/parent/",
+            "pages": []
+          },
+          "Student": {
+            "url": "https://denison.erp.frontlineeducation.com/mobile/student/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://denison.erp.frontlineeducation.com/mobileemp/punch/",
+            "pages": []
+          },
+          "student": { "pages": [] },
+          "parent": { "pages": [] }
+        }
+      },
+      {
+        "_id": "558302b938d192b02e9f3ad2",
+        "name": "Donna ISD",
+        "altName": "Donna",
+        "id": "108902",
+        "accounts": {
+          "substitute": {
+            "url": "https://teams.donnaisd.net/mobilesub/selfserve",
+            "pages": []
+          },
+          "student": {
+            "url": "https://teams.donnaisd.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.donnaisd.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b5c",
+        "name": "Duncanville ISD",
+        "altName": "Duncanville",
+        "id": "057907",
+        "accounts": {
+          "student": {
+            "url": "https://duncanville.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://duncanville.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589ecb624442933617a6702",
+        "name": "Education Service Center- Region 19",
+        "altName": "ESC19",
+        "id": "999001",
+        "accounts": {
+          "student": {
+            "url": "https://region19.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://region19.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558303c238d192b02e9f3da0",
+        "name": "Edgewood ISD (Bexar)",
+        "altName": "Edgewood (Bexar)",
+        "id": "015905",
+        "accounts": {
+          "Time Card": {
+            "url": "https://edgewood.erp.frontlineeducation.com/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://edgewood.erp.frontlineeducation.com/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://edgewood.erp.frontlineeducation.com/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583045e38d192b02e9f3df5",
+        "name": "El Paso ISD",
+        "altName": "El Paso",
+        "id": "071902",
+        "accounts": {
+          "substitute": {
+            "url": "https://teams.episd.org/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://teams.episd.org/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://teams.episd.org/mobileteacher/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://teams.episd.org/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://teams.episd.org/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.episd.org/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b53",
+        "name": "Fabens ISD",
+        "altName": "Fabens",
+        "id": "071903",
+        "accounts": {
+          "teacher": {
+            "pages": [],
+            "url": "https://teams.fabensisd.net/mobileteacher/"
+          },
+          "principal": {
+            "pages": [],
+            "url": "https://teams.fabensisd.net/mobileemployee/principal/"
+          },
+          "student": {
+            "url": "https://teams.fabensisd.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.fabensisd.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583037838d192b02e9f3d7c",
+        "name": "Forney ISD",
+        "altName": "Forney",
+        "id": "129902",
+        "accounts": {
+          "Time Card": {
+            "url": "https://forney.teams.hosting/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://forney.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://forney.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "55ba90485b33768e3c57d63f",
+        "name": "Frontline",
+        "altName": "Frontline",
+        "id": "999000",
+        "accounts": {
+          "substitute": {
+            "url": "https://release-01.ferp.technology/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://release-01.ferp.technology/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://release-01.ferp.technology/mobileteacher/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://release-01.ferp.technology/mobileemp/punch/",
+            "pages": []
+          },
+          "Work Order": {
+            "url": "https://release-01.ferp.technology/mobileemployee/emp/",
+            "pages": []
+          },
+          "Employee Service Center": {
+            "url": "https://release-01.ferp.technology/servicecenter/EntryPointSignOnAction.do",
+            "pages": []
+          },
+          "MAS-02 Parent": {
+            "url": "https://master-02.ferp.technology/mobile/parent",
+            "pages": []
+          },
+          "MAS-02 Student": {
+            "url": "https://master-02.ferp.technology/mobile/student",
+            "pages": []
+          },
+          "MAS-02 substitute": {
+            "url": "https://master-02.ferp.technology/mobilesub/selfserve/",
+            "pages": []
+          },
+          "MAS-02 principal": {
+            "url": "https://master-02.ferp.technology/mobileemployee/principal/",
+            "pages": []
+          },
+          "MAS-02 teacher": {
+            "url": "https://master-02.ferp.technology/mobileteacher/",
+            "pages": []
+          },
+          "MAS-02 Time Card": {
+            "url": "https://master-02.ferp.technology/mobileemp/punch/",
+            "pages": []
+          },
+          "MAS-02 Work Order": {
+            "url": "https://master-02.ferp.technology/mobileemployee/emp/",
+            "pages": []
+          },
+          "UAT-12 Parent": {
+            "url": "https://uat-12.ferp.technology/mobile/parent",
+            "pages": []
+          },
+          "UAT-12 Student": {
+            "url": "https://uat-12.ferp.technology/mobile/student",
+            "pages": []
+          },
+          "UAT-12 substitute": {
+            "url": "https://uat-12.ferp.technology/mobilesub/selfserve/",
+            "pages": []
+          },
+          "UAT-12 principal": {
+            "url": "https://uat-12.ferp.technology/mobileemployee/principal/",
+            "pages": []
+          },
+          "UAT-12 teacher": {
+            "url": "https://uat-12.ferp.technology/mobileteacher/",
+            "pages": []
+          },
+          "UAT-12 Time Card": {
+            "url": "https://uat-12.ferp.technology/mobileemp/punch/",
+            "pages": []
+          },
+          "UAT-12 Work Order": {
+            "url": "https://uat-12.ferp.technology/mobileemployee/emp/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://release-01.ferp.technology/mobile/student",
+            "pages": [
+              {
+                "name": "Prologic",
+                "icon": "",
+                "enabled": true,
+                "url": "http://www.ptsteams.com"
+              },
+              {
+                "name": "TEAMS Emp Service Center",
+                "icon": "",
+                "enabled": true,
+                "url": "https://release-01.ferp.technology/servicecenter/EntryPointSignOnAction.do"
+              }
+            ]
+          },
+          "parent": {
+            "url": "https://release-01.ferp.technology/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583042e38d192b02e9f3dd7",
+        "name": "Georgetown ISD",
+        "altName": "Georgetown",
+        "id": "246904",
+        "accounts": {
+          "student": {
+            "url": "https://teams.georgetownisd.org/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.georgetownisd.org/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c138d192b02e9f3c88",
+        "name": "Goose Creek CISD",
+        "altName": "Goose Creek",
+        "id": "101911",
+        "accounts": {
+          "teacher": {
+            "url": "https://teams.gccisd.net/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://teams.gccisd.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://teams.gccisd.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.gccisd.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bd38d192b021012181",
+        "name": "Harmony Public Schools",
+        "altName": "Harmony",
+        "id": "1012181",
+        "accounts": {
+          "substitute": {
+            "url": "https://harmony.tx01.teams360.net/mobilesub/selfserve/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://harmony.tx01.teams360.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://harmony.tx01.teams360.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558303d338d192b02e9f3dab",
+        "name": "Hays Cons ISD",
+        "altName": "Hays Cons",
+        "id": "105906",
+        "accounts": {
+          "student": {
+            "url": "https://teams.hayscisd.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.hayscisd.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558303c038d192b02e9f3d9e",
+        "name": "Judson ISD",
+        "altName": "Judson",
+        "id": "015916",
+        "accounts": {
+          "principal": {
+            "url": "https://judsonisd.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://judsonisd.teams.hosting/mobileteacher/",
+            "pages": []
+          },
+          "time card": {
+            "url": "https://judsonisd.teams.hosting/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://judsonisd.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://judsonisd.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c438d192b02e9f3cfa",
+        "name": "Killeen ISD",
+        "altName": "Killeen",
+        "id": "014906",
+        "accounts": {
+          "substitute": {
+            "url": "https://killeen.tx01.teams360.net/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://killeen.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": { "pages": [] },
+          "parent": { "pages": [] }
+        }
+      },
+      {
+        "_id": "558302be38d192b02e9f3bec",
+        "name": "Klein ISD",
+        "altName": "Klein",
+        "id": "101915",
+        "accounts": {
+          "time card": {
+            "url": "https://kleinisd.teams.hosting/mobileemp/punch/",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://kleinisd.teams.hosting/mobilesub/selfserve/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://kleinisd.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://kleinisd.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bf38d192b02e9f3c57",
+        "name": "La Grange ISD",
+        "altName": "La Grange",
+        "id": "075902",
+        "accounts": {
+          "student": {
+            "url": "https://lagrange.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://lagrange.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583043b38d192b02e9f3ddd",
+        "name": "Lake Travis ISD",
+        "altName": "Lake Travis",
+        "id": "227913",
+        "accounts": {
+          "Parent": {
+            "url": "https://laketravis.teams.hosting/mobile/parent/",
+            "pages": []
+          },
+          "Student": {
+            "url": "https://laketravis.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://laketravis.teams.hosting/mobileemp/punch/",
+            "pages": []
+          },
+          "student": { "pages": [] },
+          "parent": { "pages": [] }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b5a",
+        "name": "Lancaster ISD",
+        "altName": "Lancaster",
+        "id": "057913",
+        "accounts": {
+          "substitute": {
+            "url": "https://lancaster.tx01.teams360.net/mobilesub/selfserve",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://lancaster.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://lancaster.tx01.teams360.net/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://lancaster.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://lancaster.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589eb4a24442933617a66ff",
+        "name": "Life School",
+        "altName": "Life School",
+        "id": "999004",
+        "accounts": {
+          "teacher": {
+            "url": "https://lifeschools.tx01.teams360.net/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://lifeschools.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://lifeschools.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://lifeschools.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c138d192b02e9f3c70",
+        "name": "Lubbock ISD",
+        "altName": "Lubbock",
+        "id": "152901",
+        "accounts": {
+          "substitute": {
+            "url": "https://teams.lubbockisd.org/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://teams.lubbockisd.org/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://teams.lubbockisd.org/mobileteacher/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://teams.lubbockisd.org/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.lubbockisd.org/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302ba38d192b02e9f3b1f",
+        "name": "Lumberton ISD",
+        "altName": "Lumberton",
+        "id": "100907",
+        "accounts": {
+          "teacher": {
+            "url": "https://lumberton.erp.frontlineeducation.com/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://lumberton.erp.frontlineeducation.com/mobileemployee/principal//",
+            "pages": []
+          },
+          "student": {
+            "url": "https://lumberton.erp.frontlineeducation.com/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://lumberton.erp.frontlineeducation.com/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bd38d192b02e9f3baa",
+        "name": "Magnolia ISD",
+        "altName": "Magnolia",
+        "id": "170906",
+        "accounts": {
+          "substitute": {
+            "url": "https://magnolia.teams.hosting/mobilesub/selfserve",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://magnolia.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://magnolia.teams.hosting/mobileteacher/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://magnolia.teams.hosting/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://magnolia.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://magnolia.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589eb8b24442933617a6700",
+        "name": "Orenda Education",
+        "altName": "Orenda",
+        "id": "999005",
+        "accounts": {
+          "substitute": {
+            "url": "https://orenda.teams.hosting/mobilesub/selfserve",
+            "pages": []
+          },
+          "student": {
+            "url": "https://orenda.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://orenda.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c238d192b02e9f3cc4",
+        "name": "Palestine ISD",
+        "altName": "Palestine",
+        "id": "001907",
+        "accounts": {
+          "principal": {
+            "url": "https://palestine.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://palestine.tx01.teams360.net/mobileteacher/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://palestine.tx01.teams360.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://palestine.tx01.teams360.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302be38d192b02e9f3beb",
+        "name": "Pasadena ISD",
+        "altName": "Pasadena",
+        "id": "101917",
+        "accounts": {
+          "time card": {
+            "url": "https://pasadenaisd.erp.frontlineeducation.com/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://pasadenaisd.erp.frontlineeducation.com/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://pasadenaisd.erp.frontlineeducation.com/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302b738d192b02e9f3a36",
+        "name": "Pecos-Barstow-Toyah ISD",
+        "altName": "Pecos-Barstow-Toyah",
+        "id": "195901",
+        "accounts": {
+          "teacher": {
+            "pages": [],
+            "url": "https://pecos-barstow-toyah.erp.frontlineeducation.com/mobileteacher"
+          },
+          "principal": {
+            "pages": [],
+            "url": "https://pecos-barstow-toyah.erp.frontlineeducation.com/mobileemployee/principal"
+          },
+          "Time Card": {
+            "url": "https://pecos-barstow-toyah.erp.frontlineeducation.com/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://pecos-barstow-toyah.erp.frontlineeducation.com/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://pecos-barstow-toyah.erp.frontlineeducation.com/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583044a38d192b02e9f3de7",
+        "name": "Plano ISD",
+        "altName": "Plano",
+        "id": "043910",
+        "accounts": {
+          "substitute": {
+            "url": "https://oea.pisd.edu/mobilesub/selfserve/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://oea.pisd.edu/mobile/student",
+            "pages": []
+          },
+          "parent": { "url": "https://oea.pisd.edu/mobile/parent", "pages": [] }
+        }
+      },
+      {
+        "_id": "5589eba924442933617a6701",
+        "name": "​The Renaissance Charter High School for Innovation",
+        "altName": "Renaissance",
+        "id": "999006",
+        "accounts": {
+          "student": {
+            "url": "https://innovationhs.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://innovationhs.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589ece024442933617a6703",
+        "name": "The Rhodes School",
+        "altName": "Rhodes",
+        "id": "999002",
+        "accounts": {
+          "student": {
+            "url": "https://rhodes.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://rhodes.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558303c338d192b02e9f3da2",
+        "name": "San Antonio ISD",
+        "altName": "San Antonio",
+        "id": "015907",
+        "accounts": {
+          "student": {
+            "url": "https://sanantonioisd.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://sanantonioisd.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b52",
+        "name": "San Elizario ISD",
+        "altName": "San Elizario",
+        "id": "071904",
+        "accounts": {
+          "Teacher": {
+            "url": "https://sanelizariotx.teams.hosting/mobileteacher/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://sanelizariotx.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://sanelizariotx.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://sanelizariotx.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c138d192b02e9f3cae",
+        "name": "Seguin ISD",
+        "altName": "Seguin",
+        "id": "094901",
+        "accounts": {
+          "student": {
+            "url": "https://seguin.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://seguin.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5583046038d192b02e9f3df6",
+        "name": "Sherman ISD",
+        "altName": "Sherman",
+        "id": "091906",
+        "accounts": {
+          "principal": {
+            "url": "https://sherman.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://sherman.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://sherman.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558303aa38d192b02e9f3d8f",
+        "name": "Southwest ISD",
+        "altName": "Southwest",
+        "id": "015912",
+        "accounts": {
+          "substitute": {
+            "url": "https://southwestisd.teams.hosting/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://southwestisd.teams.hosting/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://southwestisd.teams.hosting/mobileteacher/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://southwestisd.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://southwestisd.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302c138d192b02e9f3c76",
+        "name": "Taylor ISD",
+        "altName": "Taylor",
+        "id": "246911",
+        "accounts": {
+          "Time Card": {
+            "url": "https://taylor.teams.hosting/mobileemp/punch",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://taylor.teams.hosting/mobilesub/selfserve",
+            "pages": []
+          },
+          "student": {
+            "url": "https://taylor.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://taylor.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bd38d192b02e9f3bcd",
+        "name": "Texarkana ISD",
+        "altName": "Texarkana",
+        "id": "019907",
+        "accounts": {
+          "student": {
+            "url": "https://teams.txkisd.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.txkisd.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bb38d192b02e9f3b51",
+        "name": "Tornillo ISD",
+        "altName": "Tornillo",
+        "id": "071908",
+        "accounts": {
+          "Time Card": {
+            "url": "https://tornillo.tx01.teams360.net/mobileemp/punch",
+            "pages": []
+          },
+          "student": {
+            "url": "https://tornillo.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://tornillo.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bd38d192b02e9f3bc7",
+        "name": "Tyler ISD",
+        "altName": "Tyler",
+        "id": "212905",
+        "accounts": {
+          "principal": {
+            "url": "https://teams.tylerisd.org/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://teams.tylerisd.org/mobileteacher/",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://teams.tylerisd.org/mobilesub/selfserve/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://teams.tylerisd.org/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://teams.tylerisd.org/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://teams.tylerisd.org/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589ecfe24442933617a6704",
+        "name": "Uplift Education",
+        "altName": "Uplift",
+        "id": "999003",
+        "accounts": {
+          "student": {
+            "url": "https://uplift.teams.hosting/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://uplift.teams.hosting/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302ba38d192b02e9f3b0a",
+        "name": "Waco ISD",
+        "altName": "Waco",
+        "id": "161914",
+        "accounts": {
+          "substitute": {
+            "url": "https://waco.teams.hosting/mobilesub/selfserve/",
+            "pages": []
+          },
+          "teacher": {
+            "pages": [],
+            "url": "https://waco.teams.hosting/mobileteacher/"
+          },
+          "principal": {
+            "pages": [],
+            "url": "https://waco.teams.hosting/mobileemployee/principal/"
+          },
+          "student": {
+            "url": "https://waco.teams.hosting/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://waco.teams.hosting/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "5589ecfe2444293361227803",
+        "name": "Wayside",
+        "altName": "Wayside",
+        "id": "227803",
+        "accounts": {
+          "substitute": {
+            "url": "https://wayside.tx01.teams360.net/mobilesub/selfserve",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://wayside.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://wayside.tx01.teams360.net/mobileteacher/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://wayside.tx01.teams360.net/mobile/student",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://wayside.tx01.teams360.net/mobile/parent",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bc38d192b02e9f3b9a",
+        "name": "West Oso ISD",
+        "altName": "West Oso",
+        "id": "178915",
+        "accounts": {
+          "substitute": {
+            "url": "https://westoso.tx01.teams360.net/mobilesub/selfserve",
+            "pages": []
+          },
+          "student": {
+            "url": "https://westoso.tx01.teams360.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://westoso.tx01.teams360.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      },
+      {
+        "_id": "558302bd38d192b02e9f3ba7",
+        "name": "Willis ISD",
+        "altName": "Willis",
+        "id": "170904",
+        "accounts": {
+          "substitute": {
+            "url": "https://willis.tx01.teams360.net/mobilesub/selfserve/",
+            "pages": []
+          },
+          "principal": {
+            "url": "https://willis.tx01.teams360.net/mobileemployee/principal/",
+            "pages": []
+          },
+          "teacher": {
+            "url": "https://willis.tx01.teams360.net/mobileteacher/",
+            "pages": []
+          },
+          "Time Card": {
+            "url": "https://willis.tx01.teams360.net/mobileemp/punch/",
+            "pages": []
+          },
+          "student": {
+            "url": "https://willis.tx01.teams360.net/mobile/student/",
+            "pages": []
+          },
+          "parent": {
+            "url": "https://willis.tx01.teams360.net/mobile/parent/",
+            "pages": []
+          }
+        }
+      }
+    ]
+  }
+}
