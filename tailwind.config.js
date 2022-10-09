@@ -31,6 +31,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
+      os: ["Inter", "sans-serif"],
       sans: ["DMSans", "sans-serif"],
       mono: ["AnekKannada", "monospace"],
     },
@@ -80,6 +81,15 @@ module.exports = {
           fontStyle: "normal",
           fontWeight: 400,
           src: "url(font/DMSans-Regular.ttf)",
+        },
+      });
+
+      addBase({
+        "@font-face": {
+          fontFamily: "Inter",
+          fontStyle: "normal",
+          fontWeight: 400,
+          src: "url(font/Inter-Regular.ttf)",
         },
       });
 

@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { SetupContext } from "../../core/context/SetupContext";
 import MQ from "../../core/MQ";
 import Image from "next/image";
+import TextInput from "../../core/input/TextInput";
 
 export default function Setup() {
   const setupContext = useContext(SetupContext);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div className="flex flex-col lg:flex-row h-full">
@@ -29,9 +33,21 @@ export default function Setup() {
           </p>
         </div>
       </div>
-      <div className="w-full lg:w-3/5 h-full bg-accent-100 lg:pt-72 pt-10">
-        <div>
-          <p>School or District</p>
+      <div className="w-full lg:w-3/5 h-full bg-accent-100 lg:pt-72 pt-10 ">
+        <div className="max-w-md flex flex-col gap-4 mx-auto">
+          <TextInput
+            value={username}
+            setValue={setUsername}
+            label="Username"
+            placeholder="Enter your frontline username"
+          />
+          <TextInput
+            value={password}
+            setValue={setPassword}
+            password={true}
+            label="Password"
+            placeholder="Your password will not be stored online"
+          />
         </div>
       </div>
     </div>
