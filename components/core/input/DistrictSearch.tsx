@@ -38,7 +38,7 @@ export default function DistrictSearch(props: {
         });
 
         return (
-          <div className="border-b-8 border-b-mono-l-100">
+          <div className="border-b-8 border-b-mono-l-100 dark:border-b-mono-d-100">
             <div className="flex flex-col px-2 max-h-80 overflow-scroll">
               {districtList && districtList.length > 0 ? (
                 districtList.map((district: any, idx: number) => {
@@ -49,30 +49,30 @@ export default function DistrictSearch(props: {
                       onClick={() => {
                         setValue(district.url);
                         setComponent(
-                          <div className="bg-white py-4 px-4 rounded-md border border-mono-l-300 flex items-center justify-between">
+                          <div className="bg-mono-l-100 dark:bg-mono-d-100 py-4 px-4 rounded-md border border-mono-l-300 dark:border-mono-d-300 flex items-center justify-between">
                             <div>
-                              <p className="text-mono-l-600 font-os">
+                              <p className="text-mono-l-600 dark:text-mono-d-600 font-os">
                                 {district.name}
                               </p>
-                              <p className="text-mono-l-500 font-os">
+                              <p className="text-mono-l-500 dark:text-mono-d-500 font-os">
                                 {district.url}
                               </p>
                             </div>
                             <div
-                              className="p-1 rounded-md hover:bg-mono-l-200 mr-4 cursor-pointer"
+                              className="p-1 rounded-md hover:bg-mono-l-200 dark:hover:bg-mono-d-200 mr-4 cursor-pointer"
                               onClick={() => {
                                 setValue(undefined);
                                 setComponent(null);
                               }}
                             >
-                              <IoCloseCircle className="text-mono-l-500" />
+                              <IoCloseCircle className="text-mono-l-500 dark:text-mono-d-500" />
                             </div>
                           </div>
                         );
                       }}
                     >
-                      <div className="bg-mono-l-200 rounded-md py-2 px-4 font-os group-hover:bg-accent-300">
-                        <p className="text-mono-l-600 group-hover:text-white">
+                      <div className="bg-mono-l-200 dark:bg-mono-d-200 rounded-md py-2 px-4 font-os group-hover:bg-accent-300 dark:group-hover:bg-accent-400">
+                        <p className="text-mono-l-600 dark:text-mono-d-600 group-hover:text-white">
                           {district.name}
                         </p>
                         <p className="group-hover:text-mono-l-300">

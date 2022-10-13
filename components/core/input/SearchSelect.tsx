@@ -56,7 +56,11 @@ export default function SearchSelect(props: {
     <div className="relative" ref={ref}>
       {value ? (
         <div className="flex flex-col gap-1">
-          {label && <p className="font-os text-mono-l-600">{label}</p>}
+          {label && (
+            <p className="font-os text-mono-l-600 dark:text-mono-d-600">
+              {label}
+            </p>
+          )}
           {component}
         </div>
       ) : (
@@ -69,10 +73,14 @@ export default function SearchSelect(props: {
             value={search}
             setValue={setSearch}
             placeholder={placeholder}
-            icon={<IoSearchOutline className={"text-mono-l-500"} />}
+            icon={
+              <IoSearchOutline
+                className={"text-mono-l-500 dark:text-mono-d-500"}
+              />
+            }
           />
           {displaySuggestions && (
-            <div className="w-full absolute z-20 bg-mono-l-100 border-mono-l-300 border rounded-md mt-2 overflow-hidden">
+            <div className="w-full absolute z-20 bg-mono-l-100 dark:bg-mono-d-100 border-mono-l-300 dark:border-mono-d-300 border rounded-md mt-2 overflow-hidden">
               {props.children(search, setValue, setComponent)}
             </div>
           )}

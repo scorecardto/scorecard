@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Loading from "../../core/util/Loading";
 import assert from "assert";
 import { IoAlertCircle } from "react-icons/io5";
+import Router, { useRouter } from "next/router";
 
 export default function Setup(props: {
   checkSetup(host: string, username: string, password: string): Promise<string>;
@@ -35,9 +36,11 @@ export default function Setup(props: {
 
   const [checking, setChecking] = useState(false);
 
+  const router = useRouter();
+
   return (
     <div className="flex flex-col lg:flex-row h-full">
-      <div className="shrink-0 flex-none w-full lg:w-2/5 lg:h-full bg-mono-l-100 py-10 lg:pt-48 px-10">
+      <div className="shrink-0 flex-none w-full lg:w-2/5 lg:h-full py-10 lg:pt-48 px-10">
         <div className="flex flex-col gap-8">
           <div className="flex lg:flex-col lg:gap-8 gap-4 lg:items-start items-center">
             <div className="lg:w-16 lg:h-16 h-8 w-8">
@@ -58,7 +61,7 @@ export default function Setup(props: {
           </p>
         </div>
       </div>
-      <div className="w-full lg:w-3/5 lg:min-h-full lg:h-max   h-full bg-accent-100 lg:pt-72 pt-10 ">
+      <div className="w-full lg:w-3/5 lg:min-h-full lg:h-max   h-full bg-accent-100 dark:bg-accent-800 lg:pt-72 pt-10 ">
         <div className="max-w-md flex flex-col gap-4 mx-auto">
           {(incorrectPassword || incorrectUsername) && (
             <div className="bg-red-100 border border-red-400 rounded-md flex gap-4 items-center py-2 px-4">
@@ -96,18 +99,26 @@ export default function Setup(props: {
               <Loading />
             ) : (
               <button
+                disabled={!valid}
                 className={`py-2 px-4 from-accent-400 to-accent-500 rounded-md ${
                   valid
                     ? "bg-gradient-to-tr text-white"
-                    : "bg-mono-l-300 text-mono-l-400 cursor-not-allowed"
+                    : "bg-mono-l-300 dark:bg-mono-d-300 text-mono-l-400 dark:text-mono-d-400 cursor-not-allowed"
                 }`}
                 onClick={() => {
+                  if (!valid) return;
+
                   setChecking(true);
                   assert(district != null);
 
                   props
                     .checkSetup(district, username, password)
                     .then((result) => {
+                      if (result === "VALID") {
+                        router.push("/app");
+                        return;
+                      }
+
                       setChecking(false);
 
                       if (result === "INCORRECT_PASSWORD") {
