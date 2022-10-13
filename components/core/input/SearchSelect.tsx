@@ -16,11 +16,13 @@ export default function SearchSelect(props: {
   placeholder?: string;
   value: string | undefined;
   setValue: setValueType;
+  component: React.ReactNode;
+  setComponent: setComponentType;
 }) {
-  const { label, placeholder, value, setValue } = props;
+  const { label, placeholder, value, setValue, component, setComponent } =
+    props;
 
   const [search, setSearch] = useState("");
-  const [component, setComponent] = useState<React.ReactNode>(<></>);
 
   let ref = React.createRef<HTMLDivElement>();
 

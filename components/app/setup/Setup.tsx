@@ -8,17 +8,32 @@ import DistrictSearch from "../../core/input/DistrictSearch";
 import { useEffect } from "react";
 import Loading from "../../core/util/Loading";
 import assert from "assert";
-import { IoAlertCircle } from "react-icons/io5";
+import {
+  IoAlertCircle,
+  IoArrowUndo,
+  IoClose,
+  IoCloseOutline,
+} from "react-icons/io5";
 import Router, { useRouter } from "next/router";
+import ChangeButton from "../../core/input/ChangeButton";
 
 export default function Setup(props: {
   checkSetup(host: string, username: string, password: string): Promise<string>;
 }) {
   const setupContext = useContext(SetupContext);
 
-  const [district, setDistrict] = useState<string | undefined>("");
-  const [username, setUsername] = useState("");
+  const [district, setDistrict] = useState<string | undefined>(
+    new URLSearchParams(window.location.search).get("district") || ""
+  );
+  const [username, setUsername] = useState(
+    new URLSearchParams(window.location.search).get("username") || ""
+  );
+
   const [password, setPassword] = useState("");
+
+  const [changePassword, setChangePassword] = useState(
+    new URLSearchParams(window.location.search).get("changePassword") != "false"
+  );
 
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [incorrectUsername, setIncorrectUsername] = useState(false);
@@ -86,14 +101,45 @@ export default function Setup(props: {
             label="Username"
             placeholder="Enter your frontline username"
           />
-          <TextInput
-            value={password}
-            setValue={setPassword}
-            password={true}
-            error={incorrectPassword}
-            label="Password"
-            placeholder="Your password will not be stored online"
-          />
+          {changePassword ? (
+            <div className="flex flex-row w-full items-end gap-2">
+              <div className="w-full">
+                <TextInput
+                  value={password}
+                  setValue={setPassword}
+                  password={true}
+                  error={incorrectPassword}
+                  label="Password"
+                  placeholder="Your password will not be stored online"
+                />
+              </div>
+              {new URLSearchParams(window.location.search).get(
+                "changePassword"
+              ) == "false" && (
+                <div
+                  className="h-10 w-10 flex items-center justify-center bg-accent-150 border border-accent-250 rounded-md text-accent-300 cursor-pointer hover:bg-accent-250"
+                  onClick={() => {
+                    setChangePassword(false);
+                  }}
+                >
+                  <IoClose />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <ChangeButton
+                onClick={() => {
+                  setChangePassword(true);
+                }}
+              >
+                Password
+              </ChangeButton>
+              <p className="font-os">
+                You have a password stored on your device.
+              </p>
+            </div>
+          )}
           <div className="mx-auto">
             {checking ? (
               <Loading />

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { ReactNode } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import {
@@ -15,6 +15,7 @@ export default function DistrictSearch(props: {
   setValue: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) {
   const [districts, setDistricts] = useState<any>();
+  const [component, setComponent] = useState<ReactNode>(<></>);
 
   useEffect(() => {
     axios.get("/api/districts").then((value) => {
@@ -22,26 +23,68 @@ export default function DistrictSearch(props: {
     });
   }, []);
 
+  const districtList = districts?.districts?.filter((district: any) => {
+    return district.url;
+  });
+
+  const [initial, setInitial] = useState(props.value);
+
+  useEffect(() => {
+    if (initial && districtList) {
+      const district = districtList.find((district: any) => {
+        return district.url == initial;
+      });
+
+      setInitial(undefined);
+
+      if (district) {
+        setComponent(
+          <div className="bg-mono-l-100 dark:bg-mono-d-100 py-4 px-4 rounded-md border border-mono-l-300 dark:border-mono-d-300 flex items-center justify-between">
+            <div>
+              <p className="text-mono-l-600 dark:text-mono-d-600 font-os">
+                {district.name}
+              </p>
+              <p className="text-mono-l-500 dark:text-mono-d-500 font-os">
+                {district.url}
+              </p>
+            </div>
+            <div
+              className="p-1 rounded-md hover:bg-mono-l-200 dark:hover:bg-mono-d-200 mr-4 cursor-pointer"
+              onClick={() => {
+                props.setValue(undefined);
+                setComponent(null);
+              }}
+            >
+              <IoCloseCircle className="text-mono-l-500 dark:text-mono-d-500" />
+            </div>
+          </div>
+        );
+      } else {
+        props.setValue(undefined);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initial, districtList]);
+
   return (
     <SearchSelect
+      component={component}
+      setComponent={setComponent}
       value={props.value}
       setValue={props.setValue}
       label="School or District"
       placeholder="Search for your school or district"
     >
       {(search, setValue, setComponent) => {
-        const districtList = districts?.districts?.filter((district: any) => {
-          return (
-            district.name.toLowerCase().includes(search.toLowerCase()) &&
-            district.url
-          );
+        const districtList2 = districtList.filter((district: any) => {
+          return district.name.toLowerCase().includes(search.toLowerCase());
         });
 
         return (
           <div className="border-b-8 border-b-mono-l-100 dark:border-b-mono-d-100">
             <div className="flex flex-col px-2 max-h-80 overflow-scroll">
-              {districtList && districtList.length > 0 ? (
-                districtList.map((district: any, idx: number) => {
+              {districtList2 && districtList2.length > 0 ? (
+                districtList2.map((district: any, idx: number) => {
                   return (
                     <div
                       key={idx}
