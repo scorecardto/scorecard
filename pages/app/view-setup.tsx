@@ -8,8 +8,11 @@ import ExtensionConnector, {
 } from "../../components/core/ExtensionConnector";
 import { SetupContext } from "../../components/core/context/SetupContext";
 import ViewSetup from "../../components/app/setup/ViewSetup";
+import { useRouter } from "next/router";
+import { markAsUntransferable } from "worker_threads";
 
 const ViewSetupPage: NextPage = () => {
+  const router = useRouter();
   const setupContext = useContext(SetupContext);
 
   const loadState = useState<AppLoadState>("LOADING");
@@ -23,7 +26,34 @@ const ViewSetupPage: NextPage = () => {
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setSetup") {
-      setupContext.setSetup(msg.setup);
+      if (msg.setup == null) {
+        router.push("/app/connect-account");
+      } else if (
+        msg.setup?.host == null ||
+        msg.setup?.username == null ||
+        !msg.setup?.hasPassword
+      ) {
+        const district =
+          msg.setup?.host == null ? {} : { district: msg.setup.host! };
+
+        const username =
+          msg.setup?.username == null ? {} : { district: msg.setup.username! };
+
+        const password = msg.setup.hasPassword ? { changePassword: false } : {};
+
+        const search = new URLSearchParams();
+        const query = { ...district, ...username, ...password };
+
+        Object.entries(query).forEach(([key, value]) => {
+          search.set(key, value);
+        });
+
+        console.log(msg.setup);
+
+        router.push(`/app/connect-account?${search.toString()}`);
+      } else {
+        setupContext.setSetup(msg.setup);
+      }
     }
   };
 

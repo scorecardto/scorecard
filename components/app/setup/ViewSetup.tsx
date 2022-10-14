@@ -71,7 +71,9 @@ export default function ViewSetup() {
           </div>
         </div>
       ) : (
-        <Loading />
+        <div className="flex items-center justify-center">
+          <Loading />
+        </div>
       )}
     </FormPage>
   );
