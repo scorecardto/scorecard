@@ -13,7 +13,8 @@ export default function ExtensionConnector(props: {
   onMessage: (message: any, port: chrome.runtime.Port) => void;
   onConnect: (port: chrome.runtime.Port) => void;
 }) {
-  const EXTENSION_ID = "fkpgodekaimcnfknnkgkkdclfodblifl";
+  const EXTENSION_ID = "gjmgdfghndgllmbpihnblibecacmnlpp";
+  // const EXTENSION_ID = "fkpgodekaimcnfknnkgkkdclfodblifl";
   const CURRENT_VERSION = 0.1;
 
   const [load, setLoad] = props.loadState;
