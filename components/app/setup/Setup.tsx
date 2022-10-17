@@ -170,22 +170,28 @@ export default function Setup(props: {
                 setChecking(true);
                 assert(district != null);
 
-                props.checkSetup(district, username).then((result) => {
-                  if (result === "VALID") {
-                    router.push("/app");
-                    return;
-                  }
+                props
+                  .checkSetup(
+                    district,
+                    username,
+                    changePassword ? password : undefined
+                  )
+                  .then((result) => {
+                    if (result === "VALID") {
+                      router.push("/app");
+                      return;
+                    }
 
-                  setChecking(false);
+                    setChecking(false);
 
-                  if (result === "INCORRECT_PASSWORD") {
-                    setIncorrectPassword(true);
-                  }
+                    if (result === "INCORRECT_PASSWORD") {
+                      setIncorrectPassword(true);
+                    }
 
-                  if (result === "INCORRECT_USERNAME") {
-                    setIncorrectUsername(true);
-                  }
-                });
+                    if (result === "INCORRECT_USERNAME") {
+                      setIncorrectUsername(true);
+                    }
+                  });
               }}
             >
               Continue
