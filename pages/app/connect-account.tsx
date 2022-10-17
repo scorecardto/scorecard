@@ -22,7 +22,7 @@ const Login: NextPage = () => {
   function checkSetup(
     host: string,
     username: string,
-    password: string
+    password?: string
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       if (port) {

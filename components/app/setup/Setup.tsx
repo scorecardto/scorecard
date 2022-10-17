@@ -19,7 +19,11 @@ import ChangeButton from "../../core/input/ChangeButton";
 import FormPage from "../../core/FormPage";
 
 export default function Setup(props: {
-  checkSetup(host: string, username: string, password: string): Promise<string>;
+  checkSetup(
+    host: string,
+    username: string,
+    password?: string
+  ): Promise<string>;
 }) {
   const setupContext = useContext(SetupContext);
 
@@ -36,23 +40,59 @@ export default function Setup(props: {
     new URLSearchParams(window.location.search).get("changePassword") != "false"
   );
 
+  const [newlyIncorrectPassword, setNewlyIncorrectPassword] = useState(false);
+  const [newlyIncorrectUsername, setNewlyIncorrectUsername] = useState(false);
+
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [incorrectUsername, setIncorrectUsername] = useState(false);
 
   useEffect(() => {
     setIncorrectPassword(false);
+    setNewlyIncorrectPassword(false);
   }, [district, password]);
 
   useEffect(() => {
     setIncorrectPassword(false);
     setIncorrectUsername(false);
+    setNewlyIncorrectPassword(false);
+    setNewlyIncorrectUsername(false);
   }, [username]);
 
-  const valid = district && username && password;
+  useEffect(() => {
+    setNewlyIncorrectUsername(
+      new URLSearchParams(window.location.search).get("error") ===
+        "newlyIncorrectUsername"
+    );
+    setNewlyIncorrectPassword(
+      new URLSearchParams(window.location.search).get("error") ===
+        "newlyIncorrectPassword"
+    );
+  }, []);
+
+  const valid = district && username && (password || !changePassword);
 
   const [checking, setChecking] = useState(false);
 
   const router = useRouter();
+
+  const error = (() => {
+    if (incorrectUsername) {
+      return "This username was not found in this district. Please try again.";
+    }
+
+    if (incorrectPassword) {
+      return "This password you entered is incorrect. Please try again.";
+    }
+
+    if (newlyIncorrectUsername) {
+      return "Your previous username is no longer valid in this district. Please try another username.";
+    }
+
+    if (newlyIncorrectPassword) {
+      return "Your previous password is no longer correct. Please try another password.";
+    }
+    return undefined;
+  })();
 
   return (
     <FormPage
@@ -60,19 +100,10 @@ export default function Setup(props: {
       description="Enter your student account details to continue. Your Frontline login is not stored online, and your grades will not be visible to Scorecard."
     >
       <div className="max-w-md flex flex-col gap-4 mx-auto">
-        {(incorrectPassword || incorrectUsername) && (
+        {error && (
           <div className="bg-red-100 border border-red-400 rounded-md flex gap-4 items-center py-2 px-4">
             <IoAlertCircle className="text-red-400 text-xl" />
-            <p className="text-red-400">
-              {(() => {
-                if (incorrectUsername) {
-                  return "This username was not found in this district. Please try again.";
-                }
-                if (incorrectPassword) {
-                  return "This password you entered is incorrect. Please try again.";
-                }
-              })()}
-            </p>
+            <p className="text-red-400">{error}</p>
           </div>
         )}
         <DistrictSearch value={district} setValue={setDistrict} />
@@ -139,24 +170,22 @@ export default function Setup(props: {
                 setChecking(true);
                 assert(district != null);
 
-                props
-                  .checkSetup(district, username, password)
-                  .then((result) => {
-                    if (result === "VALID") {
-                      router.push("/app");
-                      return;
-                    }
+                props.checkSetup(district, username).then((result) => {
+                  if (result === "VALID") {
+                    router.push("/app");
+                    return;
+                  }
 
-                    setChecking(false);
+                  setChecking(false);
 
-                    if (result === "INCORRECT_PASSWORD") {
-                      setIncorrectPassword(true);
-                    }
+                  if (result === "INCORRECT_PASSWORD") {
+                    setIncorrectPassword(true);
+                  }
 
-                    if (result === "INCORRECT_USERNAME") {
-                      setIncorrectUsername(true);
-                    }
-                  });
+                  if (result === "INCORRECT_USERNAME") {
+                    setIncorrectUsername(true);
+                  }
+                });
               }}
             >
               Continue
