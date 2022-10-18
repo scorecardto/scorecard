@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IoTrendingUp } from "react-icons/io5";
 import { DataContext } from "scorecard-types";
 import Dropdown from "../core/input/Dropdown";
+import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
 import NotificationSummary from "./NotificationSummary";
@@ -10,8 +11,11 @@ import Toolbar from "./Toolbar";
 export default function Summary() {
   const data = useContext(DataContext);
 
+  const [course, setCourse] = useState(-1);
+
   return (
     <div className="w-full">
+      <AssignmentsViewer course={course} setCourse={setCourse} />
       <div className="max-w-6xl mx-auto px-8 flex flex-col gap-8 pt-8">
         <div className="flex flex-row justify-between items-end gap-8">
           <h1 className="flex-shrink-0">Your Scorecard</h1>
@@ -43,7 +47,9 @@ export default function Summary() {
               return (
                 <CourseCard
                   key={idx}
-                  onClick={() => {}}
+                  onClick={() => {
+                    setCourse(idx);
+                  }}
                   courseName={course.name}
                   description1={course.key}
                   description2=" "

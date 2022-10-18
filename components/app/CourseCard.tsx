@@ -12,7 +12,7 @@ export default function CourseCard(props: {
   return (
     <div
       className=""
-      onClick={() => {
+      onClick={(e) => {
         props.onClick(props.id);
       }}
     >
