@@ -14,16 +14,15 @@ import { SetupContext } from "../components/core/context/SetupContext";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
-  const [gradingPeriod, setGradingPeriod] = useState<number>(0);
-
-  const dataContext = useMemo<DataProvider>(
+  const [gradeCategory, setGradeCategory] = useState<number>(0);
+  const dataContext = useMemo(
     () => ({
       data,
       setData,
-      gradeCategory: gradingPeriod,
-      setGradeCategory: setGradingPeriod,
+      gradeCategory,
+      setGradeCategory,
     }),
-    [data, gradingPeriod, setGradingPeriod]
+    [data, gradeCategory, setGradeCategory]
   );
 
   const [loading, setLoading] = useState(false);
