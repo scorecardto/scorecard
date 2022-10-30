@@ -58,7 +58,7 @@ export default function AssignmentsViewer(props: {
         >
           <div className="bg-mono-l-100 dark:bg-mono-d-100 flex overflow-hidden rounded-lg">
             <div className="bg-accent-100 pt-16 w-80">
-              {data.data?.data?.map((c, idx) => {
+              {data.data?.courses.map((c, idx) => {
                 return (
                   <div
                     key={idx}
@@ -75,7 +75,7 @@ export default function AssignmentsViewer(props: {
 
                     <div className="flex-none w-fit">
                       <GradeChip>
-                        {c.grades[data.gradingPeriod]?.value ?? "NG"}
+                        {c.grades[data.gradeCategory]?.value ?? "NG"}
                       </GradeChip>
                     </div>
                   </div>
@@ -85,9 +85,9 @@ export default function AssignmentsViewer(props: {
             <div className="flex-1 w-[44rem]">
               <div className="h-16 flex items-center px-4">
                 <Dropdown
-                  options={data.data?.gradingPeriods ?? []}
-                  selected={data.gradingPeriod}
-                  setSelected={data.setGradingPeriod}
+                  options={data.data?.gradeCategoryNames ?? []}
+                  selected={data.gradeCategory}
+                  setSelected={data.setGradeCategory}
                 />
               </div>
               <p>bottom section</p>

@@ -7,6 +7,7 @@ import {
   DataContext,
   LoadingContext,
   SetupState,
+  DataProvider,
 } from "scorecard-types";
 import { useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
@@ -14,12 +15,13 @@ import { SetupContext } from "../components/core/context/SetupContext";
 function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
   const [gradingPeriod, setGradingPeriod] = useState<number>(0);
-  const dataContext = useMemo(
+
+  const dataContext = useMemo<DataProvider>(
     () => ({
       data,
       setData,
-      gradingPeriod,
-      setGradingPeriod,
+      gradeCategory: gradingPeriod,
+      setGradeCategory: setGradingPeriod,
     }),
     [data, gradingPeriod, setGradingPeriod]
   );

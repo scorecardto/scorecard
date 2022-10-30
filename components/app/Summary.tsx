@@ -21,9 +21,9 @@ export default function Summary() {
           <h1 className="flex-shrink-0">Your Scorecard</h1>
           <div className="flex gap-2">
             <Dropdown
-              options={data.data?.gradingPeriods ?? []}
-              selected={data.gradingPeriod}
-              setSelected={data.setGradingPeriod}
+              options={data.data?.gradeCategoryNames ?? []}
+              selected={data.gradeCategory}
+              setSelected={data.setGradeCategory}
             />
             <Context />
           </div>
@@ -43,7 +43,7 @@ export default function Summary() {
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200">
         <div className="max-w-6xl mx-auto p-8 relative">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {data.data?.data?.map((course, idx) => {
+            {data.data?.courses.map((course, idx) => {
               return (
                 <CourseCard
                   key={idx}
@@ -53,7 +53,7 @@ export default function Summary() {
                   courseName={course.name}
                   description1={course.key}
                   description2=" "
-                  grade={course.grades[data.gradingPeriod]?.value ?? "NG"}
+                  grade={course.grades[data.gradeCategory]?.value ?? "NG"}
                   id={course.key}
                 />
                 //
