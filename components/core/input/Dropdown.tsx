@@ -29,7 +29,7 @@ export default function Dropdown(props: {
   }, [active]);
 
   return (
-    <div ref={ref} className="flex flex-col justify-end items-end">
+    <div ref={ref} className="flex flex-col justify-end items-end relative">
       <div
         onClick={(e) => {
           setActive(!active);

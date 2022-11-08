@@ -7,17 +7,44 @@ import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
 import { SetupContext } from "../../components/core/context/SetupContext";
+import { useRouter } from "next/router";
 
 const Login: NextPage = () => {
+  const router = useRouter();
+
   const loadState = useState<AppLoadState>("LOADING");
 
   const [port, setPort] = useState<chrome.runtime.Port | null>(null);
 
   const onConnect = (port: chrome.runtime.Port) => {
+    port.postMessage({ type: "requestSetup" });
     setPort(port);
   };
 
-  const onMessage = (msg: any, port: chrome.runtime.Port) => {};
+  const onMessage = (msg: any, port: chrome.runtime.Port) => {
+    if (msg.type === "setSetup") {
+      if (
+        msg.setup &&
+        msg.setup.host &&
+        msg.setup.username &&
+        msg.setup.hasPassword
+      ) {
+        const districtParam = new URLSearchParams(window.location.search).get(
+          "district"
+        );
+        const usernameParam = new URLSearchParams(window.location.search).get(
+          "username"
+        );
+        const changePassword = !!new URLSearchParams(
+          window.location.search
+        ).get("changePassword")!;
+
+        if (!districtParam && !usernameParam && !changePassword) {
+          router.push("/app/view-setup");
+        }
+      }
+    }
+  };
 
   function checkSetup(
     host: string,
