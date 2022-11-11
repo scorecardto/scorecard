@@ -13,11 +13,19 @@ const App: NextPage = () => {
 
   const onConnect = (port: chrome.runtime.Port) => {
     port.postMessage({ type: "requestCourses" });
+    port.postMessage({ type: "requestGradingCategory" });
+    port.postMessage({ type: "requestCourseNames" });
   };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setCourses") {
       dataContext.setData(msg.record);
+    }
+    if (msg.type === "setGradingCategory") {
+      dataContext.setGradeCategory(msg.category);
+    }
+    if (msg.type === "setCourseNames") {
+      dataContext.setCourseNames(msg.names);
     }
   };
 

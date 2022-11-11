@@ -15,14 +15,24 @@ import { SetupContext } from "../components/core/context/SetupContext";
 function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
   const [gradeCategory, setGradeCategory] = useState<number>(0);
+
+  const [courseNames, setCourseNames] = useState<{
+    [key: string]: string;
+  }>({});
+
   const dataContext = useMemo(
     () => ({
       data,
       setData,
       gradeCategory,
       setGradeCategory,
+      courseNames,
+      setCourseName: (id: string, name: string) => {
+        setCourseNames((prev) => ({ ...prev, [id]: name }));
+      },
+      setCourseNames,
     }),
-    [data, gradeCategory, setGradeCategory]
+    [data, gradeCategory, setGradeCategory, courseNames, setCourseNames]
   );
 
   const [loading, setLoading] = useState(false);
@@ -89,5 +99,3 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     </>
   );
 }
-
-export default MyApp;
