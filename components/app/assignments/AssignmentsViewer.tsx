@@ -43,39 +43,48 @@ export default function AssignmentsViewer(props: {
       },
     },
     hide: {
-      opacity: 0.7,
+      opacity: show ? 0.7 : 0,
       scale: 0.9,
     },
   };
 
   return (
     <motion.div
-      className={`${
-        show ? "block" : "hidden"
-      } z-40 fixed top-0 left-0 w-full h-full flex py-10 px-20`}
-      animate={{ backgroundColor: show ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)" }}
-      transition={{ duration: 0.2 }}
+      animate={{
+        visibility: show ? "visible" : "hidden",
+      }}
+      transition={{
+        delay: show ? 0 : 0.3,
+      }}
     >
       <motion.div
-        animate={show ? "show" : "hide"}
-        variants={modalVariants}
-        className="w-full h-full bg-mono-l-100 dark:bg-mono-d-100 rounded-md overflow-hidden"
+        className={`z-40 fixed top-0 left-0 w-full h-full flex py-10 px-20`}
+        animate={{
+          backgroundColor: show ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)",
+        }}
+        transition={{ duration: 0.2 }}
       >
-        <div ref={ref} className="flex w-full h-full">
-          <AssignmentsSidebar
-            courses={data.data?.courses ?? []}
-            currentCourse={course}
-            setCourse={setCourse}
-            gradingPeriod={data.gradeCategory}
-          />
-          <div className="flex-1 w-[44rem] overflow-scroll h-full">
-            {data.data?.courses[course] ? (
-              <CourseGradebook course={data.data?.courses[course]} />
-            ) : (
-              <p>Nothing to show</p>
-            )}
+        <motion.div
+          animate={show ? "show" : "hide"}
+          variants={modalVariants}
+          className="w-full h-full bg-mono-l-100 dark:bg-mono-d-100 rounded-md overflow-hidden"
+        >
+          <div ref={ref} className="flex w-full h-full">
+            <AssignmentsSidebar
+              courses={data.data?.courses ?? []}
+              currentCourse={course}
+              setCourse={setCourse}
+              gradingPeriod={data.gradeCategory}
+            />
+            <div className="flex-1 w-[44rem] overflow-scroll h-full">
+              {data.data?.courses[course] ? (
+                <CourseGradebook course={data.data?.courses[course]} />
+              ) : (
+                <p></p>
+              )}
+            </div>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
