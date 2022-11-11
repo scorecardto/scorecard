@@ -52,7 +52,7 @@ export default function AssignmentsViewer(props: {
     <motion.div
       className={`${
         show ? "block" : "hidden"
-      } z-40 fixed top-0 left-0 w-full h-full flex py-20 px-20`}
+      } z-40 fixed top-0 left-0 w-full h-full flex py-10 px-20`}
       animate={{ backgroundColor: show ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)" }}
       transition={{ duration: 0.2 }}
     >
@@ -69,13 +69,6 @@ export default function AssignmentsViewer(props: {
             gradingPeriod={data.gradeCategory}
           />
           <div className="flex-1 w-[44rem] overflow-scroll h-full">
-            <div className="h-16 flex items-center px-4">
-              <Dropdown
-                options={data.data?.gradeCategoryNames ?? []}
-                selected={data.gradeCategory}
-                setSelected={data.setGradeCategory}
-              />
-            </div>
             {data.data?.courses[course] ? (
               <CourseGradebook course={data.data?.courses[course]} />
             ) : (

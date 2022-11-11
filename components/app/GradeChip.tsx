@@ -5,12 +5,10 @@ export default function GradeChip(props: {
   faded?: boolean;
   spoiler?: boolean;
 }) {
-  const value = useMemo(() => Math.floor(Math.random() * 31) + 70, []);
-
   const spoiler = props.spoiler ?? true;
 
   return (
-    <div className="flex-none from-accent-400 to-accent-500 bg-gradient-to-tr rounded-xl pt-2.5 pb-1.5 px-3 group min-w-[3rem]">
+    <div className="leading-none flex-none from-accent-400 to-accent-500 bg-gradient-to-tr rounded-xl pt-2.5 pb-1.5 px-3 group min-w-[3rem]">
       {spoiler && (
         <p className="align-middle text-white font-mono group-hover:hidden text-center">
           {". . ."}
@@ -21,7 +19,7 @@ export default function GradeChip(props: {
           spoiler ? "hidden group-hover:block" : ""
         }`}
       >
-        {props.children}
+        {props.children ?? "NG"}
       </p>
     </div>
   );
