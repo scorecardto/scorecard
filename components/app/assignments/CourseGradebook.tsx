@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { Course, DataContext } from "scorecard-types";
 import ActionChip from "../ActionChip";
@@ -13,7 +13,16 @@ export default function CourseGradebook(props: { course: Course }) {
 
   const controls = useAnimationControls();
 
-  useEffect(() => {
+  const firstUpdate = useRef(true);
+
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      if (course) {
+        firstUpdate.current = false;
+      }
+      return;
+    }
+
     controls.start({
       opacity: [0.5, 1],
       translateX: [-20, 0],
