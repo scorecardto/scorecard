@@ -54,7 +54,7 @@ export default function AssignmentsViewer(props: {
         visibility: show ? "visible" : "hidden",
       }}
       transition={{
-        delay: show ? 0 : 0.3,
+        delay: show ? 0 : 0.0,
       }}
     >
       <motion.div
@@ -62,7 +62,7 @@ export default function AssignmentsViewer(props: {
         animate={{
           backgroundColor: show ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0)",
         }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.2, delay: 0 }}
       >
         <motion.div
           animate={show ? "show" : "hide"}
