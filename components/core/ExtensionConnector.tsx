@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export type AppLoadState =
   | "LOADING"
@@ -7,12 +7,22 @@ export type AppLoadState =
   | "ERR_EXT_NOT_INSTALLED"
   | "ERR_EXT_VERSION";
 
+export const PortContext = createContext<PortContextProvider>({
+  port: null,
+});
+
+export interface PortContextProvider {
+  port: chrome.runtime.Port | null;
+}
+
 export default function ExtensionConnector(props: {
   loadState: [AppLoadState, React.Dispatch<React.SetStateAction<AppLoadState>>];
   children: React.ReactNode;
   onMessage: (message: any, port: chrome.runtime.Port) => void;
   onConnect: (port: chrome.runtime.Port) => void;
 }) {
+  const [port, setPort] = useState<chrome.runtime.Port | null>(null);
+
   const CURRENT_VERSION = 0.1;
 
   const [load, setLoad] = props.loadState;
@@ -26,6 +36,8 @@ export default function ExtensionConnector(props: {
       "fkpgodekaimcnfknnkgkkdclfodblifl";
 
     const port = chrome.runtime.connect(EXTENSION_ID);
+
+    setPort(port);
 
     port.onMessage.addListener((msg, port) => {
       if (msg.type === "handshake") {
@@ -68,7 +80,11 @@ export default function ExtensionConnector(props: {
         <p>Please install Scorecard to continue.</p>
       )}
       {load === "ERR_EXT_VERSION" && <p>Your Scorecard is outdated.</p>}
-      {load === "DONE" && props.children}
+      {load === "DONE" && (
+        <PortContext.Provider value={{ port }}>
+          {props.children}
+        </PortContext.Provider>
+      )}
     </>
   );
 }

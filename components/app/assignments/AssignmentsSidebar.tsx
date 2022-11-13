@@ -27,7 +27,7 @@ export default function AssignmentsSidebar(props: {
               <p
                 className={`${currentCourse === idx ? "text-accent-300" : ""}`}
               >
-                {c.name}
+                {c.displayName || c.name}
               </p>
             </div>
           );

@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setGradeCategory,
       courseNames,
       setCourseName: (id: string, name: string) => {
-        setCourseNames((prev) => ({ ...prev, [id]: name }));
+        // setCourseNames((prev) => ({ ...prev, [id]: name }));
       },
       setCourseNames,
     }),
@@ -99,3 +99,5 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     </>
   );
 }
+
+export default MyApp;

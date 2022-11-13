@@ -5,6 +5,7 @@ import ActionChip from "../ActionChip";
 import GradeChip from "../GradeChip";
 import AssignmentCategory from "./AssignmentCategory";
 import { motion, useAnimationControls } from "framer-motion";
+import { PortContext } from "../../core/ExtensionConnector";
 
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
@@ -14,6 +15,8 @@ export default function CourseGradebook(props: { course: Course }) {
   const controls = useAnimationControls();
 
   const firstUpdate = useRef(true);
+
+  const port = useContext(PortContext).port;
 
   useLayoutEffect(() => {
     if (firstUpdate.current) {
@@ -32,12 +35,23 @@ export default function CourseGradebook(props: { course: Course }) {
     });
   }, [course]);
 
+  function initiateUpdateName() {
+    const newName = prompt("Enter a new name for this course");
+    if (newName) {
+      port?.postMessage({
+        type: "updateCourseDisplayName",
+        courseKey: course.key,
+        displayName: newName,
+      });
+    }
+  }
+
   return (
     <motion.div className="flex flex-col gap-4">
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center">
-            <h1 className="text-3xl">{course.name}</h1>
+          <div className="flex gap-2 items-center" onClick={initiateUpdateName}>
+            <h1 className="text-3xl">{course.displayName || course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>

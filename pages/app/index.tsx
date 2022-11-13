@@ -22,10 +22,10 @@ const App: NextPage = () => {
       dataContext.setData(msg.record);
     }
     if (msg.type === "setGradingCategory") {
-      dataContext.setGradeCategory(msg.category);
+      dataContext.setGradeCategory(msg.gradingCategory || 0);
     }
     if (msg.type === "setCourseNames") {
-      dataContext.setCourseNames(msg.names);
+      dataContext.setCourseNames(msg.courseNames || {});
     }
   };
 

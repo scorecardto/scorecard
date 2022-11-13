@@ -20,7 +20,7 @@ export default function CourseCard(props: {
         <div className="flex flex-row justify-between gap-5">
           <div className="whitespace-nowrap flex-shrink min-w-0 overflow-hidden">
             <div className="flex flex-col gap-5 p-1 whitespace-nowrap">
-              <b className="text-ellipsis overflow-hidden">
+              <b className="text-ellipsis overflow-hidden leading-normal">
                 {props.courseName}
               </b>
               <div className="flex flex-col gap-3 children:text-ellipsis children:overflow-hidden">
