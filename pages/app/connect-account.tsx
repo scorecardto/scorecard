@@ -69,7 +69,7 @@ const Login: NextPage = () => {
 
         port.onMessage.addListener(listener);
       } else {
-        resolve("NO_PORT");
+        reject("NO_PORT");
       }
     });
   }
