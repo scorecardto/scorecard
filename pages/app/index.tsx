@@ -24,9 +24,6 @@ const App: NextPage = () => {
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradingCategory || 0);
     }
-    if (msg.type === "setCourseNames") {
-      dataContext.setCourseNames(msg.courseNames || {});
-    }
   };
 
   return (
