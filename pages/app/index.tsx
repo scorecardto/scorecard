@@ -14,12 +14,15 @@ const App: NextPage = () => {
   const onConnect = (port: chrome.runtime.Port) => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
-    port.postMessage({ type: "requestCourseNames" });
+    port.postMessage({ type: "requestCourseDisplayNames" });
   };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setCourses") {
       dataContext.setData(msg.record);
+    }
+    if (msg.type == "setCourseDisplayNames") {
+      dataContext.setCourseDisplayNames(msg.courseDisplayNames ?? {});
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradingCategory || 0);

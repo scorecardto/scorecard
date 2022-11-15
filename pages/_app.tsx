@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
   const [gradeCategory, setGradeCategory] = useState<number>(0);
 
-  const [courseNames, setCourseNames] = useState<{
+  const [courseDisplayNames, setCourseDisplayNames] = useState<{
     [key: string]: string;
   }>({});
 
@@ -26,13 +26,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setData,
       gradeCategory,
       setGradeCategory,
-      courseNames,
-      setCourseName: (id: string, name: string) => {
-        // setCourseNames((prev) => ({ ...prev, [id]: name }));
-      },
-      setCourseNames,
+      // courseNames,
+      // setCourseName: (id: string, name: string) => {
+      //   // setCourseNames((prev) => ({ ...prev, [id]: name }));
+      // },
+      // setCourseNames,
+      courseDisplayNames,
+      setCourseDisplayNames
     }),
-    [data, gradeCategory, setGradeCategory, courseNames, setCourseNames]
+    [data, gradeCategory, setGradeCategory, courseDisplayNames, setCourseDisplayNames]
   );
 
   const [loading, setLoading] = useState(false);

@@ -1,5 +1,5 @@
-import React from "react";
-import { Course } from "scorecard-types";
+import React, {useContext} from "react";
+import { DataContext, Course } from "scorecard-types";
 import GradeChip from "../GradeChip";
 
 export default function AssignmentsSidebar(props: {
@@ -9,6 +9,9 @@ export default function AssignmentsSidebar(props: {
   gradingPeriod: number;
 }) {
   const { courses, setCourse, currentCourse, gradingPeriod } = props;
+
+  const data = useContext(DataContext);
+
   return (
     <div className="h-full bg-accent-100 dark:bg-accent-600 pt-8 w-64 text-sm">
       <p className="text-mono-l-600 dark:text-mono-d-600 font-medium pl-6 py-2">
@@ -35,7 +38,7 @@ export default function AssignmentsSidebar(props: {
                     : ""
                 }`}
               >
-                {c.displayName || c.name}
+                  {data.courseDisplayNames[c.key] ?? c.name}
               </p>
             </div>
           );
