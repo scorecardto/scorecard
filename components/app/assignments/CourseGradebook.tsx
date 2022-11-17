@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import React, {BaseSyntheticEvent, SyntheticEvent, useContext, useEffect, useLayoutEffect, useRef} from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { Course, DataContext } from "scorecard-types";
 import ActionChip from "../ActionChip";
@@ -35,14 +35,38 @@ export default function CourseGradebook(props: { course: Course }) {
     });
   }, [course]);
 
-  function initiateUpdateName() {
-    const newName = prompt("Enter a new name for this course");
-    if (newName) {
-      port?.postMessage({
-        type: "updateCourseDisplayName",
-        courseKey: course.key,
-        displayName: newName,
-      });
+  function updateName(evt: KeyboardEvent<HTMLHeadingElement>) {
+    if ((evt.key === "Enter" || evt.key === "Escape") && evt.target) {
+      if (evt.key === "Escape") {
+        (evt.target as HTMLHeadingElement).innerText = (data.courseDisplayNames[course.key] || course.name);
+      } else {
+        port?.postMessage({
+          type: "updateCourseDisplayName",
+          courseKey: course.key,
+          displayName: (evt.target as HTMLHeadingElement).innerText,
+        });
+
+        evt.cancelBubble = true;
+      }
+
+      (evt.target as HTMLHeadingElement).blur();
+    }
+  }
+
+  function escapeName(evt: FocusEvent<HTMLHeadingElement>) {
+    if (evt.target) {
+      if (evt.nativeEvent.sourceCapabilities) {
+        (evt.target as HTMLHeadingElement).innerText = (data.courseDisplayNames[course.key] || course.name);
+      }
+
+      (evt.target as HTMLHeadingElement).contentEditable = "false";
+    }
+  }
+
+  function makeEditable(evt: MouseEvent<HTMLHeadingElement>) {
+    if (evt.target) {
+      (evt.target as HTMLHeadingElement).contentEditable = "true";
+      (evt.target as HTMLHeadingElement).focus();
     }
   }
 
@@ -50,8 +74,8 @@ export default function CourseGradebook(props: { course: Course }) {
     <motion.div className="flex flex-col gap-4">
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center" onClick={initiateUpdateName}>
-            <h1 className="text-3xl">{data.courseDisplayNames[course.key] ?? course.name}</h1>
+          <div className="flex gap-2 items-center">
+            <h1 className="text-3xl outline-0 decoration-3 underline transition-colors duration-300 decoration-transparent focus:decoration-blue-300" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>

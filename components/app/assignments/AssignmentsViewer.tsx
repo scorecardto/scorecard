@@ -25,10 +25,18 @@ export default function AssignmentsViewer(props: {
         }
       };
 
+      const handleKey = (e: KeyboardEvent) => {
+        if (e.target == e.view?.document.body && e.key === "Escape") {
+          setCourse(-1);
+        }
+      }
+
       document.addEventListener("click", handleClick, { capture: true });
+      document.addEventListener("keydown", handleKey, { capture: true });
 
       return () => {
         document.removeEventListener("click", handleClick, { capture: true });
+        document.removeEventListener("keydown", handleKey, { capture: true });
       };
     }
   }, [show, setCourse]);
