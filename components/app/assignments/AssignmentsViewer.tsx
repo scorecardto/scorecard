@@ -26,8 +26,22 @@ export default function AssignmentsViewer(props: {
       };
 
       const handleKey = (e: KeyboardEvent) => {
-        if (e.target == e.view?.document.body && e.key === "Escape") {
-          setCourse(-1);
+        if (e.target == e.view?.document.body) {
+          if (e.key === "Escape") {
+            setCourse(-1);
+          } else if (e.altKey && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+            const courses = data.data?.courses?.length;
+
+            if (courses) {
+              if (e.key === "ArrowDown") {
+                setCourse(Math.min((course + 1), courses-1));
+              } else {
+                setCourse(Math.max(0, course-1));
+              }
+
+              e.preventDefault();
+            }
+          }
         }
       }
 
@@ -39,7 +53,7 @@ export default function AssignmentsViewer(props: {
         document.removeEventListener("keydown", handleKey, { capture: true });
       };
     }
-  }, [show, setCourse]);
+  }, [show, setCourse, course]);
 
   const modalVariants = {
     show: {

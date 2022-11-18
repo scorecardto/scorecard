@@ -57,12 +57,12 @@ export default function Dropdown(props: {
                     props.setSelected(idx);
                     setActive(false);
                   }}
-                  className="flex justify-between gap-8 px-4 py-2 hover:bg-mono-l-150 dark:hover:bg-mono-d-150 cursor-pointer"
+                  className="flex relative justify-between gap-8 px-4 py-2 hover:bg-mono-l-150 dark:hover:bg-mono-d-150 cursor-pointer"
                   key={idx}
                 >
                   <p>{option}</p>
                   {idx === selected && (
-                    <IoCheckmark className="text-mono-l-600 dark:text-mono-d-600" />
+                    <IoCheckmark className="text-mono-l-600 dark:text-mono-d-600 absolute right-0 bottom-0.5 -translate-y-2/3 mr-0.5 " />
                   )}
                 </div>
               );
