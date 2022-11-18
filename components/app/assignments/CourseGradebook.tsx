@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useContext, useEffect, useLayoutEffect, useRef} from "react";
+import React, {useContext, useEffect, useLayoutEffect, useRef} from "react";
 import { FiEdit2 } from "react-icons/fi";
 import { Course, DataContext } from "scorecard-types";
 import ActionChip from "../ActionChip";
@@ -35,27 +35,26 @@ export default function CourseGradebook(props: { course: Course }) {
     });
   }, [course]);
 
-  function updateName(evt: KeyboardEvent<HTMLHeadingElement>) {
+  let saveName = true;
+
+  function updateName(evt: React.KeyboardEvent<HTMLHeadingElement>) {
     if ((evt.key === "Enter" || evt.key === "Escape") && evt.target) {
-      if (evt.key === "Escape") {
-        (evt.target as HTMLHeadingElement).innerText = (data.courseDisplayNames[course.key] || course.name);
-      } else {
+      evt.bubbles = false;
+
+      saveName = evt.key !== "Escape";
+      (evt.target as HTMLHeadingElement).blur();
+    }
+  }
+
+  function escapeName(evt: React.FocusEvent<HTMLHeadingElement>) {
+    if (evt.target) {
+      if (saveName) {
         port?.postMessage({
           type: "updateCourseDisplayName",
           courseKey: course.key,
           displayName: (evt.target as HTMLHeadingElement).innerText,
         });
-
-        evt.cancelBubble = true;
-      }
-
-      (evt.target as HTMLHeadingElement).blur();
-    }
-  }
-
-  function escapeName(evt: FocusEvent<HTMLHeadingElement>) {
-    if (evt.target) {
-      if (evt.nativeEvent.sourceCapabilities) {
+      } else {
         (evt.target as HTMLHeadingElement).innerText = (data.courseDisplayNames[course.key] || course.name);
       }
 
@@ -63,7 +62,7 @@ export default function CourseGradebook(props: { course: Course }) {
     }
   }
 
-  function makeEditable(evt: MouseEvent<HTMLHeadingElement>) {
+  function makeEditable(evt: React.MouseEvent<HTMLHeadingElement>) {
     if (evt.target) {
       (evt.target as HTMLHeadingElement).contentEditable = "true";
       (evt.target as HTMLHeadingElement).focus();
@@ -75,7 +74,7 @@ export default function CourseGradebook(props: { course: Course }) {
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center">
-            <h1 className="text-3xl outline-0 decoration-3 underline transition-colors duration-300 decoration-transparent focus:decoration-blue-300" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
+            <h1 className="text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>
