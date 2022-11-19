@@ -10,7 +10,7 @@ import { PortContext } from "../../core/ExtensionConnector";
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
 
-  const { gradeCategory } = useContext(DataContext);
+  const data = useContext(DataContext);
 
   const controls = useAnimationControls();
 
@@ -51,7 +51,7 @@ export default function CourseGradebook(props: { course: Course }) {
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center" onClick={initiateUpdateName}>
-            <h1 className="text-3xl">{course.displayName || course.name}</h1>
+            <h1 className="text-3xl">{data.courseDisplayNames[course.key] ?? course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>
@@ -61,7 +61,7 @@ export default function CourseGradebook(props: { course: Course }) {
             <ActionChip>Details</ActionChip>
             <ActionChip>Test Grades</ActionChip>
             <GradeChip spoiler={false}>
-              {course.grades[gradeCategory]?.value}
+              {course.grades[data.gradeCategory]?.value}
             </GradeChip>
           </div>
         </div>

@@ -50,7 +50,7 @@ export default function Summary() {
                   onClick={() => {
                     setCourse(idx);
                   }}
-                  courseName={course.displayName || course.name}
+                  courseName={data.courseDisplayNames[course.key] ?? course.name}
                   description1={course.key}
                   description2=" "
                   grade={course.grades[data.gradeCategory]?.value ?? "NG"}
