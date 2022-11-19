@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
-import { FiEdit2 } from "react-icons/fi";
+import React, {useContext, useEffect, useLayoutEffect, useRef} from "react";
+import { FiEdit2, FiRotateCw } from "react-icons/fi";
 import { Course, DataContext } from "scorecard-types";
 import ActionChip from "../ActionChip";
 import GradeChip from "../GradeChip";
@@ -35,23 +35,60 @@ export default function CourseGradebook(props: { course: Course }) {
     });
   }, [course]);
 
-  function initiateUpdateName() {
-    const newName = prompt("Enter a new name for this course");
-    if (newName) {
-      port?.postMessage({
-        type: "updateCourseDisplayName",
-        courseKey: course.key,
-        displayName: newName,
-      });
+  let saveName = true;
+
+  function updateName(evt: React.KeyboardEvent<HTMLHeadingElement>) {
+    if ((evt.key === "Enter" || evt.key === "Escape") && evt.currentTarget) {
+      evt.bubbles = false;
+
+      saveName = evt.key !== "Escape";
+      evt.currentTarget.blur();
     }
+  }
+
+  function escapeName(evt: React.FocusEvent<HTMLHeadingElement>) {
+    if (evt.currentTarget) {
+      if (saveName && evt.currentTarget.innerText !== data.courseDisplayNames[course.key]) {
+        const newName = evt.currentTarget.innerText.trim();
+
+        port?.postMessage({
+          type: "updateCourseDisplayName",
+          courseKey: course.key,
+          displayName: (evt.currentTarget.innerText = newName ? newName : course.name),
+        });
+      } else {
+        evt.currentTarget.innerText = (data.courseDisplayNames[course.key] || course.name);
+      }
+
+      evt.currentTarget.contentEditable = "false";
+      evt.currentTarget.previousElementSibling?.classList.add("opacity-0");
+    }
+  }
+
+  function makeEditable(evt: React.MouseEvent<HTMLHeadingElement>) {
+    if (evt.currentTarget) {
+      evt.currentTarget.contentEditable = "true";
+      evt.currentTarget.previousElementSibling?.classList.remove("opacity-0");
+
+      evt.currentTarget.focus();
+    }
+  }
+
+  function reset() {
+    port?.postMessage({
+      type: "updateCourseDisplayName",
+      courseKey: course.key,
+      displayName: course.name,
+    });
   }
 
   return (
     <motion.div className="flex flex-col gap-4">
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center" onClick={initiateUpdateName}>
-            <h1 className="text-3xl">{data.courseDisplayNames[course.key] ?? course.name}</h1>
+          <div className="flex gap-2 items-center relative">
+            <button onClick={reset} className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"><FiRotateCw/></button>
+            <h1 className="text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>
