@@ -4,26 +4,57 @@ import {
   IoPulse,
   IoHeart,
 } from "react-icons/io5";
+import { GradebookNotification } from "scorecard-types";
+import { motion } from "framer-motion";
 
 export default function Notification(props: {
-  title: string;
-  details: string;
-  iconType: "TRENDING_UP" | "TRENDING_DOWN" | "TRENDING_FLAT" | "HEART";
+  notification: GradebookNotification;
+  index: number;
 }) {
+  const { notification, index } = props;
   return (
-    <div className="relative w-fit py-4 px-6 flex border border-mono-l-300 dark:border-mono-d-300 my-4 rounded-lg">
-      <div className="flex flex-row gap-6 items-center">
-        <div className="flex flex-col text-accent-300 text-4xl">
-          {props.iconType === "TRENDING_UP" && <IoTrendingUp />}
-          {props.iconType === "TRENDING_DOWN" && <IoTrendingDown />}
-          {props.iconType === "TRENDING_FLAT" && <IoPulse />}
-          {props.iconType === "HEART" && <IoHeart />}
-        </div>
-        <div className="flex flex-col gap-2 max-w-[24rem]">
-          <b>{props.title}</b>
-          <p>{props.details}</p>
+    <motion.div
+      key={`notification-${index}`}
+      initial={
+        props.index === 0
+          ? {}
+          : {
+              opacity: 0,
+              translateY: 20,
+              scale: 0.8,
+            }
+      }
+      animate={{
+        opacity: 1,
+        translateY: 0,
+        scale: 1,
+      }}
+      exit={{
+        position: "absolute",
+        bottom: 0,
+        opacity: 0,
+        translateX: "-100%",
+        scale: 0.8,
+      }}
+      transition={{
+        duration: 0.5,
+        ease: "easeOut",
+      }}
+    >
+      <div className="relative w-fit py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg w-[30rem]">
+        <div className="flex flex-row gap-6 items-center">
+          <div className="flex flex-col text-accent-300 text-3xl">
+            {notification.icon === "RISE" && <IoTrendingUp />}
+            {notification.icon === "FALL" && <IoTrendingDown />}
+            {notification.icon === "NEUTRAL" && <IoPulse />}
+            {/* {notification.icon === "" && <IoHeart />} */}
+          </div>
+          <div className="flex flex-col gap-2 max-w-[24rem]">
+            <b>{notification.title}</b>
+            <p>{notification.message}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

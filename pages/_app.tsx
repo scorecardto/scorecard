@@ -58,7 +58,23 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     () => ({
       notifications,
       setNotifications,
-      markRead: () => {},
+      markRead: (port: chrome.runtime.Port) => {
+        let done = false;
+
+        const newNotifications = notifications.map((notification) => {
+          if (!notification.read && !done) {
+            notification.read = true;
+            done = true;
+          }
+          return notification;
+        });
+
+        setNotifications(newNotifications);
+
+        port.postMessage({
+          type: "markNotificationAsRead",
+        });
+      },
       unreadNotifications: notifications.filter((n) => !n.read),
     }),
     [notifications]
