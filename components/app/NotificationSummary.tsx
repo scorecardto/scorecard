@@ -35,10 +35,8 @@ export default function NotificationSummary() {
       })}
       {showingNotification && (
         <div
-          className="absolute top-1/2 right-0 -translate-y-1/2 text-mono-100 bg-accent-300 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center"
+          className="absolute top-1/2 -right-4 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
           onClick={() => {
-            console.log(port);
-
             if (port) {
               markRead(port);
             }
