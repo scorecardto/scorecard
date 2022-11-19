@@ -8,6 +8,8 @@ import {
   LoadingContext,
   SetupState,
   DataProvider,
+  NotificationContext,
+  GradebookNotification,
 } from "scorecard-types";
 import { useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
@@ -32,15 +34,35 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       // },
       // setCourseNames,
       courseDisplayNames,
-      setCourseDisplayNames
+      setCourseDisplayNames,
     }),
-    [data, gradeCategory, setGradeCategory, courseDisplayNames, setCourseDisplayNames]
+    [
+      data,
+      gradeCategory,
+      setGradeCategory,
+      courseDisplayNames,
+      setCourseDisplayNames,
+    ]
   );
 
   const [loading, setLoading] = useState(false);
   const reloadContent = () => {};
 
   const [setup, setSetup] = useState<SetupState | null>(null);
+
+  const [notifications, setNotifications] = useState<GradebookNotification[]>(
+    []
+  );
+
+  const notificationContext = useMemo(
+    () => ({
+      notifications,
+      setNotifications,
+      markRead: () => {},
+      unreadNotifications: notifications.filter((n) => !n.read),
+    }),
+    [notifications]
+  );
 
   return (
     <>
@@ -92,11 +114,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       />
 
       <SetupContext.Provider value={{ setup, setSetup }}>
-        <LoadingContext.Provider value={{ loading, setLoading, reloadContent }}>
-          <DataContext.Provider value={dataContext}>
-            <Component {...pageProps} />
-          </DataContext.Provider>
-        </LoadingContext.Provider>
+        <NotificationContext.Provider value={notificationContext}>
+          <LoadingContext.Provider
+            value={{ loading, setLoading, reloadContent }}
+          >
+            <DataContext.Provider value={dataContext}>
+              <Component {...pageProps} />
+            </DataContext.Provider>
+          </LoadingContext.Provider>
+        </NotificationContext.Provider>
       </SetupContext.Provider>
     </>
   );

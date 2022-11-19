@@ -30,11 +30,7 @@ export default function Summary() {
         </div>
 
         <div className="flex flex-row justify-between items-end gap-8">
-          <NotificationSummary
-            iconType="HEART"
-            title="Notifications Appear Here"
-            details="Thanks for chosing Scorecard, the free gradebook viewer for Frontline."
-          />
+          <NotificationSummary />
 
           <Toolbar />
         </div>
@@ -50,7 +46,9 @@ export default function Summary() {
                   onClick={() => {
                     setCourse(idx);
                   }}
-                  courseName={data.courseDisplayNames[course.key] ?? course.name}
+                  courseName={
+                    data.courseDisplayNames[course.key] ?? course.name
+                  }
                   description1={course.key}
                   description2=" "
                   grade={course.grades[data.gradeCategory]?.value ?? "NG"}

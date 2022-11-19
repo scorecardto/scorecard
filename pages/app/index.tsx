@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
-import { Course, DataContext } from "scorecard-types";
+import { Course, DataContext, NotificationContext } from "scorecard-types";
 import Summary from "../../components/app/Summary";
 import ExtensionConnector, {
   AppLoadState,
@@ -8,6 +8,7 @@ import ExtensionConnector, {
 
 const App: NextPage = () => {
   const dataContext = useContext(DataContext);
+  const notificationContext = useContext(NotificationContext);
 
   const loadState = useState<AppLoadState>("LOADING");
 
@@ -15,6 +16,7 @@ const App: NextPage = () => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
     port.postMessage({ type: "requestCourseDisplayNames" });
+    port.postMessage({ type: "requestNotifications" });
   };
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
@@ -26,6 +28,9 @@ const App: NextPage = () => {
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradingCategory || 0);
+    }
+    if (msg.type === "setNotifications") {
+      notificationContext.setNotifications(msg.notifications);
     }
   };
 
