@@ -8,7 +8,7 @@ import Summary from "../Summary";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export default function NotificationSummary() {
+export default function NotificationSummary(props: {courseIdx: number}) {
   const notificationContext = useContext(NotificationContext);
 
   const { notifications, markRead, unreadNotifications } = notificationContext;
@@ -37,6 +37,7 @@ export default function NotificationSummary() {
       {showingNotification && (
         <div
           className="absolute top-1/2 -right-4 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
+          tabIndex={props.courseIdx == -1 ? 0 : -1}
           onClick={() => {
             if (port) {
               markRead(port);
@@ -48,7 +49,7 @@ export default function NotificationSummary() {
       )}
       {!showingNotification && (
         <Link href="/app/notifications">
-          <div className="cursor-pointer border border-mono-l-300 dark:border-mono-d-300 py-4 px-6 rounded-md flex items-center gap-4 hover:bg-mono-l-150 hover:dark:bg-mono-d-150">
+          <div tabIndex={props.courseIdx == -1 ? 0 : -1} className="cursor-pointer border border-mono-l-300 dark:border-mono-d-300 py-4 px-6 rounded-md flex items-center gap-4 hover:bg-mono-l-150 hover:dark:bg-mono-d-150">
             <div className="w-2 h-2 rounded-full bg-accent-300" />
             <p>View Past Notifications</p>
           </div>

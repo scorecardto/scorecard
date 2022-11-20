@@ -36,7 +36,7 @@ export default function Summary() {
         </div>
 
         <div className="flex flex-row justify-between items-end gap-8">
-          <NotificationSummary />
+          <NotificationSummary courseIdx={course}/>
 
           <Toolbar />
         </div>
