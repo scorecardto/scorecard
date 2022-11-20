@@ -5,6 +5,7 @@ export default function GradingCategorySelector(props: {
   selected: number;
   setSelected: React.Dispatch<React.SetStateAction<number>>;
   options: string[];
+  courseIdx: number;
 }) {
   const { selected, options } = props;
 
@@ -31,6 +32,7 @@ export default function GradingCategorySelector(props: {
   return (
     <div ref={ref} className="relative">
       <div
+        tabIndex={props.courseIdx == -1 ? 0 : -1}
         onClick={(e) => {
           setActive(!active);
         }}
@@ -53,6 +55,7 @@ export default function GradingCategorySelector(props: {
             {options.map((option, idx) => {
               return (
                 <div
+                  tabIndex={0}
                   onClick={(e) => {
                     props.setSelected(idx);
                     setActive(false);

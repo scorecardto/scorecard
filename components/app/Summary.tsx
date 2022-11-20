@@ -31,15 +31,16 @@ export default function Summary() {
               options={data.data?.gradeCategoryNames ?? []}
               selected={data.gradeCategory}
               setSelected={data.setGradeCategory}
+              courseIdx={course}
             />
-            <Context />
+            <Context courseIdx={course} />
           </div>
         </div>
 
         <div className="flex flex-row justify-between items-end gap-8">
           <NotificationSummary courseIdx={course}/>
 
-          <Toolbar />
+          <Toolbar courseIdx={course} />
         </div>
       </div>
 
