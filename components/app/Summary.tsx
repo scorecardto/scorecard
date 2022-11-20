@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
 import GradingCategorySelector from "../core/input/GradingCategorySelector";
@@ -14,6 +14,20 @@ export default function Summary() {
   const [course, setCourse] = useState(-1);
 
   const { unreadNotifications } = useContext(NotificationContext);
+
+  useEffect(() => {
+    const href = decodeURI(window.location.href);
+
+    if (href.indexOf("#") != -1) {
+      const course = href.slice(href.indexOf("#") + 1);
+      const index = data.data?.courses.findIndex((c) => (data.courseDisplayNames[c.key] ?? c.name) == course);
+
+      if (index != undefined && index != -1) {
+        setCourse(index);
+        window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
+      }
+    }
+  }, [data.data?.courses, data.courseDisplayNames])
 
     return (
     <div className="w-full flex flex-col h-screen">
