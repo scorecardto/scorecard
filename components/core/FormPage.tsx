@@ -1,11 +1,18 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 export default function FormPage(props: {
   title: string;
   description: string;
   children: React.ReactNode;
+  omitTopPadding?: boolean;
+  backLink?: string;
+  backLinkText?: string;
 }) {
+  const { backLink, backLinkText } = props;
+
   return (
     <div className="flex flex-col lg:flex-row h-full">
       <div className="shrink-0 flex-none w-full lg:w-2/5 lg:h-full py-10 lg:pt-48 px-10">
@@ -25,9 +32,23 @@ export default function FormPage(props: {
           <p className="max-w-sm">{props.description}</p>
         </div>
       </div>
-      <div className="w-full lg:w-3/5 lg:min-h-full lg:h-max   h-full bg-accent-100 dark:bg-accent-800 lg:pt-72 pt-10 ">
+      <div
+        className={`w-full lg:w-3/5 lg:min-h-full lg:h-max h-full bg-accent-100 dark:bg-accent-800 pt-10 ${
+          props.omitTopPadding ? "" : "lg:pt-72"
+        }`}
+      >
         {props.children}
       </div>
+      {backLink && backLinkText && (
+        <div className="fixed top-5 left-5">
+          <Link href={backLink}>
+            <div className="bg-accent-100 hover:bg-accent-200 cursor-pointer py-2 px-4 border border-accent-200 rounded-md flex gap-2 items-center text-accent-300">
+              <IoArrowBackOutline />
+              <p className="text-accent-300">{backLinkText}</p>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

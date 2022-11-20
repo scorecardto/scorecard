@@ -2,9 +2,9 @@ import { AnimatePresence } from "framer-motion";
 import React, { useContext, useMemo } from "react";
 import { IoChevronForwardOutline } from "react-icons/io5";
 import { NotificationContext } from "scorecard-types";
-import { PortContext } from "../core/ExtensionConnector";
+import { PortContext } from "../../core/ExtensionConnector";
 import Notification from "./Notification";
-import Summary from "./Summary";
+import Summary from "../Summary";
 import { motion } from "framer-motion";
 
 export default function NotificationSummary() {
@@ -46,7 +46,7 @@ export default function NotificationSummary() {
         </div>
       )}
       {!showingNotification && (
-        <div className="border border-mono-l-300 dark:border-mono-d-400 py-4 px-6 rounded-md flex items-center gap-4">
+        <div className="border border-mono-l-300 dark:border-mono-d-300 py-4 px-6 rounded-md flex items-center gap-4">
           <div className="w-2 h-2 rounded-full bg-accent-300" />
           <p>View Past Notifications</p>
         </div>

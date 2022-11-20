@@ -5,7 +5,7 @@ import Dropdown from "../core/input/Dropdown";
 import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
-import NotificationSummary from "./NotificationSummary";
+import NotificationSummary from "./notifications/NotificationSummary";
 import Toolbar from "./Toolbar";
 
 export default function Summary() {

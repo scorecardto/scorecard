@@ -41,7 +41,7 @@ export default function Notification(props: {
         ease: "easeOut",
       }}
     >
-      <div className="relative w-fit py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg w-[30rem]">
+      <div className="relative w-fit py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg max-w-[30rem] w-full bg-mono-l-100 dark:bg-mono-d-100">
         <div className="flex flex-row gap-6 items-center">
           <div className="flex flex-col text-accent-300 text-3xl">
             {notification.icon === "RISE" && <IoTrendingUp />}
