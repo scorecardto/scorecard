@@ -14,7 +14,7 @@ export default function DistrictSearch(props: {
   value: string | undefined;
   setValue: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) {
-  const [districts, setDistricts] = useState<any>();
+  const [districts, setDistricts] = useState<any>([]);
   const [component, setComponent] = useState<ReactNode>(<></>);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function DistrictSearch(props: {
       setComponent={setComponent}
       value={props.value}
       setValue={props.setValue}
-      label="School or District"
+      label="School District"
       placeholder="Search for your school or district"
     >
       {(search, setValue, setComponent) => {
