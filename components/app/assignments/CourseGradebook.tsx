@@ -61,16 +61,28 @@ export default function CourseGradebook(props: { course: Course }) {
       }
 
       evt.currentTarget.contentEditable = "false";
+
       evt.currentTarget.previousElementSibling?.classList.add("opacity-0");
+      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = -1
     }
   }
 
   function makeEditable(evt: React.MouseEvent<HTMLHeadingElement>) {
     if (evt.currentTarget) {
       evt.currentTarget.contentEditable = "true";
-      evt.currentTarget.previousElementSibling?.classList.remove("opacity-0");
 
+      evt.currentTarget.previousElementSibling?.classList.remove("opacity-0");
+      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = 0
+
+      saveName = true;
       evt.currentTarget.focus();
+
+      if (getSelection()?.getRangeAt(0).startContainer.parentElement != evt.currentTarget) {
+        const range = document.createRange();
+        range.selectNodeContents(evt.currentTarget);
+        getSelection()?.removeAllRanges();
+        getSelection()?.addRange(range);
+      }
     }
   }
 
@@ -87,8 +99,8 @@ export default function CourseGradebook(props: { course: Course }) {
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center relative">
-            <button onClick={reset} className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"><FiRotateCw/></button>
-            <h1 className="text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
+            <button tabIndex={-1} onClick={reset} className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"><FiRotateCw/></button>
+            <h1 tabIndex={0} className="text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
           <p>Gradebook</p>

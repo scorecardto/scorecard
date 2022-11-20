@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
+import {FiRotateCw, FiX} from "react-icons/fi";
 import { motion } from "framer-motion";
 import { DataContext } from "scorecard-types";
 import GradeChip from "../GradeChip";
@@ -91,7 +92,7 @@ export default function AssignmentsViewer(props: {
           variants={modalVariants}
           className="w-full h-full bg-mono-l-100 dark:bg-mono-d-100 rounded-md overflow-hidden"
         >
-          <div ref={ref} className="flex w-full h-full">
+          <div ref={ref} className="relative flex w-full h-full">
             <AssignmentsSidebar
               courses={data.data?.courses ?? []}
               currentCourse={course}
@@ -105,6 +106,7 @@ export default function AssignmentsViewer(props: {
                 <p></p>
               )}
             </div>
+            <button tabIndex={0} onClick={() => {setCourse(-1)}} className="absolute top-1 right-1 text-mono-l-500 hover:bg-slate-100 rounded-md p-1"><FiX/></button>
           </div>
         </motion.div>
       </motion.div>

@@ -43,18 +43,20 @@ export default function Summary() {
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200">
         <div className="max-w-6xl mx-auto p-8 relative">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {data.data?.courses.map((course, idx) => {
+            {data.data?.courses.map((c, idx) => {
               return (
                 <CourseCard
                   key={idx}
                   onClick={() => {
                     setCourse(idx);
+                    (document.activeElement as HTMLElement)?.blur();
                   }}
-                  courseName={data.courseDisplayNames[course.key] ?? course.name}
-                  description1={course.key}
+                  courseName={data.courseDisplayNames[c.key] ?? c.name}
+                  description1={c.key}
                   description2=" "
-                  grade={course.grades[data.gradeCategory]?.value ?? "NG"}
-                  id={course.key}
+                  grade={c.grades[data.gradeCategory]?.value ?? "NG"}
+                  id={c.key}
+                  courseIdx={course}
                 />
                 //
               );

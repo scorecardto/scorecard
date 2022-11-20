@@ -9,7 +9,7 @@ import {
   SetupState,
   DataProvider,
 } from "scorecard-types";
-import { useMemo, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
@@ -41,6 +41,25 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const reloadContent = () => {};
 
   const [setup, setSetup] = useState<SetupState | null>(null);
+
+  useEffect(() => {
+      const handleKey = (e: KeyboardEvent) => {
+        if (e.key === " ") {
+            const el = e.view?.document.activeElement as HTMLElement;
+
+            if (el !== e.view?.document.body && e.view?.document.designMode !== "on" && !el.isContentEditable && !(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) {
+                el.click();
+                e.preventDefault();
+            }
+        }
+      }
+
+      document.addEventListener("keydown", handleKey, { capture: true });
+
+      return () => {
+          document.removeEventListener("keydown", handleKey, { capture: true });
+      };
+  })
 
   return (
     <>
