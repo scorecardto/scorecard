@@ -65,6 +65,14 @@ export default function DeleteTelemetryData() {
     }
   }, [clientId, fetching]);
 
+  useEffect(() => {
+    if (done) {
+      setTimeout(() => {
+        window.close();
+      }, 500);
+    }
+  }, [done]);
+
   return (
     <>
       <NextSeo title="Delete your Telemetry Data" />
