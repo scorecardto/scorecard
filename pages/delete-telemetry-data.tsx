@@ -2,13 +2,16 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import DeleteTelemetryDataRow from "../components/app/uninstall/DeleteTelemetryDataRow";
-
+import axios from "axios";
 export default function DeleteTelemetryData() {
   const [clientId, setClientId] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
+  const [fetching, setFetching] = useState(false);
   const router = useRouter();
+
+  const domain = "https://scorecard-iota.vercel.app";
 
   useEffect(() => {
     const { clientId } = router.query;
@@ -31,6 +34,33 @@ export default function DeleteTelemetryData() {
       clearTimeout(timeout);
     };
   }, [clientId]);
+
+  useEffect(() => {
+    if (clientId && !fetching) {
+      setFetching(true);
+
+      axios
+        .post(`/api/metrics/delete-telemetry-data`, {
+          clientId,
+        })
+        .then((result) => {
+          if (result.data.success) {
+            setDone(true);
+          } else {
+            if (result.data.error === "NO_DOCUMENT_FOUND") {
+              setError(
+                "We couldn't find any telemetry data for your this client ID. This likely means your data is already deleted."
+              );
+            } else {
+              setError(`Unrecognized error: ${result.data.error}`);
+            }
+          }
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
+    }
+  }, [clientId, fetching]);
 
   return (
     <>
