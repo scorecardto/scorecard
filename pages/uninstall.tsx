@@ -60,7 +60,10 @@ const Uninstall: NextPage = () => {
     if (uninstallReason) {
       if (clientId) {
         axios
-          .post("/api/metrics/provideUninstallReason", {})
+          .post("/api/metrics/provideUninstallReason", {
+            clientId,
+            uninstallReason,
+          })
           .then((result) => {
             if (result.data.success) {
               setUninstallStatus("DONE");
