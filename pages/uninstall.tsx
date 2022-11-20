@@ -79,7 +79,9 @@ const Uninstall: NextPage = () => {
               data,{" "}
               <a
                 className="underline"
-                href={`/delete-telemetry-data?clientId=${clientId}`}
+                onClick={() => {
+                  window.open(`/delete-telemetry-data?clientId=${clientId}`);
+                }}
               >
                 click here.
               </a>

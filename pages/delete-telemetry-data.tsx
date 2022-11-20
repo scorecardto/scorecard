@@ -68,7 +68,7 @@ export default function DeleteTelemetryData() {
   useEffect(() => {
     if (done) {
       setTimeout(() => {
-        window.open("", "_self")?.close();
+        window.close();
       }, 1000);
     }
   }, [done]);
