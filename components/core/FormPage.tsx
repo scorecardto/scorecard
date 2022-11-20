@@ -42,7 +42,7 @@ export default function FormPage(props: {
       {backLink && backLinkText && (
         <div className="fixed top-5 left-5">
           <Link href={backLink}>
-            <div className="bg-accent-100 hover:bg-accent-200 cursor-pointer py-2 px-4 border border-accent-200 rounded-md flex gap-2 items-center text-accent-300">
+            <div className="bg-accent-100 hover:bg-accent-200 dark:bg-accent-600 hover:dark:bg-accent-700 cursor-pointer py-2 px-4 border border-accent-200 dark:border-accent-700 rounded-md flex gap-2 items-center text-accent-300">
               <IoArrowBackOutline />
               <p className="text-accent-300">{backLinkText}</p>
             </div>

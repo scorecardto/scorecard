@@ -6,6 +6,7 @@ import { PortContext } from "../../core/ExtensionConnector";
 import Notification from "./Notification";
 import Summary from "../Summary";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function NotificationSummary() {
   const notificationContext = useContext(NotificationContext);
@@ -46,10 +47,12 @@ export default function NotificationSummary() {
         </div>
       )}
       {!showingNotification && (
-        <div className="border border-mono-l-300 dark:border-mono-d-300 py-4 px-6 rounded-md flex items-center gap-4">
-          <div className="w-2 h-2 rounded-full bg-accent-300" />
-          <p>View Past Notifications</p>
-        </div>
+        <Link href="/app/notifications">
+          <div className="cursor-pointer border border-mono-l-300 dark:border-mono-d-300 py-4 px-6 rounded-md flex items-center gap-4 hover:bg-mono-l-150 hover:dark:bg-mono-d-150">
+            <div className="w-2 h-2 rounded-full bg-accent-300" />
+            <p>View Past Notifications</p>
+          </div>
+        </Link>
       )}
     </div>
   );
