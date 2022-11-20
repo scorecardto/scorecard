@@ -43,7 +43,7 @@ export default function DeleteTelemetryData() {
       setFetching(true);
 
       axios
-        .post(`/api/metrics/delete-telemetry-data`, {
+        .post(`/api/metrics/deleteTelemetryData`, {
           clientId,
         })
         .then((result) => {
