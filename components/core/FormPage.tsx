@@ -14,7 +14,7 @@ export default function FormPage(props: {
   const { backLink, backLinkText } = props;
 
   return (
-    <div className="flex flex-col lg:flex-row h-full">
+    <div className="flex flex-col lg:flex-row h-full min-h-screen">
       <div className="shrink-0 flex-none w-full lg:w-2/5 lg:h-full py-10 lg:pt-48 px-10">
         <div className="flex flex-col gap-8">
           <div className="flex lg:flex-col lg:gap-8 gap-4 lg:items-start items-center">
@@ -33,7 +33,7 @@ export default function FormPage(props: {
         </div>
       </div>
       <div
-        className={`w-full lg:w-3/5 lg:min-h-full lg:h-max h-full bg-accent-100 dark:bg-accent-800 pt-10 ${
+        className={`w-full lg:w-3/5 lg:min-h-full lg:h-max h-full bg-accent-100 dark:bg-accent-800 py-10 ${
           props.omitTopPadding ? "" : "lg:pt-72"
         }`}
       >
