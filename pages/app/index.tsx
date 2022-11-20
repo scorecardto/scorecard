@@ -1,14 +1,18 @@
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { Course, DataContext, NotificationContext } from "scorecard-types";
 import Summary from "../../components/app/Summary";
 import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
+import Loading from "../../components/core/util/Loading";
 
 const App: NextPage = () => {
+  const router = useRouter();
   const dataContext = useContext(DataContext);
   const notificationContext = useContext(NotificationContext);
+  const [loaded, setLoaded] = useState(false);
 
   const loadState = useState<AppLoadState>("LOADING");
 
@@ -21,7 +25,12 @@ const App: NextPage = () => {
 
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setCourses") {
+      if (msg.record == null) {
+        router.push("/app/connect-account");
+        return;
+      }
       dataContext.setData(msg.record);
+      setLoaded(true);
     }
     if (msg.type == "setCourseDisplayNames") {
       dataContext.setCourseDisplayNames(msg.courseDisplayNames ?? {});
@@ -40,7 +49,7 @@ const App: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
-      <Summary />
+      {loaded ? <Summary /> : <Loading center={true} />}
     </ExtensionConnector>
   );
 };
