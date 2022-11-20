@@ -22,7 +22,7 @@ export default function ChangeButton(props: {
         )}
         <button
           onClick={props.onClick}
-          className="border border-none hover:bg-accent-150 hover:border-accent-150 hover:dark:bg-accent-750 py-1 px-3 rounded-md text-accent-400"
+          className="border border-none hover:bg-accent-150 hover:dark:bg-accent-750 py-1 px-3 rounded-md text-accent-400"
         >
           Change
         </button>

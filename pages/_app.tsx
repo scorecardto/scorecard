@@ -8,6 +8,8 @@ import {
   LoadingContext,
   SetupState,
   DataProvider,
+  NotificationContext,
+  GradebookNotification,
 } from "scorecard-types";
 import {useEffect, useMemo, useState} from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
@@ -32,9 +34,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       // },
       // setCourseNames,
       courseDisplayNames,
-      setCourseDisplayNames
+      setCourseDisplayNames,
     }),
-    [data, gradeCategory, setGradeCategory, courseDisplayNames, setCourseDisplayNames]
+    [
+      data,
+      gradeCategory,
+      setGradeCategory,
+      courseDisplayNames,
+      setCourseDisplayNames,
+    ]
   );
 
   const [loading, setLoading] = useState(false);
@@ -60,6 +68,36 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           document.removeEventListener("keydown", handleKey, { capture: true });
       };
   })
+
+  const [notifications, setNotifications] = useState<GradebookNotification[]>(
+    []
+  );
+
+  const notificationContext = useMemo(
+    () => ({
+      notifications,
+      setNotifications,
+      markRead: (port: chrome.runtime.Port) => {
+        let done = false;
+
+        const newNotifications = notifications.map((notification) => {
+          if (!notification.read && !done) {
+            notification.read = true;
+            done = true;
+          }
+          return notification;
+        });
+
+        setNotifications(newNotifications);
+
+        port.postMessage({
+          type: "markNotificationAsRead",
+        });
+      },
+      unreadNotifications: notifications.filter((n) => !n.read),
+    }),
+    [notifications]
+  );
 
   return (
     <>
@@ -111,11 +149,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       />
 
       <SetupContext.Provider value={{ setup, setSetup }}>
-        <LoadingContext.Provider value={{ loading, setLoading, reloadContent }}>
-          <DataContext.Provider value={dataContext}>
-            <Component {...pageProps} />
-          </DataContext.Provider>
-        </LoadingContext.Provider>
+        <NotificationContext.Provider value={notificationContext}>
+          <LoadingContext.Provider
+            value={{ loading, setLoading, reloadContent }}
+          >
+            <DataContext.Provider value={dataContext}>
+              <Component {...pageProps} />
+            </DataContext.Provider>
+          </LoadingContext.Provider>
+        </NotificationContext.Provider>
       </SetupContext.Provider>
     </>
   );

@@ -29,7 +29,7 @@ export default function Dropdown(props: {
   }, [active]);
 
   return (
-    <div ref={ref} className="flex flex-col justify-end items-end relative">
+    <div ref={ref} className="relative">
       <div
         onClick={(e) => {
           setActive(!active);
@@ -48,8 +48,8 @@ export default function Dropdown(props: {
         </div>
       </div>
       {active && (
-        <div className="flex justify-end">
-          <div className="absolute mt-2 z-20 bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md overflow-hidden">
+        <div className="absolute right-0 top-full z-20">
+          <div className="mt-2 bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md whitespace-nowrap">
             {options.map((option, idx) => {
               return (
                 <div
@@ -62,7 +62,7 @@ export default function Dropdown(props: {
                 >
                   <p>{option}</p>
                   {idx === selected && (
-                    <IoCheckmark className="text-mono-l-600 dark:text-mono-d-600 absolute right-0 bottom-0.5 -translate-y-2/3 mr-0.5 " />
+                    <IoCheckmark className="text-mono-l-600 dark:text-mono-d-600" />
                   )}
                 </div>
               );
