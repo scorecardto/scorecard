@@ -3,7 +3,7 @@ import {FiRotateCw, FiX} from "react-icons/fi";
 import { motion } from "framer-motion";
 import { DataContext } from "scorecard-types";
 import GradeChip from "../GradeChip";
-import Dropdown from "../../core/input/Dropdown";
+import GradingCategorySelector from "../../core/input/GradingCategorySelector";
 import AssignmentCategory from "./AssignmentCategory";
 import CourseGradebook from "./CourseGradebook";
 import AssignmentsSidebar from "./AssignmentsSidebar";

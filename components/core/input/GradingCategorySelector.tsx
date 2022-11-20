@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoCheckmark, IoChevronDown, IoChevronUp } from "react-icons/io5";
 
-export default function Dropdown(props: {
+export default function GradingCategorySelector(props: {
   selected: number;
   setSelected: React.Dispatch<React.SetStateAction<number>>;
   options: string[];
