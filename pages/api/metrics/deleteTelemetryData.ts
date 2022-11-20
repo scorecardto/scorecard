@@ -36,8 +36,12 @@ export default async function handler(
   const docRef = await db.collection("extensionUsers").doc(clientId);
 
   if (docRef) {
+    const doc = await docRef.get();
+    const uninstallReason = doc.data()?.uninstallReason;
+
     await docRef.set({
       deleted: true,
+      uninstallReason,
     });
 
     res.status(200).json({ success: true });
