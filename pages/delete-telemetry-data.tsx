@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import DeleteTelemetryDataRow from "../components/app/uninstall/DeleteTelemetryDataRow";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { IoCheckmarkCircle } from "react-icons/io5";
+
 export default function DeleteTelemetryData() {
   const [clientId, setClientId] = useState<string | undefined>(undefined);
   const [done, setDone] = useState(false);
@@ -66,20 +69,30 @@ export default function DeleteTelemetryData() {
     <>
       <NextSeo title="Delete your Telemetry Data" />
       <div className="w-screen h-screen flex items-center justify-center bg-accent-100">
-        <div className="max-w-md w-full flex flex-col gap-4 mx-auto">
-          <div className="bg-mono-l-100 dark:bg-mono-d-100 rounded-md shadow-sm">
-            <DeleteTelemetryDataRow
-              title="Getting Client ID"
-              status={clientId ? "DONE" : error ? "ERROR" : "LOADING"}
-              error={clientId ? undefined : error}
-            />
-            <DeleteTelemetryDataRow
-              title="Requesting Deletion"
-              status={!clientId ? "WAITING" : error ? "ERROR" : "LOADING"}
-              error={clientId ? error : undefined}
-            />
+        {!done && (
+          <div className="max-w-md w-full flex flex-col gap-4 mx-auto">
+            <div className="bg-mono-l-100 dark:bg-mono-d-100 rounded-md shadow-sm">
+              <DeleteTelemetryDataRow
+                title="Getting Client ID"
+                status={clientId ? "DONE" : error ? "ERROR" : "LOADING"}
+                error={clientId ? undefined : error}
+              />
+              <DeleteTelemetryDataRow
+                title="Requesting Deletion"
+                status={!clientId ? "WAITING" : error ? "ERROR" : "LOADING"}
+                error={clientId ? error : undefined}
+              />
+            </div>
           </div>
-        </div>
+        )}
+        {done && (
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0.5 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <IoCheckmarkCircle className="text-9xl text-accent-300" />
+          </motion.div>
+        )}
       </div>
     </>
   );
