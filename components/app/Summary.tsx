@@ -16,10 +16,10 @@ export default function Summary() {
   const { unreadNotifications } = useContext(NotificationContext);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-screen">
       <AssignmentsViewer course={course} setCourse={setCourse} />
       <div
-        className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 ${
+        className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
           unreadNotifications.length > 0 ? "gap-8" : "gap-0"
         }`}
       >
@@ -42,7 +42,7 @@ export default function Summary() {
         </div>
       </div>
 
-      <div className="w-full bg-mono-l-200 dark:bg-mono-d-200">
+      <div className="w-full bg-mono-l-200 dark:bg-mono-d-200 h-full">
         <div className="max-w-6xl mx-auto p-8 relative">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {data.data?.courses.map((course, idx) => {
