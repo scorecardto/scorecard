@@ -49,12 +49,12 @@ export default function CourseGradebook(props: { course: Course }) {
   function escapeName(evt: React.FocusEvent<HTMLHeadingElement>) {
     if (evt.currentTarget) {
       if (saveName && evt.currentTarget.innerText !== data.courseDisplayNames[course.key]) {
-        const newName = evt.currentTarget.innerText.trim();
+        // const newName = evt.currentTarget.innerText.trim();
 
         port?.postMessage({
           type: "updateCourseDisplayName",
           courseKey: course.key,
-          displayName: (evt.currentTarget.innerText = newName ? newName : course.name),
+          displayName: evt.currentTarget.innerText.trim(),
         });
       } else {
         evt.currentTarget.innerText = (data.courseDisplayNames[course.key] || course.name);

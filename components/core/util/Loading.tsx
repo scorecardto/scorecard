@@ -6,6 +6,7 @@ export default function Loading(props: { size?: number; center?: boolean }) {
     // center component in middle of screen
     return (
       <div className="flex justify-center items-center h-screen">
+        <title>Loading...</title>
         <Loading size={size} center={false} />
       </div>
     );

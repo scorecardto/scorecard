@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
 import GradingCategorySelector from "../core/input/GradingCategorySelector";
@@ -15,9 +15,10 @@ export default function Summary() {
 
   const { unreadNotifications } = useContext(NotificationContext);
 
-  return (
+    return (
     <div className="w-full flex flex-col h-screen">
-      <AssignmentsViewer course={course} setCourse={setCourse} />
+        <title>{"Scorecard" + (course != -1 && data.data && ": "+(data.courseDisplayNames[data.data.courses[course].key] ?? data.data.courses[course].name) || "")}</title>
+        <AssignmentsViewer course={course} setCourse={setCourse} />
       <div
         className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
           unreadNotifications.length > 0 ? "gap-8" : "gap-0"
