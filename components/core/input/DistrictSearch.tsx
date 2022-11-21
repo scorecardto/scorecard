@@ -118,7 +118,7 @@ export default function DistrictSearch(props: {
                         <p className="text-mono-l-600 dark:text-mono-d-600 group-hover:text-white">
                           {district.name}
                         </p>
-                        <p className="group-hover:text-mono-l-300">
+                        <p className="group-hover:text-mono-l-300 p">
                           {district.url}
                         </p>
                       </div>

@@ -39,7 +39,7 @@ export default function TextInput(props: {
           onChange={(e) => setValue(e.target.value)}
           type={password ? "password" : "text"}
           placeholder={placeholder}
-          className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 transition-colors placeholder:text-mono-l-400 dark:placeholder:text-mono-d-400 font-os dark:text-mono-d-600 ${
+          className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:border-accent-300 dark:focus:border-accent-300 transition-colors placeholder:text-mono-l-400 dark:placeholder:text-mono-d-400 font-os dark:text-mono-d-600 ${
             icon ? "pl-10 " : ""
           }${focused ? "border-accent-300 " : ""}${
             !focused && error

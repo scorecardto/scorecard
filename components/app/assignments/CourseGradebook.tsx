@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useLayoutEffect, useRef} from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import { FiEdit2, FiRotateCw } from "react-icons/fi";
 import { Course, DataContext } from "scorecard-types";
 import ActionChip from "../ActionChip";
@@ -48,7 +48,10 @@ export default function CourseGradebook(props: { course: Course }) {
 
   function escapeName(evt: React.FocusEvent<HTMLHeadingElement>) {
     if (evt.currentTarget) {
-      if (saveName && evt.currentTarget.innerText !== data.courseDisplayNames[course.key]) {
+      if (
+        saveName &&
+        evt.currentTarget.innerText !== data.courseDisplayNames[course.key]
+      ) {
         // const newName = evt.currentTarget.innerText.trim();
 
         port?.postMessage({
@@ -57,13 +60,14 @@ export default function CourseGradebook(props: { course: Course }) {
           displayName: evt.currentTarget.innerText.trim(),
         });
       } else {
-        evt.currentTarget.innerText = (data.courseDisplayNames[course.key] || course.name);
+        evt.currentTarget.innerText =
+          data.courseDisplayNames[course.key] || course.name;
       }
 
       evt.currentTarget.contentEditable = "false";
 
       evt.currentTarget.previousElementSibling?.classList.add("opacity-0");
-      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = -1
+      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = -1;
     }
   }
 
@@ -72,12 +76,15 @@ export default function CourseGradebook(props: { course: Course }) {
       evt.currentTarget.contentEditable = "true";
 
       evt.currentTarget.previousElementSibling?.classList.remove("opacity-0");
-      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = 0
+      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = 0;
 
       saveName = true;
       evt.currentTarget.focus();
 
-      if (getSelection()?.getRangeAt(0).startContainer.parentElement != evt.currentTarget) {
+      if (
+        getSelection()?.getRangeAt(0).startContainer.parentElement !=
+        evt.currentTarget
+      ) {
         const range = document.createRange();
         range.selectNodeContents(evt.currentTarget);
         getSelection()?.removeAllRanges();
@@ -99,11 +106,25 @@ export default function CourseGradebook(props: { course: Course }) {
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center relative">
-            <button tabIndex={-1} onClick={reset} className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"><FiRotateCw/></button>
-            <h1 tabIndex={0} className="text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline" onClick={makeEditable} onKeyDown={updateName} onBlur={escapeName}>{data.courseDisplayNames[course.key] ?? course.name}</h1>
+            <button
+              tabIndex={-1}
+              onClick={reset}
+              className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"
+            >
+              <FiRotateCw />
+            </button>
+            <h1
+              tabIndex={0}
+              className="h1 text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline"
+              onClick={makeEditable}
+              onKeyDown={updateName}
+              onBlur={escapeName}
+            >
+              {data.courseDisplayNames[course.key] ?? course.name}
+            </h1>
             <FiEdit2 className="text-mono-l-500" />
           </div>
-          <p>Gradebook</p>
+          <p className="p">Gradebook</p>
         </div>
         <div className="flex">
           <div className="children:w-fit flex h-fit gap-2">

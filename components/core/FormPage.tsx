@@ -27,9 +27,9 @@ export default function FormPage(props: {
               />
             </div>
 
-            <h1>{props.title}</h1>
+            <h1 className="h1">{props.title}</h1>
           </div>
-          <p className="max-w-sm">{props.description}</p>
+          <p className="max-w-sm p">{props.description}</p>
         </div>
       </div>
       <div

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import GradeChip from "./GradeChip";
-import {Course} from "scorecard-types";
+import { Course } from "scorecard-types";
 
 export default function CourseCard(props: {
   courseName: string;
@@ -18,14 +18,17 @@ export default function CourseCard(props: {
         props.onClick(props.id);
       }}
     >
-      <div tabIndex={props.courseIdx == -1 ? 0 : -1} className="max-w-md md:max-w-none mx-auto rounded-lg p-4 leading-none bg-mono-l-100 dark:bg-mono-d-100 hover:bg-mono-l-150 hover:dark:bg-mono-d-150 cursor-pointer">
+      <div
+        tabIndex={props.courseIdx == -1 ? 0 : -1}
+        className="max-w-md md:max-w-none mx-auto rounded-lg p-4 leading-none bg-mono-l-100 dark:bg-mono-d-100 hover:bg-mono-l-150 hover:dark:bg-mono-d-150 cursor-pointer"
+      >
         <div className="flex flex-row justify-between gap-5">
           <div className="whitespace-nowrap flex-shrink min-w-0 overflow-hidden">
             <div className="flex flex-col gap-5 p-1 whitespace-nowrap">
-              <b className="text-ellipsis overflow-hidden leading-normal">
+              <b className="text-ellipsis overflow-hidden leading-normal b">
                 {props.courseName}
               </b>
-              <div className="flex flex-col gap-3 children:text-ellipsis children:overflow-hidden">
+              <div className="flex flex-col gap-3 children:text-ellipsis children:overflow-hidden p">
                 <p>{props.description1}</p>
                 <p>{props.description2}</p>
               </div>

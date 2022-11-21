@@ -33,7 +33,7 @@ export default function Summary() {
         }`}
       >
         <div className="flex flex-row justify-between items-end gap-8">
-          <h1 className="flex-shrink-0">Your Scorecard</h1>
+          <h1 className="flex-shrink-0 h1">Your Scorecard</h1>
           <div className="flex gap-2">
             <Dropdown
               options={data.data?.gradeCategoryNames ?? []}

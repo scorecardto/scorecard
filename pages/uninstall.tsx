@@ -102,7 +102,7 @@ const Uninstall: NextPage = () => {
           <p className="text-mono-l-600 dark:text-mono-d-600 font-medium">
             Just One Question.
           </p>
-          <p>Why did you uninstall Scorecard?</p>
+          <p className="p">Why did you uninstall Scorecard?</p>
           {!uninstallReason && (
             <div className=" group children:bg-mono-l-100 dark:children:bg-mono-d-100 children:border-b children:border-mono-l-300 dark:children:border-mono-d-300 rounded-md overflow-hidden shadow-sm font-os hover:children:bg-mono-l-150 dark:hover:children:bg-mono-d-150 children:transition-colors children:cursor-pointer">
               {[
@@ -112,7 +112,7 @@ const Uninstall: NextPage = () => {
                 "No Longer Using Frontline",
               ].map((reason, i) => (
                 <motion.p
-                  className="px-6 py-4"
+                  className="px-6 py-4 p"
                   onClick={() => setUninstallReason(reason)}
                   layoutId={`uninstall-reason-${reason}`}
                   key={i}
@@ -135,7 +135,7 @@ const Uninstall: NextPage = () => {
                   <p className="text-mono-l-600 dark:text-mono-d-600">
                     Thanks for your feedback.
                   </p>
-                  <p>It really helps us improve Scorecard.</p>
+                  <p className="p">It really helps us improve Scorecard.</p>
                 </div>
                 <div>
                   {uninstallStatus === "LOADING" && <Loading />}
@@ -152,7 +152,7 @@ const Uninstall: NextPage = () => {
             </motion.div>
           )}
         </div>
-        <p className="text-sm max-w-md mx-auto">
+        <p className="text-sm max-w-md mx-auto p">
           {clientId ? (
             <>
               Your telemetry data is not deleted by default as it has no data

@@ -14,7 +14,7 @@ export default function ChangeButton(props: {
       )}
       <div className="font-os flex flex-row justify-between">
         {props.value ? (
-          <p>{props.value}</p>
+          <p className="p">{props.value}</p>
         ) : (
           <p className=" text-mono-l-600 dark:text-mono-d-600">
             {props.children}

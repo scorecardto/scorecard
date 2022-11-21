@@ -85,7 +85,7 @@ export default function Dropdown(props: {
                   className="flex relative justify-between gap-8 px-4 py-2 hover:bg-mono-l-150 dark:hover:bg-mono-d-150 cursor-pointer"
                   key={idx}
                 >
-                  <p>{option}</p>
+                  <p className="p">{option}</p>
                   {idx === selected && (
                     <IoCheckmark className="text-mono-l-600 dark:text-mono-d-600" />
                   )}

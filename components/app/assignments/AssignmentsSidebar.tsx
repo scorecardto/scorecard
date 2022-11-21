@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { DataContext, Course } from "scorecard-types";
 import GradeChip from "../GradeChip";
 
@@ -32,13 +32,13 @@ export default function AssignmentsSidebar(props: {
               }}
             >
               <p
-                className={`${
+                className={`p ${
                   currentCourse === idx
                     ? "text-accent-300 dark:text-accent-250"
                     : ""
                 }`}
               >
-                  {data.courseDisplayNames[c.key] ?? c.name}
+                {data.courseDisplayNames[c.key] ?? c.name}
               </p>
             </div>
           );

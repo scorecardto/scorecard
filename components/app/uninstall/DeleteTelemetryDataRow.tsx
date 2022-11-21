@@ -15,7 +15,7 @@ export default function DeleteTelemetryDataRow(props: {
           <p className="text-mono-l-600 dark:text-mono-d-600 font-os">
             {props.title}
           </p>
-          {props.error && <p className="font-os pt-2">{props.error}</p>}
+          {props.error && <p className="font-os pt-2 p">{props.error}</p>}
         </div>
         <div className="flex-shrink-0">
           {props.status === "LOADING" && (

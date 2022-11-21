@@ -76,7 +76,7 @@ export default function DeleteTelemetryData() {
   return (
     <>
       <NextSeo title="Delete your Telemetry Data" />
-      <div className="w-screen h-screen flex items-center justify-center bg-accent-100">
+      <div className="w-screen h-screen flex items-center justify-center bg-accent-100 dark:bg-accent-800">
         {!done && (
           <div className="max-w-md w-full flex flex-col gap-4 mx-auto">
             <div className="bg-mono-l-100 dark:bg-mono-d-100 rounded-md shadow-sm">
