@@ -7,6 +7,7 @@ import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
 import NotificationSummary from "./notifications/NotificationSummary";
+import FinishSetup from "./setup/FinishSetup";
 import Toolbar from "./Toolbar";
 
 export default function Summary() {
@@ -22,11 +23,29 @@ export default function Summary() {
       : data.courseDisplayNames[data.data?.courses[course].key ?? ""] ??
         data.data?.courses[course].name;
 
+  const [setup, setSetup] = useState(
+    // true if setup in url params
+    typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("hidden-action") ===
+        "setup"
+  );
+
+  useEffect(() => {
+    // if setup in url params, remove it
+    if (setup) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("hidden-action");
+      window.history.replaceState({}, "", url.href);
+    }
+  }, []);
+
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
 
       <AssignmentsViewer course={course} setCourse={setCourse} />
+      {setup && <FinishSetup done={() => setSetup(false)} />}
+
       <div
         className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
           unreadNotifications.length > 0 ? "gap-8" : "gap-0"

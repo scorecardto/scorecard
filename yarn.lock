@@ -518,6 +518,11 @@
     "@types/mime" "*"
     "@types/node" "*"
 
+"@types/ua-parser-js@^0.7.36":
+  "integrity" "sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ=="
+  "resolved" "https://registry.npmjs.org/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz"
+  "version" "0.7.36"
+
 "@typescript-eslint/parser@^5.21.0":
   "integrity" "sha512-zj251pcPXI8GO9NDKWWmygP6+UjwWmrdf9qMW/L/uQJBM/0XbU2inxe5io/234y/RCvwpKEYjZ6c1YrXERkK4Q=="
   "resolved" "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-5.30.5.tgz"
@@ -3173,6 +3178,11 @@
   "integrity" "sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.7.4.tgz"
   "version" "4.7.4"
+
+"ua-parser-js@^1.0.32":
+  "integrity" "sha512-dXVsz3M4j+5tTiovFVyVqssXBu5HM47//YSOeZ9fQkdDKkfzv2v3PP1jmH6FUyPW+yCSn7aBVK1fGGKNhowdDA=="
+  "resolved" "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-1.0.32.tgz"
+  "version" "1.0.32"
 
 "uc.micro@^1.0.1", "uc.micro@^1.0.5":
   "integrity" "sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA=="
