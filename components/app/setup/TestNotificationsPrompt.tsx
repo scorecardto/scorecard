@@ -44,7 +44,7 @@ export default function TestNotificationsPrompt(props: {
             className={`absolute w-full h-full ${"from-accent-400 to-accent-500 bg-gradient-to-tr"} opacity-25`}
           />
           <div
-            className={`overflow-hidden relative select-none ${
+            className={`overflow-hidden relative select-none mx-4 ${
               isMac ? "h-24" : "h-36"
             }`}
           >
