@@ -39,7 +39,7 @@ export default function NotificationsPrompt(props: {
             .map((_, i) => (
               <div
                 key={i}
-                className={`overflow-hidden relative select-none ${
+                className={`overflow-hidden relative select-none mx-4 ${
                   isMac ? "h-24" : "h-36"
                 }`}
               >

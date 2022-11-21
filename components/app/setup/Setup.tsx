@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { SetupContext } from "../../core/context/SetupContext";
 import MQ from "../../core/MQ";
 import Image from "next/image";
@@ -94,6 +94,12 @@ export default function Setup(props: {
     return undefined;
   })();
 
+  const [redirectToSetup] = useState(
+    typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("hidden-action") ===
+        "setup"
+  );
+
   function submit() {
     if (!valid) return;
 
@@ -104,7 +110,7 @@ export default function Setup(props: {
       .checkSetup(district, username, changePassword ? password : undefined)
       .then((result) => {
         if (result === "VALID") {
-          router.push("/app");
+          router.push(redirectToSetup ? "/app?hidden-action=setup" : "/app");
           return;
         }
 
