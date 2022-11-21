@@ -30,6 +30,21 @@ export default function Summary() {
         "setup"
   );
 
+  useEffect(() => {
+    // open course card if in url
+    const href = decodeURI(window.location.href);
+
+    if (href.indexOf("#") != -1) {
+      const course = href.slice(href.indexOf("#") + 1);
+      const index = data.data?.courses.findIndex((c) => (data.courseDisplayNames[c.key] ?? c.name) == course);
+
+      if (index != undefined && index != -1) {
+        setCourse(index);
+        window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
+      }
+    }
+  }, [setup, data.data?.courses, data.courseDisplayNames]);
+
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
