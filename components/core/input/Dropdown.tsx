@@ -7,12 +7,19 @@ export default function Dropdown(props: {
   options: string[];
   tabIndex?: number;
   top?: boolean;
+  disabled?: boolean;
 }) {
-  const { selected, options } = props;
+  const { selected, options, disabled } = props;
 
   const [active, setActive] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (disabled) {
+      setActive(false);
+    }
+  }, [disabled, setActive]);
 
   useEffect(() => {
     if (active) {
@@ -35,9 +42,15 @@ export default function Dropdown(props: {
       <div
         tabIndex={props.tabIndex}
         onClick={(e) => {
-          setActive(!active);
+          if (!disabled) {
+            setActive(!active);
+          }
         }}
-        className={`float-right w-fit bg-accent-100 border border-accent-200 dark:bg-accent-600 dark:border-accent-700 rounded-md py-2 px-4 gap-4 flex items-center hover:bg-accent-200 dark:hover:bg-accent-700 cursor-pointer`}
+        className={`float-right w-fit bg-accent-100 border border-accent-200 dark:bg-accent-600 dark:border-accent-700 rounded-md py-2 px-4 gap-4 flex items-center ${
+          disabled
+            ? ""
+            : "hover:bg-accent-200 dark:hover:bg-accent-700 cursor-pointer"
+        }`}
       >
         <p className="text-accent-300 dark:text-accent-250">
           {options[selected]}
