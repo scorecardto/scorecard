@@ -140,9 +140,11 @@ export default function CourseGradebook(props: { course: Course }) {
         transition={{ duration: 0.3, type: "keyframes", ease: "easeOut" }}
         animate={controls}
       >
-        {props.course.gradeCategories?.map((category, idx) => {
-          return <AssignmentCategory key={idx} category={category} />;
-        })}
+        <div className="flex flex-col gap-6 pb-6">
+          {props.course.gradeCategories?.map((category, idx) => {
+            return <AssignmentCategory key={idx} category={category} />;
+          })}
+        </div>
       </motion.div>
     </motion.div>
   );
