@@ -22,3 +22,19 @@ body {
 .p {
   @apply text-mono-l-500 dark:text-mono-d-500;
 }
+
+.use-theme-pink {
+  --accent-100: #fff2f7;
+  --accent-150: #ffe7fc;
+  --accent-200: #ffe1ea;
+  --accent-250: #ffdbfa;
+  --accent-300: #e76fb4;
+  --accent-350: #ff45ce;
+  --accent-400: #f33bb5;
+  --accent-500: #bd220d;
+  --accent-600: #571b30;
+  --accent-650: #65273a;
+  --accent-700: #4a1125;
+  --accent-750: #4e1a2a;
+  --accent-800: #1c0313;
+}

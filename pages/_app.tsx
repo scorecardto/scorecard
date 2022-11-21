@@ -182,6 +182,32 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     localStorage.appearance = settingsContext.appearance;
   }, [settingsContext, systemDarkMode]);
 
+  useEffect(() => {
+    if (localStorage.accentColor === "PINK") {
+      document.documentElement.classList.add("use-theme-pink");
+    } else {
+      document.documentElement.classList.remove(
+        ...Array.from(document.documentElement.classList).filter((c) =>
+          c.startsWith("use-theme-")
+        )
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (settingsContext.accentColor === "PINK" || true) {
+      document.documentElement.classList.add("use-theme-pink");
+    } else {
+      document.documentElement.classList.remove(
+        ...Array.from(document.documentElement.classList).filter((c) =>
+          c.startsWith("use-theme-")
+        )
+      );
+    }
+
+    localStorage.accentColor = settingsContext.accentColor;
+  }, [settingsContext]);
+
   return (
     <>
       <Head>

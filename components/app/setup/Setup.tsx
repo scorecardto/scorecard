@@ -180,7 +180,7 @@ export default function Setup(props: {
               >
                 Password
               </ChangeButton>
-              <p className="font-os">
+              <p className="font-os p">
                 You have a password stored on your device.
               </p>
             </div>
