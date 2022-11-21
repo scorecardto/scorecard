@@ -2,13 +2,13 @@ import type { NextPage } from "next";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Settings, SettingsContext } from "scorecard-types";
 import AllNotifications from "../../components/app/notifications/AllNotifications";
-import Prefrences from "../../components/app/prefrences/Prefrences";
+import Preferences from "../../components/app/preferences/Preferences";
 
 import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
 
-const PrefrencesPage: NextPage = () => {
+const PreferencesPage: NextPage = () => {
   const loadState = useState<AppLoadState>("LOADING");
 
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -54,9 +54,9 @@ const PrefrencesPage: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
-      <Prefrences />
+      <Preferences />
     </ExtensionConnector>
   );
 };
 
-export default PrefrencesPage;
+export default PreferencesPage;
