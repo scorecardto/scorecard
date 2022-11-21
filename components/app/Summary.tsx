@@ -30,15 +30,6 @@ export default function Summary() {
         "setup"
   );
 
-  useEffect(() => {
-    // if setup in url params, remove it
-    if (setup) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("hidden-action");
-      window.history.replaceState({}, "", url.href);
-    }
-  }, []);
-
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
