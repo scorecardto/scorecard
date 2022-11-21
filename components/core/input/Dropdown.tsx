@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoCheckmark, IoChevronDown, IoChevronUp } from "react-icons/io5";
 
-export default function GradingCategorySelector(props: {
+export default function Dropdown(props: {
   selected: number;
-  setSelected: React.Dispatch<React.SetStateAction<number>>;
+  setSelected(arg0: number): void;
   options: string[];
-  courseIdx: number;
+  tabIndex?: number;
+  top?: boolean;
 }) {
   const { selected, options } = props;
 
@@ -32,7 +33,7 @@ export default function GradingCategorySelector(props: {
   return (
     <div ref={ref} className="relative">
       <div
-        tabIndex={props.courseIdx == -1 ? 0 : -1}
+        tabIndex={props.tabIndex}
         onClick={(e) => {
           setActive(!active);
         }}
@@ -50,8 +51,16 @@ export default function GradingCategorySelector(props: {
         </div>
       </div>
       {active && (
-        <div className="absolute right-0 top-full z-20">
-          <div className="mt-2 bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md whitespace-nowrap">
+        <div
+          className={`absolute right-0 z-20 ${
+            !props.top ? "top-full" : "bottom-full"
+          }`}
+        >
+          <div
+            className={`bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md whitespace-nowrap ${
+              !props.top ? "mt-2" : "mb-2"
+            }`}
+          >
             {options.map((option, idx) => {
               return (
                 <div

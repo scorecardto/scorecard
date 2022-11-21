@@ -2,7 +2,7 @@ import { DefaultSeo, NextSeo } from "next-seo";
 import React, { useContext, useEffect, useState } from "react";
 import { IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
-import GradingCategorySelector from "../core/input/GradingCategorySelector";
+import Dropdown from "../core/input/Dropdown";
 import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
@@ -35,11 +35,11 @@ export default function Summary() {
         <div className="flex flex-row justify-between items-end gap-8">
           <h1 className="flex-shrink-0">Your Scorecard</h1>
           <div className="flex gap-2">
-            <GradingCategorySelector
+            <Dropdown
               options={data.data?.gradeCategoryNames ?? []}
               selected={data.gradeCategory}
               setSelected={data.setGradeCategory}
-              courseIdx={course}
+              tabIndex={course == -1 ? 0 : -1}
             />
             <Context courseIdx={course} />
           </div>

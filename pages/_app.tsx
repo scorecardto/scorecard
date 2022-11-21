@@ -10,8 +10,15 @@ import {
   DataProvider,
   NotificationContext,
   GradebookNotification,
+  Appearance,
+  AccentColor,
+  SpoilerMode,
+  CheckGradesInterval,
+  UsePushNotifications,
+  DeleteNotificationsAfter,
+  SettingsContext,
 } from "scorecard-types";
-import {useEffect, useMemo, useState} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
@@ -51,23 +58,28 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [setup, setSetup] = useState<SetupState | null>(null);
 
   useEffect(() => {
-      const handleKey = (e: KeyboardEvent) => {
-        if (e.key === " ") {
-            const el = e.view?.document.activeElement as HTMLElement;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === " ") {
+        const el = e.view?.document.activeElement as HTMLElement;
 
-            if (el !== e.view?.document.body && e.view?.document.designMode !== "on" && !el.isContentEditable && !(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) {
-                el.click();
-                e.preventDefault();
-            }
+        if (
+          el !== e.view?.document.body &&
+          e.view?.document.designMode !== "on" &&
+          !el.isContentEditable &&
+          !(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)
+        ) {
+          el.click();
+          e.preventDefault();
         }
       }
+    };
 
-      document.addEventListener("keydown", handleKey, { capture: true });
+    document.addEventListener("keydown", handleKey, { capture: true });
 
-      return () => {
-          document.removeEventListener("keydown", handleKey, { capture: true });
-      };
-  })
+    return () => {
+      document.removeEventListener("keydown", handleKey, { capture: true });
+    };
+  });
 
   const [notifications, setNotifications] = useState<GradebookNotification[]>(
     []
@@ -97,6 +109,47 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       unreadNotifications: notifications.filter((n) => !n.read),
     }),
     [notifications]
+  );
+
+  const [appearance, setAppearance] = useState<Appearance>("SYSTEM");
+  const [accentColor, setAccentColor] = useState<AccentColor>("BLUE");
+  const [spoilerMode, setSpoilerMode] = useState<SpoilerMode>(false);
+  const [checkGradesInterval, setCheckGradesInterval] =
+    useState<CheckGradesInterval>(10);
+  const [usePushNotifications, setUsePushNotifications] =
+    useState<UsePushNotifications>(false);
+  const [deleteNotificationsAfter, setDeleteNotificationsAfter] =
+    useState<DeleteNotificationsAfter>(0);
+
+  const setupContext = useMemo(
+    () => ({
+      appearance,
+      setAppearance,
+      accentColor,
+      setAccentColor,
+      spoilerMode,
+      setSpoilerMode,
+      checkGradesInterval,
+      setCheckGradesInterval,
+      usePushNotifications,
+      setUsePushNotifications,
+      deleteNotificationsAfter,
+      setDeleteNotificationsAfter,
+    }),
+    [
+      appearance,
+      setAppearance,
+      accentColor,
+      setAccentColor,
+      spoilerMode,
+      setSpoilerMode,
+      checkGradesInterval,
+      setCheckGradesInterval,
+      usePushNotifications,
+      setUsePushNotifications,
+      deleteNotificationsAfter,
+      setDeleteNotificationsAfter,
+    ]
   );
 
   return (
@@ -148,17 +201,19 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         canonical={`https://scorecard.to${router.route}`}
       />
 
-      <SetupContext.Provider value={{ setup, setSetup }}>
-        <NotificationContext.Provider value={notificationContext}>
-          <LoadingContext.Provider
-            value={{ loading, setLoading, reloadContent }}
-          >
-            <DataContext.Provider value={dataContext}>
-              <Component {...pageProps} />
-            </DataContext.Provider>
-          </LoadingContext.Provider>
-        </NotificationContext.Provider>
-      </SetupContext.Provider>
+      <SettingsContext.Provider value={setupContext}>
+        <SetupContext.Provider value={{ setup, setSetup }}>
+          <NotificationContext.Provider value={notificationContext}>
+            <LoadingContext.Provider
+              value={{ loading, setLoading, reloadContent }}
+            >
+              <DataContext.Provider value={dataContext}>
+                <Component {...pageProps} />
+              </DataContext.Provider>
+            </LoadingContext.Provider>
+          </NotificationContext.Provider>
+        </SetupContext.Provider>
+      </SettingsContext.Provider>
     </>
   );
 }
