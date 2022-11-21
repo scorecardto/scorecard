@@ -16,6 +16,12 @@ export default function Summary() {
 
   const { unreadNotifications } = useContext(NotificationContext);
 
+  const title =
+    course === -1
+      ? "Your Scorecard"
+      : data.courseDisplayNames[data.data?.courses[course].key ?? ""] ??
+        data.data?.courses[course].name;
+
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
