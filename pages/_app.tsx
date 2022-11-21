@@ -20,6 +20,7 @@ import {
 } from "scorecard-types";
 import { useEffect, useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
+import { useMediaQuery } from "../components/hooks/hooks";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
@@ -121,7 +122,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [deleteNotificationsAfter, setDeleteNotificationsAfter] =
     useState<DeleteNotificationsAfter>(0);
 
-  const setupContext = useMemo(
+  const settingsContext = useMemo(
     () => ({
       appearance,
       setAppearance,
@@ -151,6 +152,35 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setDeleteNotificationsAfter,
     ]
   );
+
+  useEffect(() => {
+    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+    if (
+      localStorage.appearance === "DARK" ||
+      localStorage.appearance === "SYSTEM" ||
+      (!("appearance" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
+  const systemDarkMode = useMediaQuery("(prefers-color-scheme: dark)", false);
+
+  useEffect(() => {
+    if (
+      settingsContext.appearance === "DARK" ||
+      (settingsContext.appearance === "SYSTEM" && systemDarkMode)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    localStorage.appearance = settingsContext.appearance;
+  }, [settingsContext, systemDarkMode]);
 
   return (
     <>
@@ -201,7 +231,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         canonical={`https://scorecard.to${router.route}`}
       />
 
-      <SettingsContext.Provider value={setupContext}>
+      <SettingsContext.Provider value={settingsContext}>
         <SetupContext.Provider value={{ setup, setSetup }}>
           <NotificationContext.Provider value={notificationContext}>
             <LoadingContext.Provider

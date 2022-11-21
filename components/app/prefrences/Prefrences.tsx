@@ -91,7 +91,7 @@ export default function Prefrences(props: {}) {
       backLink="/app"
       backLinkText="Back to Scorecard"
       title="Prefrences"
-      description="These are your prefrences for Scorecard."
+      description="These are your prefrences for Scorecard. Changing them will affect the Scorecard website, extension, and background processes."
       omitTopPadding={true}
     >
       <div
