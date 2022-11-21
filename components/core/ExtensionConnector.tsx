@@ -1,4 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Settings, SettingsContext } from "scorecard-types";
 
 export type AppLoadState =
   | "LOADING"
@@ -22,6 +23,8 @@ export default function ExtensionConnector(props: {
   onConnect: (port: chrome.runtime.Port) => void;
 }) {
   const [port, setPort] = useState<chrome.runtime.Port | null>(null);
+
+  const settingsContext = useContext(SettingsContext);
 
   const CURRENT_VERSION = 0.1;
 
@@ -47,8 +50,34 @@ export default function ExtensionConnector(props: {
         } else {
           setLoad("ERR_EXT_VERSION");
         }
-      }
+      } else if (msg.type === "setSettings") {
+        const settings: Settings = msg.settings;
 
+        settingsContext.setLoaded(true);
+
+        if (settings?.appearance) {
+          settingsContext.setAppearance(settings?.appearance);
+        }
+        if (settings?.accentColor) {
+          settingsContext.setAccentColor(settings?.accentColor);
+        }
+        if (settings?.spoilerMode) {
+          settingsContext.setSpoilerMode(settings?.spoilerMode);
+        }
+        if (settings?.checkGradesInterval) {
+          settingsContext.setCheckGradesInterval(settings?.checkGradesInterval);
+        }
+        if (settings?.usePushNotifications) {
+          settingsContext.setUsePushNotifications(
+            settings?.usePushNotifications
+          );
+        }
+        if (settings?.deleteNotificationsAfter) {
+          settingsContext.setDeleteNotificationsAfter(
+            settings?.deleteNotificationsAfter
+          );
+        }
+      }
       props.onMessage(msg, port);
     });
   };
@@ -71,6 +100,12 @@ export default function ExtensionConnector(props: {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (load === "DONE") {
+      port?.postMessage({ type: "requestSettings" });
+    }
+  }, [load, port]);
 
   return (
     <>

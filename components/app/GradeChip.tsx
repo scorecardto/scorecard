@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
+import { SettingsContext } from "scorecard-types";
 
 export default function GradeChip(props: {
   children?: any;
   faded?: boolean;
   spoiler?: boolean;
 }) {
-  const spoiler = props.spoiler ?? true;
+  const settingsContext = useContext(SettingsContext);
+  const spoiler = props.spoiler ?? settingsContext.spoilerMode;
 
   return (
     <div className="leading-none flex-none from-accent-400 to-accent-500 bg-gradient-to-tr rounded-xl pt-2.5 pb-1.5 px-3 group min-w-[3rem]">

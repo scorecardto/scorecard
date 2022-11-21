@@ -122,6 +122,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [deleteNotificationsAfter, setDeleteNotificationsAfter] =
     useState<DeleteNotificationsAfter>(0);
 
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
   const settingsContext = useMemo(
     () => ({
       appearance,
@@ -136,6 +138,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setUsePushNotifications,
       deleteNotificationsAfter,
       setDeleteNotificationsAfter,
+      loaded: settingsLoaded,
+      setLoaded: setSettingsLoaded,
     }),
     [
       appearance,
@@ -150,6 +154,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setUsePushNotifications,
       deleteNotificationsAfter,
       setDeleteNotificationsAfter,
+      settingsLoaded,
+      setSettingsLoaded,
     ]
   );
 
@@ -157,8 +163,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if (
       localStorage.appearance === "DARK" ||
-      localStorage.appearance === "SYSTEM" ||
-      (!("appearance" in localStorage) &&
+      (localStorage.appearance === "SYSTEM" &&
+        !("appearance" in localStorage) &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
       document.documentElement.classList.add("dark");
@@ -170,6 +176,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const systemDarkMode = useMediaQuery("(prefers-color-scheme: dark)", false);
 
   useEffect(() => {
+    if (!settingsContext.loaded) return;
+
     if (
       settingsContext.appearance === "DARK" ||
       (settingsContext.appearance === "SYSTEM" && systemDarkMode)
@@ -180,7 +188,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     }
 
     localStorage.appearance = settingsContext.appearance;
-  }, [settingsContext, systemDarkMode]);
+  }, [settingsContext.appearance, systemDarkMode, settingsContext.loaded]);
 
   useEffect(() => {
     if (localStorage.accentColor === "PINK") {

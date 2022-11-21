@@ -164,9 +164,8 @@ export default function Prefrences(props: {}) {
                   };
 
                   return (
-                    <>
+                    <React.Fragment key={idx}>
                       <div
-                        key={idx}
                         className={`${defaultClassName} block dark:hidden`}
                         onClick={onClick}
                         style={{
@@ -177,7 +176,6 @@ export default function Prefrences(props: {}) {
                         {inner(false)}
                       </div>
                       <div
-                        key={idx}
                         className={`${defaultClassName} hidden dark:block`}
                         onClick={onClick}
                         style={{
@@ -187,7 +185,7 @@ export default function Prefrences(props: {}) {
                       >
                         {inner(true)}
                       </div>
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </AnimateSharedLayout>
