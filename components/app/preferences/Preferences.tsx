@@ -8,7 +8,7 @@ import Toggle from "../../core/input/Toggle";
 import { SettingsContext } from "scorecard-types";
 import { PortContext } from "../../core/ExtensionConnector";
 
-export default function Prefrences(props: {}) {
+export default function Preferences(props: {}) {
   const APPEARANCE_OPTIONS = {
     LIGHT: "Light",
     DARK: "Dark",
@@ -94,8 +94,8 @@ export default function Prefrences(props: {}) {
     <FormPage
       backLink="/app"
       backLinkText="Back to Scorecard"
-      title="Prefrences"
-      description="These are your prefrences for Scorecard. Changing them will affect the Scorecard website, extension, and background processes."
+      title="Preferences"
+      description="These are your preferences for Scorecard. Changing them will affect the Scorecard website, extension, and background processes."
       omitTopPadding={true}
     >
       <div

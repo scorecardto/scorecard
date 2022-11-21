@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Settings, SettingsContext } from "scorecard-types";
 import AllNotifications from "../../components/app/notifications/AllNotifications";
-import Prefrences from "../../components/app/prefrences/Prefrences";
+import Preferences from "../../components/app/preferences/Preferences";
 
 import ExtensionConnector, {
   AppLoadState,
@@ -54,7 +54,7 @@ const PrefrencesPage: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
-      <Prefrences />
+      <Preferences />
     </ExtensionConnector>
   );
 };
