@@ -8,7 +8,7 @@ import ExtensionConnector, {
   AppLoadState,
 } from "../../components/core/ExtensionConnector";
 
-const PrefrencesPage: NextPage = () => {
+const PreferencesPage: NextPage = () => {
   const loadState = useState<AppLoadState>("LOADING");
 
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -59,4 +59,4 @@ const PrefrencesPage: NextPage = () => {
   );
 };
 
-export default PrefrencesPage;
+export default PreferencesPage;
