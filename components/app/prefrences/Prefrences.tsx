@@ -109,6 +109,7 @@ export default function Prefrences(props: {}) {
               <b className="b">Appearance</b>
             </p>
             <Dropdown
+              tabIndex={0}
               disabled={disabled}
               options={Object.values(APPEARANCE_OPTIONS)}
               selected={Object.keys(APPEARANCE_OPTIONS).indexOf(
@@ -166,6 +167,7 @@ export default function Prefrences(props: {}) {
                   return (
                     <React.Fragment key={idx}>
                       <div
+                        tabIndex={0}
                         className={`${defaultClassName} block dark:hidden`}
                         onClick={onClick}
                         style={{
@@ -219,6 +221,7 @@ export default function Prefrences(props: {}) {
             </div>
             <div className="whitespace-nowrap">
               <Dropdown
+                tabIndex={0}
                 disabled={disabled}
                 options={Object.values(CHECK_OPTIONS)}
                 selected={Object.keys(CHECK_OPTIONS).indexOf(
@@ -261,6 +264,7 @@ export default function Prefrences(props: {}) {
             </p>
             <div className="whitespace-nowrap">
               <Dropdown
+                tabIndex={0}
                 disabled={disabled}
                 top={true}
                 options={Object.values(DELETE_NOTIFICATION_OPTIONS)}

@@ -8,6 +8,7 @@ export default function Toggle(props: {
   return (
     <div className="relative">
       <div
+        tabIndex={0}
         className={`w-10 h-6 rounded-full flex items-center justify-between transition-colors ${
           props.value ? "bg-accent-300" : "bg-mono-l-400 dark:bg-mono-d-400"
         } ${props.disabled ? "" : "cursor-pointer"}`}
