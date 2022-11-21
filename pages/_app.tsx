@@ -195,7 +195,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   }, []);
 
   useEffect(() => {
-    if (settingsContext.accentColor === "PINK" || true) {
+    if (settingsContext.accentColor === "PINK") {
       document.documentElement.classList.add("use-theme-pink");
     } else {
       document.documentElement.classList.remove(

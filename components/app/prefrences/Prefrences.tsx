@@ -19,13 +19,17 @@ export default function Prefrences(props: {}) {
     BLUE: {
       background: "#F1F8FE",
       border: "#E2EEFF",
+      darkBackground: "#1c2e4a",
+      darkBorder: "#182843",
       arrow: "#64A4FC",
     },
-    // PINK: {
-    //   background: "#FFEBF5",
-    //   border: "#FFD8EA",
-    //   arrow: "#FC64AD",
-    // },
+    PINK: {
+      background: "#fff2f7",
+      border: "#ffe1ea",
+      darkBackground: "#571b30",
+      darkBorder: "#4a1125",
+      arrow: "#FC64AD",
+    },
   };
 
   const CHECK_OPTIONS = {
@@ -102,7 +106,7 @@ export default function Prefrences(props: {}) {
         <LargeCard>
           <div className="flex justify-between items-center">
             <p>
-              <b>Appearance</b>
+              <b className="b">Appearance</b>
             </p>
             <Dropdown
               disabled={disabled}
@@ -122,7 +126,7 @@ export default function Prefrences(props: {}) {
           </div>
           <div className="flex justify-between items-center">
             <p>
-              <b>Accent Color</b>
+              <b className="b">Accent Color</b>
             </p>
             <div className="flex gap-2">
               <AnimateSharedLayout>
@@ -130,36 +134,60 @@ export default function Prefrences(props: {}) {
                   const color =
                     COLOR_OPTIONS[key as keyof typeof COLOR_OPTIONS];
 
-                  return (
-                    <div
-                      key={idx}
-                      className="w-10 h-10 rounded-md relative"
-                      style={{
-                        backgroundColor: color.background,
-                        border: `1px solid ${color.border}`,
-                      }}
-                      onClick={() => {
-                        if (!disabled) {
-                          setDisabled(true);
-                          settings.setAccentColor(
-                            key as keyof typeof COLOR_OPTIONS
-                          );
-                        }
-                      }}
-                    >
-                      <div className="absolute z-10 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-                        {key === settings.accentColor && (
-                          <motion.div
-                            layoutId="accent-color-indicator"
-                            style={{
-                              color: color.arrow,
-                            }}
-                          >
-                            <IoCaretUp className="text-xl" />
-                          </motion.div>
-                        )}
-                      </div>
+                  const inner = (dark: boolean) => (
+                    <div className="absolute z-10 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                      {key === settings.accentColor && (
+                        <motion.div
+                          layoutId={`accent-color-indicator${
+                            dark ? "-dark" : ""
+                          }`}
+                          style={{
+                            color: color.arrow,
+                          }}
+                        >
+                          <IoCaretUp className="text-xl" />
+                        </motion.div>
+                      )}
                     </div>
+                  );
+
+                  const defaultClassName =
+                    "w-10 h-10 rounded-md relative cursor-pointer";
+
+                  const onClick = () => {
+                    if (!disabled) {
+                      setDisabled(true);
+                      settings.setAccentColor(
+                        key as keyof typeof COLOR_OPTIONS
+                      );
+                    }
+                  };
+
+                  return (
+                    <>
+                      <div
+                        key={idx}
+                        className={`${defaultClassName} block dark:hidden`}
+                        onClick={onClick}
+                        style={{
+                          backgroundColor: color.background,
+                          border: `1px solid ${color.border}`,
+                        }}
+                      >
+                        {inner(false)}
+                      </div>
+                      <div
+                        key={idx}
+                        className={`${defaultClassName} hidden dark:block`}
+                        onClick={onClick}
+                        style={{
+                          backgroundColor: color.darkBackground,
+                          border: `1px solid ${color.darkBorder}`,
+                        }}
+                      >
+                        {inner(true)}
+                      </div>
+                    </>
                   );
                 })}
               </AnimateSharedLayout>
@@ -167,8 +195,10 @@ export default function Prefrences(props: {}) {
           </div>
           <div className="flex justify-between items-center">
             <div>
-              <b>Spoiler Mode</b>
-              <p>Hides grades on your Scorecard until hovered over.</p>
+              <b className="b">Spoiler Mode</b>
+              <p className="p">
+                Hides grades on your Scorecard until hovered over.
+              </p>
             </div>
             <Toggle
               disabled={disabled}
@@ -184,8 +214,10 @@ export default function Prefrences(props: {}) {
         <LargeCard>
           <div className="flex justify-between items-start gap-4">
             <div>
-              <b>Check for New Grades Every</b>
-              <p>This affects how often you recieve notifications.</p>
+              <b className="b">Check for New Grades Every</b>
+              <p className="p">
+                This affects how often you recieve notifications.
+              </p>
             </div>
             <div className="whitespace-nowrap">
               <Dropdown
@@ -207,8 +239,8 @@ export default function Prefrences(props: {}) {
           </div>
           <div className="flex justify-between items-start gap-4">
             <div>
-              <b>Push Notifications</b>
-              <p>
+              <b className="b">Push Notifications</b>
+              <p className="p">
                 Send notifications to your device. You can still see them in
                 Scorecard.
               </p>
@@ -227,7 +259,7 @@ export default function Prefrences(props: {}) {
 
           <div className="flex justify-between items-center gap-4">
             <p>
-              <b>Delete Notifications After</b>
+              <b className="b">Delete Notifications After</b>
             </p>
             <div className="whitespace-nowrap">
               <Dropdown

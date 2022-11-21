@@ -70,7 +70,7 @@ export default function Dropdown(props: {
           }`}
         >
           <div
-            className={`bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md whitespace-nowrap ${
+            className={`bg-mono-l-100 dark:bg-mono-d-100 border border-mono-l-300 dark:border-mono-d-300 rounded-md overflow-hidden whitespace-nowrap ${
               !props.top ? "mt-2" : "mb-2"
             }`}
           >

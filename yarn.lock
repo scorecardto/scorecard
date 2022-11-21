@@ -2874,8 +2874,8 @@
     "loose-envify" "^1.1.0"
 
 "scorecard-types@github:scorecardto/types":
-  "resolved" "git+ssh://git@github.com/scorecardto/types.git#ce96d398f10faa9b66f5099391b005d4fbb9195a"
-  "version" "0.0.21"
+  "resolved" "git+ssh://git@github.com/scorecardto/types.git#a86d35a86412e36363108038675fe082c15b1123"
+  "version" "0.0.22"
 
 "semver@^5.6.0":
   "integrity" "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ=="
