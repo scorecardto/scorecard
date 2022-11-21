@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import { DefaultSeo, NextSeo } from "next-seo";
+import React, { useContext, useEffect, useState } from "react";
 import { IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
 import GradingCategorySelector from "../core/input/GradingCategorySelector";
@@ -15,10 +16,17 @@ export default function Summary() {
 
   const { unreadNotifications } = useContext(NotificationContext);
 
-    return (
+  const title =
+    course === -1
+      ? "Your Scorecard"
+      : data.courseDisplayNames[data.data?.courses[course].key ?? ""] ??
+        data.data?.courses[course].name;
+
+  return (
     <div className="w-full flex flex-col h-screen">
-        <title>{"Scorecard" + (course != -1 && data.data && ": "+(data.courseDisplayNames[data.data.courses[course].key] ?? data.data.courses[course].name) || "")}</title>
-        <AssignmentsViewer course={course} setCourse={setCourse} />
+      <NextSeo title={title} />
+
+      <AssignmentsViewer course={course} setCourse={setCourse} />
       <div
         className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
           unreadNotifications.length > 0 ? "gap-8" : "gap-0"
@@ -38,7 +46,7 @@ export default function Summary() {
         </div>
 
         <div className="flex flex-row justify-between items-end gap-8">
-          <NotificationSummary courseIdx={course}/>
+          <NotificationSummary courseIdx={course} />
 
           <Toolbar courseIdx={course} />
         </div>
@@ -55,9 +63,7 @@ export default function Summary() {
                     setCourse(idx);
                     (document.activeElement as HTMLElement)?.blur();
                   }}
-                  courseName={
-                    data.courseDisplayNames[c.key] ?? c.name
-                  }
+                  courseName={data.courseDisplayNames[c.key] ?? c.name}
                   description1={c.key}
                   description2=" "
                   grade={c.grades[data.gradeCategory]?.value ?? "NG"}
