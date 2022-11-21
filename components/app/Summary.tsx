@@ -31,13 +31,6 @@ export default function Summary() {
   );
 
   useEffect(() => {
-    // if setup in url params, remove it
-    if (setup) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("hidden-action");
-      window.history.replaceState({}, "", url.href);
-    }
-
     // open course card if in url
     const href = decodeURI(window.location.href);
 

@@ -1,4 +1,5 @@
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import NotificationsPrompt from "./NotificationsPrompt";
 import TestNotificationsPrompt from "./TestNotificationsPrompt";
@@ -47,8 +48,10 @@ function SetupState(props: {
 export default function FinishSetup(props: { done: () => void }) {
   const [stage, setStage] = useState("NOTIFICATIONS_INITIAL");
 
+  const router = useRouter();
   useEffect(() => {
     if (stage === "DONE") {
+      router.push("/app");
       props.done();
     }
   }, [stage, props]);

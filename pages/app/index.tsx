@@ -26,7 +26,7 @@ const App: NextPage = () => {
   const onMessage = (msg: any, port: chrome.runtime.Port) => {
     if (msg.type === "setCourses") {
       if (msg.record == null) {
-        router.push("/app/connect-account");
+        router.push("/app/connect-account?hidden-action=setup");
         return;
       }
       dataContext.setData(msg.record);
