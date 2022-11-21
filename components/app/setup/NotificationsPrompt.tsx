@@ -44,7 +44,7 @@ export default function NotificationsPrompt(props: {
                 }`}
               >
                 <Image
-                  src={`/assets/img/notifications/${osName}-1.png`}
+                  src={`/assets/img/notifications/${osName}-${i + 1}.png`}
                   alt={"Notification Example"}
                   layout="fill"
                   objectFit="contain"
