@@ -54,7 +54,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 
   const [loading, setLoading] = useState(false);
-  const reloadContent = () => {};
+  const reloadContent = () => {
+    console.log("Using non-implemented reloadContent");
+  };
 
   const [setup, setSetup] = useState<SetupState | null>(null);
 

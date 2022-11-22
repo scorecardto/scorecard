@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IoRefreshOutline } from "react-icons/io5";
-import { DataContext } from "scorecard-types";
+import { DataContext, LoadingContext } from "scorecard-types";
 import { PortContext } from "../core/ExtensionConnector";
+import Loading from "../core/util/Loading";
 
 export default function LastUpdated() {
   const [text, setText] = useState("Click to Reload");
@@ -62,18 +63,26 @@ export default function LastUpdated() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
 
-  const port = useContext(PortContext).port;
+  const { port } = useContext(PortContext);
+  const loading = useContext(LoadingContext);
   return (
-    <div
-      className="text-sm flex gap-2 group items-center cursor-pointer"
-      onClick={() => {
-        port?.postMessage({ type: "requestReloadContent" });
-      }}
-    >
-      <p className="p">{text}</p>
-      <div className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
-        <IoRefreshOutline />
-      </div>
+    <div>
+      {loading.loading ? (
+        <Loading />
+      ) : (
+        <div
+          className="text-sm flex gap-2 group items-center cursor-pointer"
+          onClick={() => {
+            port?.postMessage({ type: "requestReloadContent" });
+            loading.setLoading(true);
+          }}
+        >
+          <p className="p">{text}</p>
+          <div className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
+            <IoRefreshOutline />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
