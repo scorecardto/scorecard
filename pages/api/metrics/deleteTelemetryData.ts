@@ -39,10 +39,16 @@ export default async function handler(
     const doc = await docRef.get();
     const uninstallReason = doc.data()?.uninstallReason;
 
-    await docRef.set({
-      deleted: true,
-      uninstallReason,
-    });
+    if (uninstallReason) {
+      await docRef.set({
+        deleted: true,
+        uninstallReason,
+      });
+    } else {
+      await docRef.set({
+        deleted: true,
+      });
+    }
 
     res.status(200).json({ success: true });
   } else {

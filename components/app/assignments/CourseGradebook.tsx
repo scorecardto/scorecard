@@ -179,8 +179,8 @@ export default function CourseGradebook(props: { course: Course }) {
         </div>
         <div className="flex">
           <div className="children:w-fit flex h-fit gap-2">
-            <ActionChip>Details</ActionChip>
-            <ActionChip>Test Grades</ActionChip>
+            {/* <ActionChip>Details</ActionChip>
+            <ActionChip>Test Grades</ActionChip> */}
             <GradeChip spoiler={false}>
               {course.grades[data.gradeCategory]?.value}
             </GradeChip>
