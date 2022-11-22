@@ -9,6 +9,7 @@ import CourseCard from "./CourseCard";
 import NotificationSummary from "./notifications/NotificationSummary";
 import FinishSetup from "./setup/FinishSetup";
 import Toolbar from "./Toolbar";
+import TopBar from "./TopBar";
 
 export default function Summary() {
   const data = useContext(DataContext);
@@ -36,7 +37,9 @@ export default function Summary() {
 
     if (href.indexOf("#") != -1) {
       const course = href.slice(href.indexOf("#") + 1);
-      const index = data.data?.courses.findIndex((c) => (data.courseDisplayNames[c.key] ?? c.name) == course);
+      const index = data.data?.courses.findIndex(
+        (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+      );
 
       if (index != undefined && index != -1) {
         setCourse(index);
@@ -48,9 +51,12 @@ export default function Summary() {
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
+      <TopBar />
 
       <AssignmentsViewer course={course} setCourse={setCourse} />
       {setup && <FinishSetup done={() => setSetup(false)} />}
+
+      <div className="flex-shrink-0 h-4" />
 
       <div
         className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
@@ -66,14 +72,14 @@ export default function Summary() {
               setSelected={data.setGradeCategory}
               tabIndex={course == -1 ? 0 : -1}
             />
-            <Context courseIdx={course} />
+            {/* <Context courseIdx={course} /> */}
           </div>
         </div>
 
         <div className="flex flex-row justify-between items-end gap-8">
           <NotificationSummary courseIdx={course} />
 
-          <Toolbar courseIdx={course} />
+          {/* <Toolbar courseIdx={course} /> */}
         </div>
       </div>
 
