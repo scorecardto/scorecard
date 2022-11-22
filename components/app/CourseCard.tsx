@@ -1,6 +1,7 @@
 import Link from "next/link";
 import GradeChip from "./GradeChip";
-import { Course } from "scorecard-types";
+import { Course, DataContext, NotificationContext } from "scorecard-types";
+import { useContext } from "react";
 
 export default function CourseCard(props: {
   courseName: string;
@@ -10,7 +11,12 @@ export default function CourseCard(props: {
   id: string;
   courseIdx: number;
   onClick(id: string): void;
+  lastUpdated: string;
 }) {
+  const notifications = useContext(NotificationContext);
+
+  // notifications.notifications[0].
+
   return (
     <div
       className=""
@@ -29,8 +35,7 @@ export default function CourseCard(props: {
                 {props.courseName}
               </b>
               <div className="flex flex-col gap-3 children:text-ellipsis children:overflow-hidden p">
-                <p>{props.description1}</p>
-                <p>{props.description2}</p>
+                <p>{props.lastUpdated}</p>
               </div>
             </div>
           </div>
