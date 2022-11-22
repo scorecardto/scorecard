@@ -14,8 +14,8 @@ const Home: NextPage = () => {
       <main className="fixed w-full h-full top-0 left-0 flex justify-center items-center from-blue-100 to-purple-100 bg-gradient-to-tr font-os">
         <div className="flex flex-col gap-8">
           <ExampleCourseCardArray />
-          <div className="flex flex-col gap-4">
-            <h1 className="h1">Free Gradebook Viewer.</h1>
+          <div className="flex flex-col gap-4 px-4">
+            <h1 className="h1 font-normal">Free Gradebook Viewer.</h1>
             <div className="flex gap-2 text-mono-l-500">
               <p>Compatible with</p>
               <Image
