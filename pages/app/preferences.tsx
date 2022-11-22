@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { NextSeo } from "next-seo";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Settings, SettingsContext } from "scorecard-types";
 import AllNotifications from "../../components/app/notifications/AllNotifications";
@@ -54,6 +55,7 @@ const PreferencesPage: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
+      <NextSeo title="Prefrences" />
       <Preferences />
     </ExtensionConnector>
   );

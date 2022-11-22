@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { NextSeo } from "next-seo";
 import { useContext, useEffect, useState } from "react";
 import { Course, DataContext, NotificationContext } from "scorecard-types";
 import AllNotifications from "../../components/app/notifications/AllNotifications";
@@ -28,6 +29,7 @@ const App: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
+      <NextSeo title="All Notifications" />
       <AllNotifications />
     </ExtensionConnector>
   );

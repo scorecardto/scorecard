@@ -8,6 +8,7 @@ import ExtensionConnector, {
 } from "../../components/core/ExtensionConnector";
 import { SetupContext } from "../../components/core/context/SetupContext";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -80,6 +81,7 @@ const Login: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
+      <NextSeo title="Connect to Frontline" />
       <Setup checkSetup={checkSetup} />
     </ExtensionConnector>
   );

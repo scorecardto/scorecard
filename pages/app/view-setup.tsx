@@ -10,6 +10,7 @@ import { SetupContext } from "../../components/core/context/SetupContext";
 import ViewSetup from "../../components/app/setup/ViewSetup";
 import { useRouter } from "next/router";
 import { markAsUntransferable } from "worker_threads";
+import { NextSeo } from "next-seo";
 
 const ViewSetupPage: NextPage = () => {
   const router = useRouter();
@@ -63,6 +64,7 @@ const ViewSetupPage: NextPage = () => {
       loadState={loadState}
       onConnect={onConnect}
     >
+      <NextSeo title="Your Setup" />
       <ViewSetup />
     </ExtensionConnector>
   );
