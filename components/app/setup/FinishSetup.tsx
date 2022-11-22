@@ -1,6 +1,7 @@
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import BookmarkPrompt from "./BookmarkPrompt";
 import NotificationsPrompt from "./NotificationsPrompt";
 import TestNotificationsPrompt from "./TestNotificationsPrompt";
 import TroubleshootNotifications from "./TroubleshootNotifications";
@@ -46,7 +47,7 @@ function SetupState(props: {
 }
 
 export default function FinishSetup(props: { done: () => void }) {
-  const [stage, setStage] = useState("NOTIFICATIONS_INITIAL");
+  const [stage, setStage] = useState("BOOKMARK_PROMPT");
 
   const router = useRouter();
   useEffect(() => {
@@ -62,9 +63,19 @@ export default function FinishSetup(props: { done: () => void }) {
     >
       <div className="w-full h-full rounded-md overflow-hidden">
         <SetupState
+          id={"BOOKMARK_PROMPT"}
+          enabled={stage === "BOOKMARK_PROMPT"}
+          omitInitial={true}
+        >
+          <BookmarkPrompt
+            done={(n) => {
+              setStage("NOTIFICATIONS_INITIAL");
+            }}
+          />
+        </SetupState>
+        <SetupState
           id={"NOTIFICATIONS_INITIAL"}
           enabled={stage === "NOTIFICATIONS_INITIAL"}
-          omitInitial={true}
         >
           <NotificationsPrompt
             done={(enabled) => {
