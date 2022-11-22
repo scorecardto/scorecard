@@ -1,11 +1,18 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { FiEdit2, FiRotateCw } from "react-icons/fi";
-import { Course, DataContext } from "scorecard-types";
+import { Course, DataContext, GradeCategory } from "scorecard-types";
 import ActionChip from "../ActionChip";
 import GradeChip from "../GradeChip";
 import AssignmentCategory from "./AssignmentCategory";
 import { motion, useAnimationControls } from "framer-motion";
 import { PortContext } from "../../core/ExtensionConnector";
+import Loading from "../../core/util/Loading";
 
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
@@ -17,6 +24,10 @@ export default function CourseGradebook(props: { course: Course }) {
   const firstUpdate = useRef(true);
 
   const port = useContext(PortContext).port;
+
+  const [displayCategories, setDisplayCategories] = useState<GradeCategory[]>(
+    []
+  );
 
   useLayoutEffect(() => {
     if (firstUpdate.current) {
@@ -101,6 +112,46 @@ export default function CourseGradebook(props: { course: Course }) {
     });
   }
 
+  const selectedGradeCategory = data.gradeCategory;
+  const defaultGradeCategory = data.data?.gradeCategory;
+
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (selectedGradeCategory === defaultGradeCategory) {
+      setLoaded(true);
+      setDisplayCategories(props.course.gradeCategories ?? []);
+    } else {
+      setLoaded(false);
+      port?.postMessage({
+        type: "requestAlternateGradingPeriod",
+        courseKey: course.key,
+        gradeCategory: selectedGradeCategory,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedGradeCategory, defaultGradeCategory]);
+
+  useEffect(() => {
+    const listener = (msg: any) => {
+      if (msg.type === "setAlternateGradingPeriod") {
+        if (
+          msg.courseKey === course.key &&
+          msg.gradeCategory === selectedGradeCategory
+        ) {
+          setLoaded(true);
+          setDisplayCategories(msg.gradeCategories);
+        }
+      }
+    };
+
+    port?.onMessage.addListener(listener);
+
+    return () => {
+      port?.onMessage.removeListener(listener);
+    };
+  }, [port, selectedGradeCategory, course.key]);
+
   return (
     <motion.div className="flex flex-col gap-4">
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
@@ -140,11 +191,17 @@ export default function CourseGradebook(props: { course: Course }) {
         transition={{ duration: 0.3, type: "keyframes", ease: "easeOut" }}
         animate={controls}
       >
-        <div className="flex flex-col gap-6 pb-6">
-          {props.course.gradeCategories?.map((category, idx) => {
-            return <AssignmentCategory key={idx} category={category} />;
-          })}
-        </div>
+        {loaded ? (
+          <div className="flex flex-col gap-6 pb-6">
+            {displayCategories?.map((category, idx) => {
+              return <AssignmentCategory key={idx} category={category} />;
+            })}
+          </div>
+        ) : (
+          <div className="w-full h-full flex justify-center items-center">
+            <Loading size={20} />
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
