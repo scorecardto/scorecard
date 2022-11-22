@@ -40,7 +40,11 @@ const Login: NextPage = () => {
           window.location.search
         ).get("changePassword")!;
 
-        if (!districtParam && !usernameParam && !changePassword) {
+        const error = !!new URLSearchParams(window.location.search).get(
+          "error"
+        );
+
+        if (!districtParam && !usernameParam && !changePassword && !error) {
           router.push("/app/view-setup");
         }
       }

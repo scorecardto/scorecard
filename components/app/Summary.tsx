@@ -4,6 +4,7 @@ import { IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
 import { PortContext } from "../core/ExtensionConnector";
 import Dropdown from "../core/input/Dropdown";
+import AlertTray from "./alerts/AlertTray";
 import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
@@ -75,6 +76,7 @@ export default function Summary() {
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
       <TopBar />
+      <AlertTray />
 
       <AssignmentsViewer course={course} setCourse={setCourse} />
       {setup && <FinishSetup done={() => setSetup(false)} />}
