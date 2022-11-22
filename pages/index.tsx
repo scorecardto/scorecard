@@ -3,25 +3,41 @@ import { NextSeo } from "next-seo";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { IoExtensionPuzzle } from "react-icons/io5";
+import ExampleCourseCard from "../components/info/ExampleCourseCard";
+import ExampleCourseCardArray from "../components/info/ExampleCourseCardArray";
 
 const Home: NextPage = () => {
   return (
     <div>
       <NextSeo titleTemplate="%s" title="Scorecard: Free Grade Viewer" />
-      <main className="fixed w-full h-full top-0 left-0 flex justify-center items-center">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-pink-700">
-            Work in Progress.
-          </h1>
-          <p className="text-slate-400">
-            Scorecard is a free grade viewer extension for Frontline. Coming
-            Late 2022.
-          </p>
-          <Link href="/app">
-            <button className="border-slate-200 rounded-md border py-2 px-4 text-slate-700 font-medium w-fit hover:bg-slate-100">
-              Go to App
-            </button>
-          </Link>
+      <main className="fixed w-full h-full top-0 left-0 flex justify-center items-center from-blue-100 to-purple-100 bg-gradient-to-tr font-os">
+        <div className="flex flex-col gap-8">
+          <ExampleCourseCardArray />
+          <div className="flex flex-col gap-4">
+            <h1 className="h1">Free Gradebook Viewer.</h1>
+            <div className="flex gap-2 text-mono-l-500">
+              <p>Compatible with</p>
+              <Image
+                src="/assets/frontline.svg"
+                width={20}
+                height={20}
+                alt="Frontline SIS"
+              />
+              <p>Frontline SIS</p>
+            </div>
+            <div className="flex gap-4">
+              <button className="flex gap-4 py-4 px-6 rounded-md bg-accent-400 text-white items-center">
+                <IoExtensionPuzzle />
+                <span>Coming Soon</span>
+              </button>
+              <Link href="/app">
+                <button className="flex gap-4 py-4 px-6 rounded-md border-2 border-mono-l-400 text-mono-l-500 items-center bg-mono-l-200">
+                  <span>Go to App</span>
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
       </main>
     </div>

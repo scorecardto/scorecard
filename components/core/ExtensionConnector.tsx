@@ -36,7 +36,7 @@ export default function ExtensionConnector(props: {
         decodeURIComponent(document.cookie)
           .split("EXT_ID=")[1]
           .split(";")[0]) ||
-      "fkpgodekaimcnfknnkgkkdclfodblifl";
+      "obgiekpfbkiikbplgclakaghmbmjgbma";
 
     const port = chrome.runtime.connect(EXTENSION_ID);
 
