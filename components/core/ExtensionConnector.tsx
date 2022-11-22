@@ -40,6 +40,10 @@ export default function ExtensionConnector(props: {
 
     const port = chrome.runtime.connect(EXTENSION_ID);
 
+    port.onDisconnect.addListener(() => {
+      location.reload();
+    });
+
     setPort(port);
 
     port.onMessage.addListener((msg, port) => {
