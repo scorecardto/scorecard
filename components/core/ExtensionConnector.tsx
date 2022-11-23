@@ -31,23 +31,29 @@ export default function ExtensionConnector(props: {
   const [load, setLoad] = props.loadState;
 
   const connectChrome = () => {
+    let connected = false;
+
     const EXTENSION_ID =
       (document.cookie.includes("EXT_ID=") &&
         decodeURIComponent(document.cookie)
           .split("EXT_ID=")[1]
           .split(";")[0]) ||
-      "obgiekpfbkiikbplgclakaghmbmjgbma";
+      "kdcaikhoeplkmicnkjflbbpchjoadaki";
 
     const port = chrome.runtime.connect(EXTENSION_ID);
 
     port.onDisconnect.addListener(() => {
-      location.reload();
+      if(connected) {
+        location.reload();
+      }
     });
 
     setPort(port);
 
     port.onMessage.addListener((msg, port) => {
       if (msg.type === "handshake") {
+        connected = true;
+
         if (msg.version === CURRENT_VERSION) {
           setLoad("DONE");
           props.onConnect(port);
