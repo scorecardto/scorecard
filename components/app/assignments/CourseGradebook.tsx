@@ -130,7 +130,7 @@ export default function CourseGradebook(props: { course: Course }) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGradeCategory, defaultGradeCategory]);
+  }, [selectedGradeCategory, defaultGradeCategory, course]);
 
   useEffect(() => {
     const listener = (msg: any) => {
