@@ -30,11 +30,13 @@ export default function ExtensionConnector(props: {
 
   const [load, setLoad] = props.loadState;
 
-  const connectChrome = () => {
+  const OTHER_IDS = ["obgiekpfbkiikbplgclakaghmbmjgbma", "aklngfigbohkefhfdohjddonboonhbaf"];
+
+  const connectChrome = (otherIndex?: number) => {
     let connected = false;
 
     const EXTENSION_ID =
-      (document.cookie.includes("EXT_ID=") &&
+      (otherIndex && OTHER_IDS[otherIndex]) || (document.cookie.includes("EXT_ID=") &&
         decodeURIComponent(document.cookie)
           .split("EXT_ID=")[1]
           .split(";")[0]) ||
@@ -45,6 +47,8 @@ export default function ExtensionConnector(props: {
     port.onDisconnect.addListener(() => {
       if(connected) {
         location.reload();
+      } else {
+        connectChrome(otherIndex != null ? otherIndex + 1 : 0)
       }
     });
 
