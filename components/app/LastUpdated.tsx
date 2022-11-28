@@ -4,7 +4,7 @@ import { DataContext, LoadingContext } from "scorecard-types";
 import { PortContext } from "../core/ExtensionConnector";
 import Loading from "../core/util/Loading";
 
-export default function LastUpdated() {
+export default function LastUpdated(props: {courseIdx: number}) {
   const [text, setText] = useState("Click to Reload");
 
   const data = useContext(DataContext);
@@ -78,7 +78,7 @@ export default function LastUpdated() {
           }}
         >
           <p className="p">{text}</p>
-          <div className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
+          <div tabIndex={props.courseIdx == -1 ? 0 : -1} className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
             <IoRefreshOutline />
           </div>
         </div>

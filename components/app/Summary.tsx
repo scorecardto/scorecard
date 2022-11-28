@@ -75,7 +75,7 @@ export default function Summary() {
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
-      <TopBar />
+      <TopBar courseIdx={course} />
       <AlertTray />
 
       <AssignmentsViewer course={course} setCourse={setCourse} />
