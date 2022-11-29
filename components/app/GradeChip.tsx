@@ -5,6 +5,7 @@ export default function GradeChip(props: {
   children?: any;
   faded?: boolean;
   spoiler?: boolean;
+  red?: boolean;
 }) {
   const settingsContext = useContext(SettingsContext);
   const spoiler = props.spoiler ?? settingsContext.spoilerMode;
@@ -19,6 +20,8 @@ export default function GradeChip(props: {
       <p
         className={`align-middle text-center text-white font-mono ${
           spoiler ? "hidden group-hover:block" : ""
+        } ${
+            props.red ? "text-red-500" : ""
         }`}
       >
         {props.children ?? "NG"}

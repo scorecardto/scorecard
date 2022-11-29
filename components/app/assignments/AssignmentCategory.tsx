@@ -3,7 +3,10 @@ import { GradeCategory } from "scorecard-types";
 import CategoryMeta from "./CategoryMeta";
 import TableRow from "./TableRow";
 
-export default function AssignmentCategory(props: { category: GradeCategory }) {
+export default function AssignmentCategory(props: {
+    category: GradeCategory;
+    setCategoryAverage: (avg: number|undefined) => void;
+}) {
     const [ moddedGrades, setModdedGrades ]  = useState<((number|undefined)[]|undefined)>();
     let [ average, setAverage ] = useState<string>("");
 
@@ -53,7 +56,10 @@ export default function AssignmentCategory(props: { category: GradeCategory }) {
                 setGrade={(grade) => {
                     if (moddedGrades) {
                         moddedGrades[idx] = grade;
-                        setAverage(sum().toString());
+
+                        let avg = sum();
+                        setAverage(avg.toString());
+                        props.setCategoryAverage(avg === parseFloat(props.category.average) ? undefined : avg);
                     }
                 }}
             />;

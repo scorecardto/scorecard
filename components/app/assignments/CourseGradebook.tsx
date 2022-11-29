@@ -1,7 +1,7 @@
 import React, {
   useContext,
   useEffect,
-  useLayoutEffect,
+  useLayoutEffect, useMemo,
   useRef,
   useState,
 } from "react";
@@ -152,6 +152,39 @@ export default function CourseGradebook(props: { course: Course }) {
     };
   }, [port, selectedGradeCategory, course.key]);
 
+  // grade testing stuff
+  const [ moddedAvgs, setModdedAvgs ]  = useState<((number|undefined)[]|undefined)>();
+  let [ average, setAverage ] = useState<string>("");
+
+  useMemo(() => {
+    setModdedAvgs(course.gradeCategories?.map(()=>undefined));
+    setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
+  }, [course.gradeCategories, course.grades, data.gradeCategory]);
+
+  const sum = () => {
+    if (!moddedAvgs) return 0;
+    if (!course.gradeCategories) return 0;
+
+    let totalWeight = 0;
+    course.gradeCategories.forEach((cat) => {totalWeight += cat.weight});
+
+    let sum = 0;
+
+    moddedAvgs.forEach((grade, i) => {
+      if (!course.gradeCategories) return;
+
+      let def = course.gradeCategories[i].average;
+
+      if (grade != undefined) {
+        sum += grade*course.gradeCategories[i].weight/totalWeight;
+      } else if (def) {
+        sum += parseFloat(def)*course.gradeCategories[i].weight/totalWeight;
+      }
+    });
+
+    return Math.round(sum);
+  }
+
   return (
     <motion.div className="flex flex-col gap-4">
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
@@ -181,8 +214,8 @@ export default function CourseGradebook(props: { course: Course }) {
           <div className="children:w-fit flex h-fit gap-2">
             {/* <ActionChip>Details</ActionChip>
             <ActionChip>Test Grades</ActionChip> */}
-            <GradeChip spoiler={false}>
-              {course.grades[data.gradeCategory]?.value}
+            <GradeChip red={!moddedAvgs?.every((i) => i === undefined)} spoiler={false}>
+              {average}
             </GradeChip>
           </div>
         </div>
@@ -194,7 +227,16 @@ export default function CourseGradebook(props: { course: Course }) {
         {loaded ? (
           <div className="flex flex-col gap-6 pb-6">
             {displayCategories?.map((category, idx) => {
-              return <AssignmentCategory key={idx} category={category} />;
+              return <AssignmentCategory
+                  key={idx}
+                  category={category}
+                  setCategoryAverage={(avg: number|undefined) => {
+                    if (moddedAvgs) {
+                      moddedAvgs[idx] = avg
+                      setAverage(sum().toString());
+                    }
+                  }}
+              />;
             })}
           </div>
         ) : (
