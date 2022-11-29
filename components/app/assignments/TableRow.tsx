@@ -39,10 +39,9 @@ export default function TableRow(props: { assignment: Assignment }) {
 
     if (!evt.key.match(/[0-9.%\/]/)) evt.preventDefault();
 
-    if (evt.key === "/" && el.value.match(/[.%]/g)) evt.preventDefault();
-    if (evt.key.match(/[.%]/) && el.value.includes("/")) evt.preventDefault();
+    if (evt.key === "/" && (el.value.match(/[.%]/g) || el.value.includes("/"))) evt.preventDefault();
+    if (evt.key.match(/[.%]/) && (el.value.includes("/") || el.value.includes(evt.key))) evt.preventDefault();
     if (el.value.includes("%") && sel > el.value.indexOf("%")) evt.preventDefault();
-    if (evt.key === "." && el.value.includes(".")) evt.preventDefault();
     if (evt.key.match(/[0-9]/)) {
       if (el.value.includes("/")) {
         if ((el.value.split("/")[!el.value.includes("/") || sel < el.value.indexOf("/") ? 0 : 1].match(/[0-9]/g)?.length ?? 0) >= 3) evt.preventDefault();
