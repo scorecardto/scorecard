@@ -1,7 +1,10 @@
 import React from "react";
 import { Assignment } from "scorecard-types";
 
-export default function TableRow(props: { assignment: Assignment }) {
+export default function TableRow(props: {
+  assignment: Assignment;
+  setGrade: (grade: number|undefined) => void;
+}) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
 
   const focusLost = (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -9,6 +12,7 @@ export default function TableRow(props: { assignment: Assignment }) {
 
     if (!el.value) {
       el.value = el.defaultValue;
+      props.setGrade(undefined);
 
       el.classList.remove("text-red-600");
 
@@ -25,9 +29,15 @@ export default function TableRow(props: { assignment: Assignment }) {
     el.value.replaceAll("%", "");
     el.value = el.value.replace(/\.0?$/, "");
     el.value = (Math.round(parseFloat(el.value)*10)/10).toString();
+    props.setGrade(parseFloat(el.value));
     el.value += "%";
 
     el.classList.add("text-red-600");
+
+    if (el.value == el.defaultValue) {
+      props.setGrade(undefined);
+      el.classList.remove("text-red-600");
+    }
   }
 
   const filterInput = (evt: React.KeyboardEvent<HTMLInputElement>) => {
