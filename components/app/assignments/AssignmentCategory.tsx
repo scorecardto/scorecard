@@ -30,7 +30,8 @@ export default function AssignmentCategory(props: {
         props.setCategoryAverage(Math.round(avg).toString() === props.category.average ? undefined : avg);
     }
 
-    useMemo(calcAvg, [assignments, moddedGrades, props]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useMemo(calcAvg, [assignments]);
 
     const addTestAssignment = () => {
         setModdedGrades((old)=>{old=old?.map(x=>x); old?.push(undefined); return old});
@@ -38,8 +39,8 @@ export default function AssignmentCategory(props: {
         setAssignments((old) => {
             old=old?.map(x=>x);
             old?.push({
-                name: `Test ${i}`,
-                grade: "100%",
+                name: `Test Assignment ${i}`,
+                grade: "",
                 dropped: false,
                 error: false
             });
@@ -69,9 +70,16 @@ export default function AssignmentCategory(props: {
                         calcAvg();
                     }
                 }}
+                remove={() => {
+                    if (assignments) {
+                        setAssignments(assignments.filter((_, i) => i !== idx));
+                        setModdedGrades(moddedGrades?.filter((_, i) => i !== idx));
+                        setIsTest(isTest?.filter((_, i) => i !== idx));
+                    }
+                }}
             />;
           })}
-         <button className="text-blue-500" onClick={addTestAssignment}>Add Test Assignment</button>
+         <button className="text-blue-500 hover:bg-slate-100 rounded-md p-1" onClick={addTestAssignment}>Add Test Assignment</button>
         </div>
     );
 }

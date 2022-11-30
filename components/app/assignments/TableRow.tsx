@@ -1,9 +1,11 @@
 import React, {useMemo, useState} from "react";
 import { Assignment } from "scorecard-types";
+import {FiX} from "react-icons/fi";
 
 export default function TableRow(props: {
   assignment: Assignment;
   setGrade: (grade: number|undefined) => void;
+  remove: () => void;
   test?: boolean;
 }) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
@@ -77,7 +79,16 @@ export default function TableRow(props: {
 
   return (
     <div className={`text-sm pr-4 pt-1`}>
-      <div className="flex items-center whitespace-nowrap justify-start">
+      <div className="flex items-center whitespace-nowrap justify-start relative">
+        {props.test && (
+            <button
+                onClick={props.remove}
+                className="duration-200 text-mono-l-500 dark:text-mono-d-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"
+            >
+              <FiX />
+            </button>
+            )
+        }
         <div className="w-full pr-2 py-1">
           <p className={`${color} dark:${darkColor}`}>
             {props.assignment.name}
