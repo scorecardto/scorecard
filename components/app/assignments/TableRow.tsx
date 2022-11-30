@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import { Assignment } from "scorecard-types";
 
 export default function TableRow(props: {
@@ -7,11 +7,15 @@ export default function TableRow(props: {
 }) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
 
-  // fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
+  const [ editing, setEditing ] = useState<boolean>(false);
+
   useMemo(() => {
+    // fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
     if (gradeRef.current) {
       (gradeRef.current.children[0] as HTMLInputElement).value = props.assignment.grade ?? "";
     }
+    
+    setEditing(false);
   }, [props.assignment]);
 
   const focusLost = (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -21,8 +25,7 @@ export default function TableRow(props: {
       el.value = el.defaultValue;
       props.setGrade(undefined);
 
-      el.classList.remove("text-red-600");
-
+      setEditing(false);
       return;
     }
 
@@ -36,15 +39,10 @@ export default function TableRow(props: {
     el.value.replaceAll("%", "");
     el.value = el.value.replace(/\.0?$/, "");
     el.value = (Math.round(parseFloat(el.value)*10)/10).toString();
-    props.setGrade(parseFloat(el.value));
     el.value += "%";
 
-    el.classList.add("text-red-600");
-
-    if (el.value == el.defaultValue) {
-      props.setGrade(undefined);
-      el.classList.remove("text-red-600");
-    }
+    setEditing(el.value !== el.defaultValue);
+    props.setGrade(el.value === el.defaultValue ? undefined : parseFloat(el.value.slice(0, -1)));
   }
 
   const filterInput = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -122,7 +120,7 @@ export default function TableRow(props: {
                 className="bg-mono-l-200 dark:bg-mono-d-200 py-1 px-2 rounded-sm"
                 ref={gradeRef}
               >
-                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className="cursor-text bg-transparent w-full text-mono-l-600 dark:text-mono-d-600 text-center focus:text-red-600" defaultValue={props.assignment.grade} placeholder={props.assignment.grade} />
+                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className={`cursor-text bg-transparent w-full text-mono-l-600 dark:text-mono-d-600 text-center ${editing ? "text-red-600" : ""}`} defaultValue={props.assignment.grade} placeholder={props.assignment.grade} />
               </div>
             </div>
           </div>
