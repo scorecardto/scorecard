@@ -35,7 +35,8 @@ export default function AssignmentCategory(props: {
 
                         let avg = props.sum(props.category, moddedGrades);
                         setAverage(Math.round(avg).toString());
-                        props.setCategoryAverage(average === props.category.average ? undefined : avg);
+
+                        props.setCategoryAverage(Math.round(avg).toString() === props.category.average ? undefined : avg);
                     }
                 }}
             />;

@@ -14,7 +14,7 @@ export default function TableRow(props: {
     if (gradeRef.current) {
       (gradeRef.current.children[0] as HTMLInputElement).value = props.assignment.grade ?? "";
     }
-    
+
     setEditing(false);
   }, [props.assignment]);
 
@@ -31,13 +31,15 @@ export default function TableRow(props: {
 
     if (el.value.includes("/")) {
       el.value = el.value.replace(/^\//, "0/");
-      if (el.value.match(/\/$/)) el.value = "0";
+
+      if (el.value.match(/\/0*$/)) el.value = "0";
 
       el.value = (eval(el.value)*100).toString();
     }
 
     el.value.replaceAll("%", "");
-    el.value = el.value.replace(/\.0?$/, "");
+    el.value = el.value.replace(/\.0*$/, "");
+    if (!el.value) el.value = "0";
     el.value = (Math.round(parseFloat(el.value)*10)/10).toString();
     el.value += "%";
 

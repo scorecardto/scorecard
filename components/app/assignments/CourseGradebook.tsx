@@ -165,6 +165,8 @@ export default function CourseGradebook(props: { course: Course }) {
   const sumCategory = (category: GradeCategory, moddedGrades: ((number|undefined)[]|undefined)) => {
     if (!moddedGrades) return 0;
 
+    if (moddedGrades.every((grade) => grade === undefined)) return parseFloat(category.average);
+
     let sum = 0;
     let count = 0;
 
@@ -188,10 +190,12 @@ export default function CourseGradebook(props: { course: Course }) {
     return sum/count;
   }
 
-  // get the weighted average of all the categories
+  // get the average (weighted) of all the categories
   const sumTotal = () => {
     if (!moddedAvgs) return 0;
     if (!course.gradeCategories) return 0;
+
+    if (moddedAvgs.every((grades) => grades === undefined)) return parseFloat(course.grades[data.gradeCategory]?.value ?? "0");
 
     let totalWeight = 0;
     let sum = 0;
