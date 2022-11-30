@@ -1,17 +1,10 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect, useMemo,
-  useRef,
-  useState,
-} from "react";
-import { FiEdit2, FiRotateCw } from "react-icons/fi";
-import { Course, DataContext, GradeCategory } from "scorecard-types";
-import ActionChip from "../ActionChip";
+import React, {useContext, useEffect, useLayoutEffect, useMemo, useRef, useState,} from "react";
+import {FiEdit2, FiRotateCw} from "react-icons/fi";
+import {Course, DataContext, GradeCategory} from "scorecard-types";
 import GradeChip from "../GradeChip";
 import AssignmentCategory from "./AssignmentCategory";
-import { motion, useAnimationControls } from "framer-motion";
-import { PortContext } from "../../core/ExtensionConnector";
+import {motion, useAnimationControls} from "framer-motion";
+import {PortContext} from "../../core/ExtensionConnector";
 import Loading from "../../core/util/Loading";
 
 export default function CourseGradebook(props: { course: Course }) {
@@ -44,7 +37,7 @@ export default function CourseGradebook(props: { course: Course }) {
       scale: [0.95, 1],
       skew: [-1, 0],
     });
-  }, [course]);
+  }, [controls, course]);
 
   let saveName = true;
 
@@ -153,27 +146,31 @@ export default function CourseGradebook(props: { course: Course }) {
   }, [port, selectedGradeCategory, course.key]);
 
   // grade testing stuff
+  // const [ assignments, setAssignments ] = useState<Map<GradeCategory, GradeCategory["assignments"]>>();
   const [ moddedAvgs, setModdedAvgs ]  = useState<((number|undefined)[]|undefined)>();
   let [ average, setAverage ] = useState<string>("");
 
   useMemo(() => {
+    // setAssignments(new Map());
+    // course.gradeCategories?.forEach((category) => {assignments?.set(category, category.assignments)});
+
     setModdedAvgs(course.gradeCategories?.map(()=>undefined));
     setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
   }, [course.gradeCategories, course.grades, data.gradeCategory]);
 
   // get the average (mean) of all the assignments in a category, taking into account test grades
-  const sumCategory = (category: GradeCategory, moddedGrades: ((number|undefined)[]|undefined)) => {
+  const sumCategory = (category: GradeCategory, assignments: GradeCategory["assignments"], moddedGrades: ((number|undefined)[]|undefined)) => {
     if (!moddedGrades) return 0;
 
-    if (moddedGrades.every((grade) => grade === undefined)) return parseFloat(category.average);
+    if (moddedGrades.every((grade) => grade === undefined) && assignments?.every((a, i) => a === category.assignments?.[i])) return parseFloat(category.average);
 
     let sum = 0;
     let count = 0;
 
     moddedGrades.forEach((grade, i) => {
-      let def = category.assignments?.[i].grade?.replace("%", "").toLowerCase();
+      let def = assignments?.[i].grade?.replace("%", "").toLowerCase();
 
-      if (category.assignments?.[i].dropped) return;
+      if (assignments?.[i].dropped) return;
 
       if (grade != undefined) {
         sum += grade;
@@ -208,7 +205,7 @@ export default function CourseGradebook(props: { course: Course }) {
       let category = course.gradeCategories[i];
 
       // we have to re-sum it because it needs to calculate the average based on individual assignments, not the stored, rounded average
-      let def = sumCategory(category, category.assignments?.map(() => undefined));
+      let def = sumCategory(category, category.assignments, category.assignments?.map(() => undefined));
 
       if (grade != undefined) {
         sum += grade*category.weight/totalWeight;

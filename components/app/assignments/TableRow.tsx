@@ -4,6 +4,7 @@ import { Assignment } from "scorecard-types";
 export default function TableRow(props: {
   assignment: Assignment;
   setGrade: (grade: number|undefined) => void;
+  test?: boolean;
 }) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
 
@@ -71,11 +72,14 @@ export default function TableRow(props: {
 
   }
 
+  const color = props.test ? "text-red-600" : "text-mono-l-600"
+  const darkColor = props.test ? "text-red-500" : "text-mono-d-600";
+
   return (
-    <div className="text-sm pr-4 pt-1">
+    <div className={`text-sm pr-4 pt-1`}>
       <div className="flex items-center whitespace-nowrap justify-start">
         <div className="w-full pr-2 py-1">
-          <p className="text-mono-l-600 dark:text-mono-d-600">
+          <p className={`${color} dark:${darkColor}`}>
             {props.assignment.name}
           </p>
         </div>
@@ -111,7 +115,7 @@ export default function TableRow(props: {
           </div>
           <div className="w-14">
             <div className="group relative">
-              {props.assignment.grade?.match(/[0-9.]{1,3}%/) && (
+              {props.assignment.points && props.assignment.max && props.assignment.grade?.match(/[0-9.]{1,3}%/) && (
                 <div className="hidden group-hover:block absolute right-full mr-1.5 top-1/2 -translate-y-1/2 bg-black/75 rounded-md">
                   <p className="text-white py-1 px-2">
                     {props.assignment.points}/{props.assignment.max}
@@ -122,7 +126,7 @@ export default function TableRow(props: {
                 className="bg-mono-l-200 dark:bg-mono-d-200 py-1 px-2 rounded-sm"
                 ref={gradeRef}
               >
-                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className={`cursor-text bg-transparent w-full text-mono-l-600 dark:text-mono-d-600 text-center ${editing ? "text-red-600" : ""}`} defaultValue={props.assignment.grade} placeholder={props.assignment.grade} />
+                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className={`cursor-text bg-transparent w-full ${color} dark:${darkColor} text-center ${editing ? 'text-red-600' : ''}`} defaultValue={props.assignment.grade} placeholder={props.assignment.grade} />
               </div>
             </div>
           </div>
