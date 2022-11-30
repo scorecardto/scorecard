@@ -214,7 +214,7 @@ export default function CourseGradebook(props: { course: Course }) {
           <div className="children:w-fit flex h-fit gap-2">
             {/* <ActionChip>Details</ActionChip>
             <ActionChip>Test Grades</ActionChip> */}
-            <GradeChip red={!moddedAvgs?.every((i) => i === undefined)} spoiler={false}>
+            <GradeChip red={average !== (course.grades[data.gradeCategory]?.value ?? "NG")} spoiler={false}>
               {average}
             </GradeChip>
           </div>

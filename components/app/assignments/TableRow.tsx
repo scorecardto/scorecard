@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import { Assignment } from "scorecard-types";
 
 export default function TableRow(props: {
@@ -6,6 +6,13 @@ export default function TableRow(props: {
   setGrade: (grade: number|undefined) => void;
 }) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
+
+  // this fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
+  useMemo(() => {
+    if (gradeRef.current) {
+      (gradeRef.current.children[0] as HTMLInputElement).value = props.assignment.grade ?? "";
+    }
+  }, [props.assignment]);
 
   const focusLost = (evt: React.FocusEvent<HTMLInputElement>) => {
     const el = evt.currentTarget;
