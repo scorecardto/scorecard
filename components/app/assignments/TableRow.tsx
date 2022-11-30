@@ -7,7 +7,7 @@ export default function TableRow(props: {
 }) {
   const gradeRef = React.useRef<HTMLDivElement>(null);
 
-  // this fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
+  // fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
   useMemo(() => {
     if (gradeRef.current) {
       (gradeRef.current.children[0] as HTMLInputElement).value = props.assignment.grade ?? "";

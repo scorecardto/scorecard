@@ -161,24 +161,55 @@ export default function CourseGradebook(props: { course: Course }) {
     setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
   }, [course.gradeCategories, course.grades, data.gradeCategory]);
 
-  const sum = () => {
+  // get the average (mean) of all the assignments in a category, taking into account test grades
+  const sumCategory = (category: GradeCategory, moddedGrades: ((number|undefined)[]|undefined)) => {
+    if (!moddedGrades) return 0;
+
+    let sum = 0;
+    let count = 0;
+
+    moddedGrades.forEach((grade, i) => {
+      let def = category.assignments?.[i].grade?.replace("%", "").toLowerCase();
+
+      if (category.assignments?.[i].dropped) return;
+
+      if (grade != undefined) {
+        sum += grade;
+        count++;
+      } else if (def) {
+        if (def === "msg") def = "0";
+        if (def.match(/[a-z]/g)) return;
+
+        sum += Math.round(parseFloat(def));
+        count++;
+      }
+    });
+
+    return sum/count;
+  }
+
+  // get the weighted average of all the categories
+  const sumTotal = () => {
     if (!moddedAvgs) return 0;
     if (!course.gradeCategories) return 0;
 
     let totalWeight = 0;
-    course.gradeCategories.forEach((cat) => {totalWeight += cat.weight});
-
     let sum = 0;
+
+    course.gradeCategories.forEach((cat) => {totalWeight += cat.weight});
 
     moddedAvgs.forEach((grade, i) => {
       if (!course.gradeCategories) return;
 
-      let def = course.gradeCategories[i].average;
+      let category = course.gradeCategories[i];
+
+      // we have to re-sum it because it needs to calculate the average based on individual assignments, not the stored, rounded average
+      let def = sumCategory(category, category.assignments?.map(() => undefined));
 
       if (grade != undefined) {
-        sum += grade*course.gradeCategories[i].weight/totalWeight;
-      } else if (def) {
-        sum += parseFloat(def)*course.gradeCategories[i].weight/totalWeight;
+        sum += grade*category.weight/totalWeight;
+      } else {
+        sum += def*category.weight/totalWeight;
       }
     });
 
@@ -233,9 +264,10 @@ export default function CourseGradebook(props: { course: Course }) {
                   setCategoryAverage={(avg: number|undefined) => {
                     if (moddedAvgs) {
                       moddedAvgs[idx] = avg
-                      setAverage(sum().toString());
+                      setAverage(sumTotal().toString());
                     }
                   }}
+                  sum={sumCategory}
               />;
             })}
           </div>

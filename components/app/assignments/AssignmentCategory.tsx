@@ -6,40 +6,16 @@ import TableRow from "./TableRow";
 export default function AssignmentCategory(props: {
     category: GradeCategory;
     setCategoryAverage: (avg: number|undefined) => void;
+    sum: (category: GradeCategory, grades: ((number|undefined)[]|undefined)) => number;
 }) {
     const [ moddedGrades, setModdedGrades ]  = useState<((number|undefined)[]|undefined)>();
     let [ average, setAverage ] = useState<string>("");
 
+    // reset states when category changes
     useMemo(() => {
         setModdedGrades(props.category.assignments?.map(()=>undefined));
         setAverage(props.category.average);
     }, [props.category.assignments, props.category.average]);
-
-    const sum = () => {
-        if (!moddedGrades) return 0;
-
-        let sum = 0;
-        let count = 0;
-
-        moddedGrades.forEach((grade, i) => {
-            let def = props.category.assignments?.[i].grade?.replace("%", "").toLowerCase();
-
-            if (props.category.assignments?.[i].dropped) return;
-
-            if (grade != undefined) {
-                sum += grade;
-                count++;
-            } else if (def) {
-                if (def === "msg") def = "0";
-                if (def.match(/[a-z]/g)) return;
-
-                sum += Math.round(parseFloat(def));
-                count++;
-            }
-        });
-
-        return Math.round(sum/count);
-    }
 
     return (
         <div className="pl-12">
@@ -57,9 +33,9 @@ export default function AssignmentCategory(props: {
                     if (moddedGrades) {
                         moddedGrades[idx] = grade;
 
-                        let avg = sum();
-                        setAverage(avg.toString());
-                        props.setCategoryAverage(avg === parseFloat(props.category.average) ? undefined : avg);
+                        let avg = props.sum(props.category, moddedGrades);
+                        setAverage(Math.round(avg).toString());
+                        props.setCategoryAverage(average === props.category.average ? undefined : avg);
                     }
                 }}
             />;
