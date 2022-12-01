@@ -146,18 +146,22 @@ export default function CourseGradebook(props: { course: Course }) {
   }, [port, selectedGradeCategory, course.key]);
 
   // grade testing stuff
-  // const [ assignments, setAssignments ] = useState<Map<GradeCategory, GradeCategory["assignments"]>>();
+  const [ isTesting, setIsTesting ] = useState<boolean[]>();
   const [ moddedAvgs, setModdedAvgs ]  = useState<((number|undefined)[]|undefined)>();
-  let [ average, setAverage ] = useState<string>("");
+  const [ average, setAverage ] = useState<string>("");
+  const [ resetMods, setResetMods ] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (resetMods) setResetMods(false);
+  }, [resetMods]);
 
   useMemo(() => {
-    // setAssignments(new Map());
-    // course.gradeCategories?.forEach((category) => {assignments?.set(category, category.assignments)});
-
+    setIsTesting(course.gradeCategories?.map(()=>false));
     setModdedAvgs(course.gradeCategories?.map(()=>undefined));
     setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
   }, [course.gradeCategories, course.grades, data.gradeCategory]);
 
+  // TODO: use assignment weights
   // get the average (mean) of all the assignments in a category, taking into account test grades
   const sumCategory = (category: GradeCategory, assignments: GradeCategory["assignments"], moddedGrades: ((number|undefined)[]|undefined)) => {
     if (!moddedGrades) return 0;
@@ -219,7 +223,7 @@ export default function CourseGradebook(props: { course: Course }) {
 
   return (
     <motion.div className="flex flex-col gap-4">
-      <div className="flex justify-between pl-12 pr-4 pt-8 pb-4">
+      <div className="flex justify-between pl-12 pr-4 pt-8 pb-4 relative">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center relative">
             <button
@@ -242,6 +246,12 @@ export default function CourseGradebook(props: { course: Course }) {
           </div>
           <p className="p">Gradebook</p>
         </div>
+        {isTesting?.every(x=>x===false) || (
+            <div className="absolute right-5 top-3/4">
+              <p className="text-red-600 dark:text-red-500 inline">Grade testing in progress! </p>
+              <button className="text-blue-500 hover:bg-slate-100 rounded-md p-1" onClick={()=>{setIsTesting(isTesting?.fill(false)); setResetMods(true)}}>Reset</button>
+            </div>
+        )}
         <div className="flex">
           <div className="children:w-fit flex h-fit gap-2">
             {/* <ActionChip>Details</ActionChip>
@@ -269,6 +279,10 @@ export default function CourseGradebook(props: { course: Course }) {
                     }
                   }}
                   sum={sumCategory}
+                  setChanged={(changed: boolean) => {
+                    setIsTesting(isTesting?.map((x, i) => i === idx ? changed : x));
+                  }}
+                  reset={resetMods}
               />;
             })}
           </div>

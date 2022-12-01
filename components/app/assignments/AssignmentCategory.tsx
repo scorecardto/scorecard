@@ -7,6 +7,8 @@ export default function AssignmentCategory(props: {
     category: GradeCategory;
     setCategoryAverage: (avg: number|undefined) => void;
     sum: (category: GradeCategory, assignments: GradeCategory["assignments"], grades: ((number|undefined)[]|undefined)) => number;
+    setChanged: (changed: boolean) => void;
+    reset: boolean;
 }) {
     const [ isTest, setIsTest ] = useState<boolean[]>();
     const [ assignments, setAssignments ] = useState<GradeCategory["assignments"]>();
@@ -14,14 +16,21 @@ export default function AssignmentCategory(props: {
     const [ average, setAverage ] = useState<GradeCategory["average"]>("");
     const [ i, setI ] = useState<number>(0);
 
-    // reset states when category changes
-    useMemo(() => {
+    const reset = () => {
         setIsTest(new Array(props.category.assignments?.length).fill(false));
         setAssignments(props.category.assignments?.map(x=>x));
         setModdedGrades(props.category.assignments?.map(()=>undefined));
         setAverage(props.category.average);
         setI(1);
-    }, [props.category.assignments, props.category.average]);
+    }
+
+    // reset states when category changes or reset button is pressed
+    useMemo(reset, [props.category.assignments, props.category.average]);
+    useMemo(() => {
+        if (props.reset) {
+            reset();
+        }
+    }, [props.reset]);
 
     const calcAvg = () => {
         let avg = props.sum(props.category, assignments, moddedGrades);
@@ -30,8 +39,15 @@ export default function AssignmentCategory(props: {
         props.setCategoryAverage(Math.round(avg).toString() === props.category.average ? undefined : avg);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useMemo(calcAvg, [assignments]);
+    useMemo(() => {
+        calcAvg();
+
+        props.setChanged(
+            !!moddedGrades && !moddedGrades.every((grade) => grade === undefined) ||
+            !!assignments && !assignments.every((a, i) => a === props.category.assignments?.[i])
+        );
+    }, [assignments, moddedGrades])
+
 
     const addTestAssignment = () => {
         setModdedGrades((old)=>{old=old?.map(x=>x); old?.push(undefined); return old});
@@ -63,23 +79,20 @@ export default function AssignmentCategory(props: {
                 key={idx}
                 test={isTest?.[idx] ?? false}
                 assignment={assignment}
+                grade={moddedGrades?.[idx] ? (moddedGrades?.[idx]?.toString()+"%") : assignment.grade}
                 setGrade={(grade) => {
-                    if (moddedGrades) {
-                        moddedGrades[idx] = grade;
-
-                        calcAvg();
-                    }
+                    setModdedGrades(moddedGrades?.map((g, i) => i === idx ? grade : g));
                 }}
                 remove={() => {
-                    if (assignments) {
-                        setAssignments(assignments.filter((_, i) => i !== idx));
-                        setModdedGrades(moddedGrades?.filter((_, i) => i !== idx));
-                        setIsTest(isTest?.filter((_, i) => i !== idx));
-                    }
+                    const filter = (_: any, i: number) => i !== idx;
+
+                    setAssignments(assignments?.filter(filter));
+                    setModdedGrades(moddedGrades?.filter(filter));
+                    setIsTest(isTest?.filter(filter));
                 }}
             />;
           })}
-         <button className="text-blue-500 hover:bg-slate-100 rounded-md p-1" onClick={addTestAssignment}>Add Test Assignment</button>
+         <button className="text-blue-500 hover:bg-slate-100 rounded-md p-1 -translate-x-1" onClick={addTestAssignment}>Add Test Assignment</button>
         </div>
     );
 }

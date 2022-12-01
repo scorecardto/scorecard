@@ -4,6 +4,7 @@ import {FiX} from "react-icons/fi";
 
 export default function TableRow(props: {
   assignment: Assignment;
+  grade: Assignment["grade"];
   setGrade: (grade: number|undefined) => void;
   remove: () => void;
   test?: boolean;
@@ -15,17 +16,18 @@ export default function TableRow(props: {
   useMemo(() => {
     // fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
     if (gradeRef.current) {
-      (gradeRef.current.children[0] as HTMLInputElement).value = props.assignment.grade ?? "";
+      (gradeRef.current.children[0] as HTMLInputElement).value = props.grade ?? "";
     }
 
-    setEditing(false);
-  }, [props.assignment]);
+    setEditing(props.grade !== props.assignment.grade);
+  }, [props.grade]);
+  useMemo(() => setEditing(false), [props.assignment]);
 
   const focusLost = (evt: React.FocusEvent<HTMLInputElement>) => {
     const el = evt.currentTarget;
 
     if (!el.value) {
-      el.value = el.defaultValue;
+      el.value = props.assignment.grade ?? "";
       props.setGrade(undefined);
 
       setEditing(false);
@@ -46,8 +48,8 @@ export default function TableRow(props: {
     el.value = (Math.round(parseFloat(el.value)*10)/10).toString();
     el.value += "%";
 
-    setEditing(el.value !== el.defaultValue);
-    props.setGrade(el.value === el.defaultValue ? undefined : parseFloat(el.value.slice(0, -1)));
+    setEditing(el.value !== props.assignment.grade ?? "");
+    props.setGrade((el.value === props.assignment.grade ?? "") ? undefined : parseFloat(el.value.slice(0, -1)));
   }
 
   const filterInput = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,6 +78,10 @@ export default function TableRow(props: {
 
   const color = props.test ? "text-red-600" : "text-mono-l-600"
   const darkColor = props.test ? "text-red-500" : "text-mono-d-600";
+
+  if (props.assignment.name === "Quiz 10") {
+      console.log(props.grade+" | "+props.assignment.grade);
+  }
 
   return (
     <div className={`text-sm pr-4 pt-1`}>
@@ -137,7 +143,7 @@ export default function TableRow(props: {
                 className="bg-mono-l-200 dark:bg-mono-d-200 py-1 px-2 rounded-sm"
                 ref={gradeRef}
               >
-                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className={`cursor-text bg-transparent w-full ${color} dark:${darkColor} text-center ${editing ? 'text-red-600' : ''}`} defaultValue={props.assignment.grade} placeholder={props.assignment.grade} />
+                <input onKeyDown={filterInput} onFocus={(evt: React.FocusEvent<HTMLInputElement>) => {evt.currentTarget.value = ""}} onBlur={focusLost} className={`cursor-text bg-transparent w-full ${color} dark:${darkColor} text-center ${editing ? 'text-red-600 dark:text-red-500' : ''}`} defaultValue={props.grade} placeholder={props.assignment.grade} />
               </div>
             </div>
           </div>
