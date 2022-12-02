@@ -1,25 +1,34 @@
 import React, {useMemo, useState} from "react";
-import {GradeCategory} from "scorecard-types";
+import {Assignment, GradeCategory} from "scorecard-types";
 import CategoryMeta from "./CategoryMeta";
 import TableRow from "./TableRow";
 
+export interface AssignmentData {
+    assignment: Assignment;
+    moddedGrade?: number;
+    test: boolean;
+}
 export default function AssignmentCategory(props: {
     category: GradeCategory;
     setCategoryAverage: (avg: number|undefined) => void;
-    sum: (category: GradeCategory, assignments: GradeCategory["assignments"], grades: ((number|undefined)[]|undefined)) => number;
+    sum: (category: GradeCategory, assignments: AssignmentData[]) => number;
     setChanged: (changed: boolean) => void;
     reset: boolean;
 }) {
-    const [ isTest, setIsTest ] = useState<boolean[]>();
-    const [ assignments, setAssignments ] = useState<GradeCategory["assignments"]>();
-    const [ moddedGrades, setModdedGrades ] = useState<((number|undefined)[]|undefined)>();
+    const [ assignments, setAssignments ]  = useState<AssignmentData[]>([]);
     const [ average, setAverage ] = useState<GradeCategory["average"]>("");
     const [ i, setI ] = useState<number>(0);
 
     const reset = () => {
-        setIsTest(new Array(props.category.assignments?.length).fill(false));
-        setAssignments(props.category.assignments?.map(x=>x));
-        setModdedGrades(props.category.assignments?.map(()=>undefined));
+        setAssignments(props.category.assignments?.reduce((x, data)=>{
+            x.push({
+                assignment: data,
+                moddedGrade: undefined,
+                test: false
+            });
+            return x;
+        }, [] as AssignmentData[]) ?? []);
+
         setAverage(props.category.average);
         setI(1);
     }
@@ -30,10 +39,11 @@ export default function AssignmentCategory(props: {
         if (props.reset) {
             reset();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.reset]);
 
     const calcAvg = () => {
-        let avg = props.sum(props.category, assignments, moddedGrades);
+        let avg = props.sum(props.category, assignments);
         setAverage(Math.round(avg).toString());
 
         props.setCategoryAverage(Math.round(avg).toString() === props.category.average ? undefined : avg);
@@ -42,23 +52,23 @@ export default function AssignmentCategory(props: {
     useMemo(() => {
         calcAvg();
 
-        props.setChanged(
-            !!moddedGrades && !moddedGrades.every((grade) => grade === undefined) ||
-            !!assignments && !assignments.every((a, i) => a === props.category.assignments?.[i])
-        );
-    }, [assignments, moddedGrades])
+        props.setChanged(!!assignments && !assignments.every((a, i) => a.assignment === props.category.assignments?.[i] && a.moddedGrade === undefined));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [assignments])
 
 
     const addTestAssignment = () => {
-        setModdedGrades((old)=>{old=old?.map(x=>x); old?.push(undefined); return old});
-        setIsTest((old) => {old=old?.map(x=>x); old?.push(true); return old});
         setAssignments((old) => {
             old=old?.map(x=>x);
             old?.push({
-                name: `Test Assignment ${i}`,
-                grade: "",
-                dropped: false,
-                error: false
+                assignment: {
+                    name: `Test Assignment ${i}`,
+                    grade: "",
+                    dropped: false,
+                    error: false
+                },
+                moddedGrade: undefined,
+                test: true
             });
             setI(i+1);
 
@@ -74,21 +84,24 @@ export default function AssignmentCategory(props: {
                 average={average}
                 defaultAverage={props.category.average}
             />
-            {assignments?.map((assignment, idx) => {
+            {assignments.map((assignment, idx) => {
             return <TableRow
                 key={idx}
-                test={isTest?.[idx] ?? false}
-                assignment={assignment}
-                grade={moddedGrades?.[idx] ? (moddedGrades?.[idx]?.toString()+"%") : assignment.grade}
+                test={assignment.test}
+                assignment={assignment.assignment}
+                grade={assignment.moddedGrade ? (assignment.moddedGrade.toString()+"%") : assignment.assignment.grade}
                 setGrade={(grade) => {
-                    setModdedGrades(moddedGrades?.map((g, i) => i === idx ? grade : g));
+                    setAssignments(assignments.map((a, i) => {
+                        if (i === idx) {
+                            a.moddedGrade = grade;
+                        }
+                        return a;
+                    }));
                 }}
                 remove={() => {
                     const filter = (_: any, i: number) => i !== idx;
 
-                    setAssignments(assignments?.filter(filter));
-                    setModdedGrades(moddedGrades?.filter(filter));
-                    setIsTest(isTest?.filter(filter));
+                    setAssignments(assignments.filter(filter));
                 }}
             />;
           })}

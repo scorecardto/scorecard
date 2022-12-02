@@ -20,7 +20,9 @@ export default function TableRow(props: {
     }
 
     setEditing(props.grade !== props.assignment.grade);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.grade]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useMemo(() => setEditing(false), [props.assignment]);
 
   const focusLost = (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -78,10 +80,6 @@ export default function TableRow(props: {
 
   const color = props.test ? "text-red-600" : "text-mono-l-600"
   const darkColor = props.test ? "text-red-500" : "text-mono-d-600";
-
-  if (props.assignment.name === "Quiz 10") {
-      console.log(props.grade+" | "+props.assignment.grade);
-  }
 
   return (
     <div className={`text-sm pr-4 pt-1`}>
