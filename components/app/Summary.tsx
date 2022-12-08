@@ -43,14 +43,21 @@ export default function Summary() {
 
     if (href.indexOf("#") != -1) {
       const course = href.slice(href.indexOf("#") + 1);
-      const index = data.data?.courses.findIndex(
+      let index = data.data?.courses.findIndex(
         (c) => c.key == course
       );
 
+      if (index == -1) {
+        index = data.data?.courses.findIndex(
+            (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+        );
+      }
+
       if (index != undefined && index != -1) {
         setCourse(index);
-        window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
       }
+
+      window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
     }
   }, [setup, data.data?.courses, data.courseDisplayNames]);
 
