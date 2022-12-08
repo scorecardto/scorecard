@@ -44,7 +44,7 @@ export default function Summary() {
     if (href.indexOf("#") != -1) {
       const course = href.slice(href.indexOf("#") + 1);
       const index = data.data?.courses.findIndex(
-        (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+        (c) => c.key == course
       );
 
       if (index != undefined && index != -1) {
