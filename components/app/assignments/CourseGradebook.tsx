@@ -212,6 +212,12 @@ export default function CourseGradebook(props: { course: Course }) {
       if (grade != undefined) {
         sum += grade*category.weight/totalWeight;
       } else {
+        if (isNaN(def)) {
+          sum *= totalWeight/(totalWeight-category.weight);
+          totalWeight -= category.weight;
+          return;
+        }
+
         sum += def*category.weight/totalWeight;
       }
     });

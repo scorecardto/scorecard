@@ -2940,7 +2940,7 @@ scheduler@^0.23.0:
 
 "scorecard-types@github:scorecardto/types":
   version "0.0.24"
-  resolved "git+ssh://git@github.com/scorecardto/types.git#907b9090cc6d0167dc750feb58c7e59f41c44bd0"
+  resolved "git+ssh://git@github.com/scorecardto/types.git#e59e6a8252949533f923cda53274024b26c13bcd"
 
 semver@^5.6.0:
   version "5.7.1"

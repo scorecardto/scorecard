@@ -44,9 +44,10 @@ export default function AssignmentCategory(props: {
 
     const calcAvg = () => {
         let avg = props.sum(props.category, assignments);
-        setAverage(Math.round(avg).toString());
+        let avgStr = isNaN(avg) ? "" : Math.round(avg).toString();
+        setAverage(avgStr);
 
-        props.setCategoryAverage(Math.round(avg).toString() === props.category.average ? undefined : avg);
+        props.setCategoryAverage(avgStr === props.category.average ? undefined : avg);
     }
 
     useMemo(() => {
@@ -89,7 +90,7 @@ export default function AssignmentCategory(props: {
                 key={idx}
                 test={assignment.test}
                 assignment={assignment.assignment}
-                grade={assignment.moddedGrade ? (assignment.moddedGrade.toString()+"%") : assignment.assignment.grade}
+                grade={assignment.moddedGrade !== undefined ? (assignment.moddedGrade.toString()+"%") : assignment.assignment.grade}
                 setGrade={(grade) => {
                     setAssignments(assignments.map((a, i) => {
                         if (i === idx) {
