@@ -76,9 +76,9 @@ export default function DistrictSearch(props: {
       placeholder="Search for your school or district"
     >
       {(search, setValue, setComponent) => {
-        const districtList2 = districtList.filter((district: any) => {
+        const districtList2 = districtList?.filter((district: any) => {
           return district.name.toLowerCase().includes(search.toLowerCase());
-        });
+        }) || [];
 
         return (
           <div className="border-b-8 border-b-mono-l-100 dark:border-b-mono-d-100">
