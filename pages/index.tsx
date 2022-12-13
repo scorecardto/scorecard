@@ -27,10 +27,12 @@ const Home: NextPage = () => {
               <p>Frontline SIS</p>
             </div>
             <div className="flex gap-4">
-              <button className="flex gap-4 py-4 px-6 rounded-md bg-accent-400 text-white items-center">
-                <IoExtensionPuzzle />
-                <span>Coming Soon</span>
-              </button>
+              <Link href="/link/chrome">
+                <button className="flex gap-4 py-4 px-6 rounded-md bg-accent-400 text-white items-center">
+                  <IoExtensionPuzzle />
+                  <span>Install for Chrome</span>
+                </button>
+              </Link>
               <Link href="/app">
                 <button className="flex gap-4 py-4 px-6 rounded-md border-2 border-mono-l-400 text-mono-l-500 items-center bg-mono-l-200">
                   <span>Go to App</span>
