@@ -136,13 +136,10 @@ export default function Summary() {
                     return `Last updated yesterday.`;
                   }
 
-                  // if within the last week, 5 days ago
-                  if (
-                    date.getTime() >
-                    new Date(new Date().getTime() - 432000000).getTime()
-                  ) {
+                  // if within the last 5 days
+                  if (new Date().getTime() - date.getTime() < 432000000) {
                     return `Last updated ${
-                      new Date().getDay() - date.getDay()
+                        Math.floor((new Date().getTime() - date.getTime()) / 86400000)
                     } days ago.`;
                   }
 
