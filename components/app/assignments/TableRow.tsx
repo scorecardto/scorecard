@@ -47,7 +47,7 @@ export default function TableRow(props: { assignment: Assignment }) {
               {props.assignment.grade?.match(/[0-9.]{1,3}%/) && (
                 <div className="hidden group-hover:block absolute right-full mr-1.5 top-1/2 -translate-y-1/2 bg-black/75 rounded-md">
                   <p className="text-white py-1 px-2">
-                    {props.assignment.points}/{props.assignment.scale}
+                    {props.assignment.points?.toString().replace(".0", "")}/{props.assignment.scale?.toString().replace(".0", "")}
                   </p>
                 </div>
               )}
