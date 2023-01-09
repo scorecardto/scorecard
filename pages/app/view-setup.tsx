@@ -38,7 +38,7 @@ const ViewSetupPage: NextPage = () => {
           msg.setup?.host == null ? {} : { district: msg.setup.host! };
 
         const username =
-          msg.setup?.username == null ? {} : { district: msg.setup.username! };
+          msg.setup?.username == null ? {} : { username: msg.setup.username! };
 
         const password = msg.setup.hasPassword ? { changePassword: false } : {};
 
