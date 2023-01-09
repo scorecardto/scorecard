@@ -62,7 +62,7 @@ const App: NextPage = () => {
         axios.get("/api/districts").then((res) => {
           const districts = res.data.districts;
           const district = districts.find(
-            (district: any) => district.host === msg.setup.host
+            (district: any) => district.url === msg.setup.host
           );
 
           if (district == null) {
