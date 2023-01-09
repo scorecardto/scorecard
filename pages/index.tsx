@@ -27,7 +27,7 @@ const Home: NextPage = () => {
               <p>Frontline SIS</p>
             </div>
             <div className="flex gap-4">
-              <Link href="/links/chrome">
+              <Link href="/link/chrome">
                 <button className="flex gap-4 py-4 px-6 rounded-md bg-accent-400 text-white items-center">
                   <IoExtensionPuzzle />
                   <span>Install for Chrome</span>
