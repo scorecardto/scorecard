@@ -46,6 +46,8 @@ export default function Setup(props: {
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [incorrectUsername, setIncorrectUsername] = useState(false);
 
+  const [newlyInvalidDistrict, setNewlyInvalidDistrict] = useState(false);
+
   useEffect(() => {
     setIncorrectPassword(false);
     setNewlyIncorrectPassword(false);
@@ -66,6 +68,10 @@ export default function Setup(props: {
     setNewlyIncorrectPassword(
       new URLSearchParams(window.location.search).get("error") ===
         "newlyIncorrectPassword"
+    );
+    setNewlyInvalidDistrict(
+      new URLSearchParams(window.location.search).get("error") ===
+        "newlyInvalidDistrict"
     );
   }, []);
 
@@ -91,6 +97,11 @@ export default function Setup(props: {
     if (newlyIncorrectPassword) {
       return "Your previous password is no longer correct. Please try another password.";
     }
+
+    if (newlyInvalidDistrict) {
+      return "Frontline no longer supports your school district URL. Please set up Scorecard again.";
+    }
+
     return undefined;
   })();
 

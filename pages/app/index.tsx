@@ -66,7 +66,7 @@ const App: NextPage = () => {
           );
 
           if (district == null) {
-            router.push("/app/connect-account");
+            router.push("/app/connect-account?error=newlyInvalidDistrict");
           }
         });
       }
