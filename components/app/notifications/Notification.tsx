@@ -40,9 +40,10 @@ export default function Notification(props: {
         duration: 0.5,
         ease: "easeOut",
       }}
+      className="relative"
     >
-      <div className="relative py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg max-w-[30rem] w-full bg-mono-l-100 dark:bg-mono-d-100">
-        <div className="flex flex-row gap-6 items-center">
+      <div className="notification-glow relative py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg max-w-[30rem] w-full bg-mono-l-100 dark:bg-mono-d-100">
+        <div className="flex flex-row gap-6 items-center z-10">
           <div className="flex flex-col text-accent-300 text-3xl">
             {notification.icon === "RISE" && <IoTrendingUp />}
             {notification.icon === "FALL" && <IoTrendingDown />}
