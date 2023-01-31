@@ -2,6 +2,7 @@ import React, {
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -64,7 +65,9 @@ export default function CourseGradebook(props: { course: Course }) {
   const input = useRef<HTMLInputElement>(null);
   const container = useRef<HTMLDivElement>(null);
 
-  const [customDisplayName, setCustomDisplayName] = useState("");
+  const [customDisplayName, setCustomDisplayName] = useState(
+    data.courseDisplayNames[course.key]
+  );
 
   const [currentCourse, setCurrentCourse] = useState(course);
 
@@ -160,8 +163,8 @@ export default function CourseGradebook(props: { course: Course }) {
       <div className="flex justify-between pl-8 pt-4 pr-4">
         <div
           ref={container}
-          className={`flex flex-col rounded-xl relative group ${
-            editing ? "" : "hover:bg-mono-l-200"
+          className={`flex flex-col rounded-xl relative group mr-20 ${
+            editing ? "" : "hover:bg-mono-l-200 cursor-pointer"
           }`}
           tabIndex={0}
           onFocus={() => {
@@ -198,7 +201,7 @@ export default function CourseGradebook(props: { course: Course }) {
                 }
               }}
               className={`h1 text-3xl outline-none bg-transparent ${
-                editing ? "pb-4" : "pb-2"
+                editing ? "pb-4" : "pb-2 cursor-pointer"
               }`}
               ref={input}
               type="text"
