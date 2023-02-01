@@ -13,10 +13,11 @@ export default function CategoryMeta(props: {
     <div className="border-b border-b-mono-l-300 dark:border-b-mono-d-300 py-2">
       <div className="flex justify-between items-center text-base pr-7">
         <p className="p">{name}</p>
-        <p className="p">
-          <p className="inline-block">{`Weight: ${weight}, Average:`}</p>
-          <p className={`inline-block ${defaultAverage === average ? "" : "text-red-600" }`}> {average}</p>
-        </p>
+        <div className="p">
+          <p className={`${defaultAverage === average ? "" : "text-red-600"}`}>
+            {`Weight: ${weight}, Average: ${average}`}
+          </p>
+        </div>
       </div>
     </div>
   );

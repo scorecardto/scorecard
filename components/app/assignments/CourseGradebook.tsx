@@ -1,10 +1,17 @@
-import React, {useContext, useEffect, useLayoutEffect, useMemo, useRef, useState,} from "react";
-import {FiEdit2, FiRotateCw} from "react-icons/fi";
-import {Course, DataContext, GradeCategory} from "scorecard-types";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { FiEdit2, FiRotateCw } from "react-icons/fi";
+import { Course, DataContext, GradeCategory } from "scorecard-types";
 import GradeChip from "../GradeChip";
-import AssignmentCategory, {AssignmentData} from "./AssignmentCategory";
-import {motion, useAnimationControls} from "framer-motion";
-import {PortContext} from "../../core/ExtensionConnector";
+import AssignmentCategory, { AssignmentData } from "./AssignmentCategory";
+import { motion, useAnimationControls } from "framer-motion";
+import { PortContext } from "../../core/ExtensionConnector";
 import Loading from "../../core/util/Loading";
 
 export default function CourseGradebook(props: { course: Course }) {
@@ -146,84 +153,107 @@ export default function CourseGradebook(props: { course: Course }) {
   }, [port, selectedGradeCategory, course.key]);
 
   // grade testing stuff
-  const [ isTesting, setIsTesting ] = useState<boolean[]>();
-  const [ moddedAvgs, setModdedAvgs ]  = useState<((number|undefined)[]|undefined)>();
-  const [ average, setAverage ] = useState<string>("");
-  const [ resetMods, setResetMods ] = useState<boolean>(false);
+  const [isTesting, setIsTesting] = useState<boolean[]>();
+  const [moddedAvgs, setModdedAvgs] = useState<
+    (number | undefined)[] | undefined
+  >();
+  const [average, setAverage] = useState<string>("");
+  const [resetMods, setResetMods] = useState<boolean>(false);
 
   useEffect(() => {
     if (resetMods) setResetMods(false);
   }, [resetMods]);
 
-  useMemo(() => {
-    setIsTesting(course.gradeCategories?.map(()=>false));
-    setModdedAvgs(course.gradeCategories?.map(()=>undefined));
+  useEffect(() => {
+    setIsTesting(course.gradeCategories?.map(() => false));
+    setModdedAvgs(course.gradeCategories?.map(() => undefined));
     setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
   }, [course.gradeCategories, course.grades, data.gradeCategory]);
 
   // TODO: use assignment weights
   // get the average (mean) of all the assignments in a category, taking into account test grades
-  const sumCategory = (category: GradeCategory, assignments: AssignmentData[]) => {
-    if (assignments.every((a, i) => a.moddedGrade === undefined && a.assignment === category.assignments?.[i])) return parseFloat(category.average);
+  const sumCategory = (
+    category: GradeCategory,
+    assignments: AssignmentData[]
+  ) => {
+    if (
+      assignments.every(
+        (a, i) =>
+          a.moddedCount === undefined &&
+          a.moddedGrade === undefined &&
+          a.assignment === category.assignments?.[i]
+      )
+    )
+      return parseFloat(category.average);
 
     let sum = 0;
     let count = 0;
 
     assignments.forEach((data) => {
       let def = data.assignment.grade?.replace("%", "").toLowerCase();
+      let weight = data.moddedCount ?? data.assignment.count ?? 1;
 
       if (data.assignment.dropped) return;
 
-      if (data.moddedGrade != undefined) {
-        sum += data.moddedGrade;
-        count++;
+      if (data.moddedGrade !== undefined) {
+        sum += data.moddedGrade * weight;
+        count += weight;
       } else if (def) {
         if (def === "msg") def = "0";
         if (def.match(/[a-z]/g)) return;
 
-        sum += Math.round(parseFloat(def));
-        count++;
+        sum += Math.round(parseFloat(def)) * weight;
+        count += weight;
       }
     });
 
-    return sum/count;
-  }
+    return sum / count;
+  };
 
   // get the average (weighted) of all the categories
   const sumTotal = () => {
     if (!moddedAvgs) return 0;
-    if (!course.gradeCategories) return 0;
+    if (!displayCategories) return 0;
 
-    if (moddedAvgs.every((grades) => grades === undefined)) return parseFloat(course.grades[data.gradeCategory]?.value ?? "0");
+    if (moddedAvgs.every((grades) => grades === undefined))
+      return parseFloat(course.grades[data.gradeCategory]?.value ?? "0");
 
     let totalWeight = 0;
     let sum = 0;
 
-    course.gradeCategories.forEach((cat) => {totalWeight += cat.weight});
+    displayCategories.forEach((cat) => {
+      totalWeight += cat.weight;
+    });
 
     moddedAvgs.forEach((grade, i) => {
-      if (!course.gradeCategories) return;
+      if (!displayCategories) return;
 
-      let category = course.gradeCategories[i];
+      let category = displayCategories[i];
 
       // we have to re-sum it because it needs to calculate the average based on individual assignments, not the stored, rounded average
-      let def = sumCategory(category, category.assignments?.reduce((x, data)=>{ x.push({assignment: data, moddedGrade: undefined, test: false}); return x; }, [] as AssignmentData[]) ?? []);
+      let def = sumCategory(
+        category,
+        category.assignments?.reduce((x, data) => {
+          x.push({ assignment: data, moddedGrade: undefined, test: false });
+          return x;
+        }, [] as AssignmentData[]) ?? []
+      );
 
       if (grade != undefined) {
-        sum += grade*category.weight/totalWeight;
+        sum += (grade * category.weight) / totalWeight;
       } else {
         if (isNaN(def)) {
-          sum *= totalWeight/(totalWeight-category.weight);
+          sum *= totalWeight / (totalWeight - category.weight);
           totalWeight -= category.weight;
           return;
         }
 
-        sum += def*category.weight/totalWeight;
+        sum += (def * category.weight) / totalWeight;
       }
     });
 
     return Math.round(sum);
-  }
+  };
 
   return (
     <motion.div className="flex flex-col gap-4">
@@ -250,17 +280,32 @@ export default function CourseGradebook(props: { course: Course }) {
           </div>
           <p className="p">Gradebook</p>
         </div>
-        {isTesting?.every(x=>x===false) || (
-            <div className="absolute right-5 top-3/4">
-              <p className="text-red-600 dark:text-red-500 inline">Grade testing in progress! </p>
-              <button className="text-blue-500 hover:bg-slate-100 rounded-md p-1" onClick={()=>{setIsTesting(isTesting?.fill(false)); setResetMods(true)}}>Reset</button>
-            </div>
+        {isTesting?.every((x) => x === false) || (
+          <div className="absolute right-5 top-3/4">
+            <p className="text-red-600 dark:text-red-500 inline">
+              Grade testing in progress! 
+            </p>
+            <button
+              className="text-blue-500 hover:bg-slate-100 rounded-md p-1"
+              onClick={() => {
+                setIsTesting(isTesting?.fill(false));
+                setResetMods(true);
+              }}
+            >
+              Reset
+            </button>
+          </div>
         )}
         <div className="flex">
           <div className="children:w-fit flex h-fit gap-2">
             {/* <ActionChip>Details</ActionChip>
             <ActionChip>Test Grades</ActionChip> */}
-            <GradeChip red={average !== (course.grades[data.gradeCategory]?.value ?? "NG")} spoiler={false}>
+            <GradeChip
+              red={
+                average !== (course.grades[data.gradeCategory]?.value ?? "NG")
+              }
+              spoiler={false}
+            >
               {average}
             </GradeChip>
           </div>
@@ -273,21 +318,25 @@ export default function CourseGradebook(props: { course: Course }) {
         {loaded ? (
           <div className="flex flex-col gap-6 pb-6">
             {displayCategories?.map((category, idx) => {
-              return <AssignmentCategory
+              return (
+                <AssignmentCategory
                   key={idx}
                   category={category}
-                  setCategoryAverage={(avg: number|undefined) => {
+                  setCategoryAverage={(avg: number | undefined) => {
                     if (moddedAvgs) {
-                      moddedAvgs[idx] = avg
+                      moddedAvgs[idx] = avg;
                       setAverage(sumTotal().toString());
                     }
                   }}
                   sum={sumCategory}
                   setChanged={(changed: boolean) => {
-                    setIsTesting(isTesting?.map((x, i) => i === idx ? changed : x));
+                    setIsTesting(
+                      isTesting?.map((x, i) => (i === idx ? changed : x))
+                    );
                   }}
                   reset={resetMods}
-              />;
+                />
+              );
             })}
           </div>
         ) : (
