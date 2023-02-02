@@ -13,6 +13,9 @@ import AssignmentCategory, { AssignmentData } from "./AssignmentCategory";
 import { motion, useAnimationControls } from "framer-motion";
 import { PortContext } from "../../core/ExtensionConnector";
 import Loading from "../../core/util/Loading";
+import GradeTestingButton from "./GradeTestingButton";
+import { IoArrowForward, IoArrowForwardOutline } from "react-icons/io5";
+import CategoryWeightPrompt from "./CategoryWeightPrompt";
 
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
@@ -165,10 +168,10 @@ export default function CourseGradebook(props: { course: Course }) {
   }, [resetMods]);
 
   useEffect(() => {
-    setIsTesting(course.gradeCategories?.map(() => false));
-    setModdedAvgs(course.gradeCategories?.map(() => undefined));
+    setIsTesting(displayCategories?.map(() => false));
+    setModdedAvgs(displayCategories?.map(() => undefined));
     setAverage(course.grades[data.gradeCategory]?.value ?? "NG");
-  }, [course.gradeCategories, course.grades, data.gradeCategory]);
+  }, [displayCategories, course.grades, data.gradeCategory]);
 
   // TODO: use assignment weights
   // get the average (mean) of all the assignments in a category, taking into account test grades
@@ -181,6 +184,7 @@ export default function CourseGradebook(props: { course: Course }) {
         (a, i) =>
           a.moddedCount === undefined &&
           a.moddedGrade === undefined &&
+          a.moddedDropped === undefined &&
           a.assignment === category.assignments?.[i]
       )
     )
@@ -193,70 +197,90 @@ export default function CourseGradebook(props: { course: Course }) {
       let def = data.assignment.grade?.replace("%", "").toLowerCase();
       let weight = data.moddedCount ?? data.assignment.count ?? 1;
 
-      if (data.assignment.dropped) return;
+      if (data.moddedDropped ?? data.assignment.dropped) return;
 
       if (data.moddedGrade !== undefined) {
         sum += data.moddedGrade * weight;
         count += weight;
       } else if (def) {
+        const exact =
+          data.assignment.points && data.assignment.scale
+            ? (data.assignment.points / data.assignment.scale) * 100
+            : undefined;
+
         if (def === "msg") def = "0";
         if (def.match(/[a-z]/g)) return;
 
-        sum += Math.round(parseFloat(def)) * weight;
+        sum += (exact ?? parseFloat(def)) * weight;
         count += weight;
       }
     });
 
-    return sum / count;
+    return Math.round(sum / count);
   };
 
   // get the average (weighted) of all the categories
   const sumTotal = () => {
-    if (!moddedAvgs) return 0;
-    if (!displayCategories) return 0;
+    if (!displayCategories) return;
 
-    if (moddedAvgs.every((grades) => grades === undefined))
-      return parseFloat(course.grades[data.gradeCategory]?.value ?? "0");
-
-    let totalWeight = 0;
     let sum = 0;
+    let count = 0;
 
-    displayCategories.forEach((cat) => {
-      totalWeight += cat.weight;
+    displayCategories.forEach((category, i) => {
+      let weight = category.weight;
+      const avg = moddedAvgs?.[i]?.toString() ?? category.average;
+
+      if (weight === undefined) return;
+
+      if (avg === "" || isNaN(parseInt(avg))) return;
+
+      sum += parseInt(avg) * weight;
+      count += weight;
     });
 
-    moddedAvgs.forEach((grade, i) => {
-      if (!displayCategories) return;
+    return Math.round(sum / count);
+  };
 
-      let category = displayCategories[i];
+  const [testCategoryIndex, setTestCategoryIndex] = useState(1);
+  const [showCategoryWeightPrompt, setShowCategoryWeightPrompt] =
+    useState(false);
 
-      // we have to re-sum it because it needs to calculate the average based on individual assignments, not the stored, rounded average
-      let def = sumCategory(
-        category,
-        category.assignments?.reduce((x, data) => {
-          x.push({ assignment: data, moddedGrade: undefined, test: false });
-          return x;
-        }, [] as AssignmentData[]) ?? []
-      );
+  const addTestCategory = (weight: number | undefined) => {
+    setShowCategoryWeightPrompt(false);
+    if (!weight) return;
 
-      if (grade != undefined) {
-        sum += (grade * category.weight) / totalWeight;
-      } else {
-        if (isNaN(def)) {
-          sum *= totalWeight / (totalWeight - category.weight);
-          totalWeight -= category.weight;
-          return;
-        }
+    const i = testCategoryIndex;
+    setTestCategoryIndex(i + 1);
 
-        sum += (def * category.weight) / totalWeight;
-      }
+    if (!course.gradeCategories) return;
+
+    const newCategories = [...displayCategories];
+    newCategories.push({
+      name: "Test Category " + i,
+      weight: weight,
+      average: "",
+      assignments: [],
+      id: `scorecard-test-category-${i}`,
+      error: false,
     });
 
-    return Math.round(sum);
+    setDisplayCategories(newCategories);
+  };
+
+  const removeTestCategory = (id: string) => {
+    if (!displayCategories) return;
+
+    const newCategories = displayCategories.filter((c) => c.id !== id);
+    setDisplayCategories(newCategories);
   };
 
   return (
     <motion.div className="flex flex-col gap-4">
+      <CategoryWeightPrompt
+        addTestCategory={addTestCategory}
+        otherCategories={displayCategories}
+        show={showCategoryWeightPrompt}
+      />
       <div className="flex justify-between pl-12 pr-4 pt-8 pb-4 relative">
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center relative">
@@ -280,10 +304,11 @@ export default function CourseGradebook(props: { course: Course }) {
           </div>
           <p className="p">Gradebook</p>
         </div>
+
         {isTesting?.every((x) => x === false) || (
           <div className="absolute right-5 top-3/4">
             <p className="text-red-600 dark:text-red-500 inline">
-              Grade testing in progress! 
+              Grade testing in progress!
             </p>
             <button
               className="text-blue-500 hover:bg-slate-100 rounded-md p-1"
@@ -298,16 +323,21 @@ export default function CourseGradebook(props: { course: Course }) {
         )}
         <div className="flex">
           <div className="children:w-fit flex h-fit gap-2">
-            {/* <ActionChip>Details</ActionChip>
-            <ActionChip>Test Grades</ActionChip> */}
-            <GradeChip
-              red={
-                average !== (course.grades[data.gradeCategory]?.value ?? "NG")
-              }
-              spoiler={false}
-            >
-              {average}
-            </GradeChip>
+            {isTesting?.every((x) => x === false) ? (
+              <GradeChip spoiler={false}>
+                {course.grades[data.gradeCategory]?.value}
+              </GradeChip>
+            ) : (
+              <div className="flex gap-4 items-center">
+                <GradeChip spoiler={false} faded={true}>
+                  {course.grades[data.gradeCategory]?.value ?? "NG"}
+                </GradeChip>
+                <IoArrowForward className="text-lg text-mono-l-500 dark:text-mono-d-500" />
+                <GradeChip spoiler={false} faded={false}>
+                  {average}
+                </GradeChip>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -320,21 +350,46 @@ export default function CourseGradebook(props: { course: Course }) {
             {displayCategories?.map((category, idx) => {
               return (
                 <AssignmentCategory
+                  testing={isTesting?.[idx] ?? false}
                   key={idx}
                   category={category}
                   setCategoryAverage={(avg: number | undefined) => {
                     if (moddedAvgs) {
                       moddedAvgs[idx] = avg;
-                      setAverage(sumTotal().toString());
+                      const total = sumTotal();
+                      setAverage(
+                        total == null || isNaN(total) ? "NG" : total.toString()
+                      );
                     }
                   }}
                   sum={sumCategory}
                   setChanged={(changed: boolean) => {
-                    setIsTesting(
-                      isTesting?.map((x, i) => (i === idx ? changed : x))
-                    );
+                    setIsTesting((isTesting) => {
+                      return isTesting?.map((x, i) =>
+                        i === idx ? changed : x
+                      );
+                    });
                   }}
                   reset={resetMods}
+                  addTestCategory={
+                    idx === displayCategories.length - 1
+                      ? () => {
+                          setIsTesting(isTesting?.fill(false));
+                          setResetMods(true);
+
+                          setShowCategoryWeightPrompt(true);
+                        }
+                      : undefined
+                  }
+                  removeTestCategory={
+                    displayCategories[idx].id.startsWith(
+                      "scorecard-test-category"
+                    )
+                      ? () => {
+                          removeTestCategory(displayCategories[idx].id);
+                        }
+                      : undefined
+                  }
                 />
               );
             })}

@@ -83,6 +83,9 @@ module.exports = {
   },
   plugins: [
     require("tailwindcss-children"),
+    require("tailwindcss-scoped-groups")({
+      groups: ["one", "two"],
+    }),
     plugin(function ({ addBase, theme }) {
       addBase({
         "@font-face": {

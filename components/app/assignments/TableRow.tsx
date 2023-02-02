@@ -1,21 +1,34 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Assignment } from "scorecard-types";
 import { FiX } from "react-icons/fi";
+import Checkbox from "../../core/input/Checkbox";
+import { IoClose, IoCloseCircle } from "react-icons/io5";
 
 export default function TableRow(props: {
   assignment: Assignment;
   grade: Assignment["grade"];
   count: Assignment["count"];
+  dropped: Assignment["dropped"];
   setGrade: (grade: number | undefined) => void;
   setCount: (count: number | undefined) => void;
+  setDropped: (dropped: boolean | undefined) => void;
   remove: () => void;
   test?: boolean;
+  showCheckboxes: boolean;
 }) {
   const countRef = React.useRef<HTMLDivElement>(null);
   const gradeRef = React.useRef<HTMLDivElement>(null);
 
   const [editingGrade, setEditingGrade] = useState<boolean>(false);
   const [editingCount, setEditingCount] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (props.test) {
+      if (gradeRef.current) {
+        (gradeRef.current.children[0] as HTMLInputElement).focus();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // fixes grades copying over when you switch between courses, but it feels more like a patch than a fix
@@ -63,7 +76,9 @@ export default function TableRow(props: {
 
     setEditingCount(el.value !== props.assignment.count?.toString() + "ct");
 
-    props.setCount(val);
+    props.setCount(
+      el.value === props.assignment.count?.toString() + "ct" ? undefined : val
+    );
   };
 
   const focusLostForGrade = (evt: React.FocusEvent<HTMLInputElement>) => {
@@ -149,17 +164,37 @@ export default function TableRow(props: {
 
   return (
     <div
-      className={`text-sm pr-4 odd:bg-mono-l-200 dark:odd:bg-mono-d-300 py-1`}
+      className={`group-one text-sm pr-4 odd:bg-mono-l-200 dark:odd:bg-mono-d-300`}
     >
-      <div className="flex items-center whitespace-nowrap justify-start relative">
-        {props.test && (
-          <button
-            onClick={props.remove}
-            className="duration-200 text-mono-l-500 dark:text-mono-d-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"
-          >
-            <FiX />
-          </button>
-        )}
+      <div className="flex items-center whitespace-nowrap justify-start relative py-1">
+        <div className="absolute right-full group-one-odd:bg-mono-l-200 dark:group-one-odd:bg-mono-d-300 w-12 h-full">
+          <div className="flex flex-row items-center justify-end h-full pr-2">
+            {props.test ? (
+              <IoCloseCircle
+                onClick={props.remove}
+                className="text-mono-l-500 dark:text-mono-d-500 w-4 h-4"
+              />
+            ) : (
+              <div
+                className={`transition-opacity duration-200 ${
+                  props.showCheckboxes ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                <Checkbox
+                  checked={!props.dropped}
+                  onChange={(b) => {
+                    if (props.assignment.dropped !== !b) {
+                      props.setDropped(!b);
+                    } else {
+                      props.setDropped(undefined);
+                    }
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
         <div className="w-full pr-2 py-1">
           <p className={`${color} dark:${darkColor}`}>
             {props.assignment.name}
@@ -193,7 +228,7 @@ export default function TableRow(props: {
             </p>
           </div>
           <div className="w-14 hidden md:block">
-            <p className="p">{props.assignment.dropped ? "Dropped" : ""}</p>
+            <p className="p">{props.dropped ? "Dropped" : ""}</p>
           </div>
           <div className="w-14 hidden md:block">
             <div className="w-14">
@@ -212,7 +247,7 @@ export default function TableRow(props: {
                       editingCount ? "text-red-600 dark:text-red-500" : ""
                     }`}
                     defaultValue={props.count + "ct"}
-                    placeholder={props.count + "ct"}
+                    placeholder={props.assignment.count + "ct"}
                   />
                 </div>
               </div>
@@ -223,11 +258,11 @@ export default function TableRow(props: {
             <div className="w-14">
               <div className="group relative">
                 {props.assignment.points &&
-                  props.assignment.max &&
+                  props.assignment.scale &&
                   props.assignment.grade?.match(/[0-9.]{1,3}%/) && (
                     <div className="hidden group-hover:block absolute right-full mr-1.5 top-1/2 -translate-y-1/2 bg-black/75 rounded-md">
                       <p className="text-white py-1 px-2">
-                        {props.assignment.points}/{props.assignment.max}
+                        {props.assignment.points}/{props.assignment.scale}
                       </p>
                     </div>
                   )}

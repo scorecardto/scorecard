@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { IoAdd, IoAddOutline, IoTrashBinOutline } from "react-icons/io5";
 import { Assignment, GradeCategory } from "scorecard-types";
 import CategoryMeta from "./CategoryMeta";
 import TableRow from "./TableRow";
@@ -7,6 +8,7 @@ export interface AssignmentData {
   assignment: Assignment;
   moddedGrade?: number;
   moddedCount?: number;
+  moddedDropped?: boolean;
   test: boolean;
 }
 export default function AssignmentCategory(props: {
@@ -15,10 +17,14 @@ export default function AssignmentCategory(props: {
   sum: (category: GradeCategory, assignments: AssignmentData[]) => number;
   setChanged: (changed: boolean) => void;
   reset: boolean;
+  testing: boolean;
+  addTestCategory?: () => void;
+  removeTestCategory?: () => void;
 }) {
   const [assignments, setAssignments] = useState<AssignmentData[]>([]);
   const [average, setAverage] = useState<GradeCategory["average"]>("");
   const [i, setI] = useState<number>(0);
+  const [showCheckboxes, setShowCheckboxes] = useState(false);
 
   const reset = () => {
     setAssignments(
@@ -27,6 +33,7 @@ export default function AssignmentCategory(props: {
           assignment: data,
           moddedGrade: undefined,
           moddedCount: undefined,
+          moddedDropped: undefined,
           test: false,
         });
         return x;
@@ -64,7 +71,8 @@ export default function AssignmentCategory(props: {
           (a, i) =>
             a.assignment === props.category.assignments?.[i] &&
             a.moddedGrade === undefined &&
-            a.moddedCount === undefined
+            a.moddedCount === undefined &&
+            a.moddedDropped === undefined
         )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,6 +87,7 @@ export default function AssignmentCategory(props: {
           grade: "",
           dropped: false,
           error: false,
+          count: 1,
         },
         moddedGrade: undefined,
         moddedCount: undefined,
@@ -90,64 +99,142 @@ export default function AssignmentCategory(props: {
     });
   };
 
+  const siderailRef = React.useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!showCheckboxes) return;
+
+    const listener = (e: MouseEvent) => {
+      if (siderailRef.current) {
+        const rect = siderailRef.current.getBoundingClientRect();
+        if (
+          e.clientX < rect.left ||
+          e.clientX > rect.right ||
+          e.clientY < rect.top ||
+          e.clientY > rect.bottom
+        ) {
+          setShowCheckboxes(false);
+        }
+      }
+    };
+    window.addEventListener("mousemove", listener);
+
+    return () => {
+      window.removeEventListener("mousemove", listener);
+    };
+  }, [showCheckboxes]);
+
   return (
-    <div className="pl-12">
+    <div>
       <CategoryMeta
         name={props.category.name}
         weight={props.category.weight}
         average={average}
-        defaultAverage={props.category.average}
+        isTesting={props.testing}
       />
-      {assignments.map((assignment, idx) => {
-        return (
-          <TableRow
-            key={idx}
-            test={assignment.test}
-            assignment={assignment.assignment}
-            grade={
-              assignment.moddedGrade !== undefined
-                ? assignment.moddedGrade.toString() + "%"
-                : assignment.assignment.grade
-            }
-            setGrade={(grade) => {
-              setAssignments(
-                assignments.map((a, i) => {
-                  if (i === idx) {
-                    a.moddedGrade = grade;
-                  }
-                  return a;
-                })
-              );
-            }}
-            count={
-              assignment.moddedCount !== undefined
-                ? assignment.moddedCount
-                : assignment.assignment.count
-            }
-            setCount={(count) => {
-              setAssignments(
-                assignments.map((a, i) => {
-                  if (i === idx) {
-                    a.moddedCount = count;
-                  }
-                  return a;
-                })
-              );
-            }}
-            remove={() => {
-              const filter = (_: any, i: number) => i !== idx;
 
-              setAssignments(assignments.filter(filter));
-            }}
-          />
-        );
-      })}
-      <button
-        className="text-blue-500 hover:bg-slate-100 rounded-md p-1 -translate-x-1"
-        onClick={addTestAssignment}
-      >
-        Add Test Assignment
-      </button>
+      <div className="flex">
+        <div
+          ref={siderailRef}
+          className={`w-12 relative top-0 bottom-0 ${
+            showCheckboxes ? "" : "z-10"
+          }`}
+          onMouseEnter={() => {
+            setShowCheckboxes(true);
+          }}
+        />
+        <div className="flex-1">
+          {assignments.map((assignment, idx) => {
+            return (
+              <TableRow
+                showCheckboxes={showCheckboxes || props.testing}
+                key={idx}
+                test={assignment.test}
+                assignment={assignment.assignment}
+                dropped={
+                  assignment.moddedDropped !== undefined
+                    ? assignment.moddedDropped
+                    : assignment.assignment.dropped
+                }
+                setDropped={(dropped) => {
+                  setAssignments(
+                    assignments.map((a, i) => {
+                      if (i === idx) {
+                        a.moddedDropped = dropped;
+                      }
+                      return a;
+                    })
+                  );
+                }}
+                grade={
+                  assignment.moddedGrade !== undefined
+                    ? assignment.moddedGrade.toString() + "%"
+                    : assignment.assignment.grade
+                }
+                setGrade={(grade) => {
+                  setAssignments(
+                    assignments.map((a, i) => {
+                      if (i === idx) {
+                        a.moddedGrade = grade;
+                      }
+                      return a;
+                    })
+                  );
+                }}
+                count={
+                  assignment.moddedCount !== undefined
+                    ? assignment.moddedCount
+                    : assignment.assignment.count
+                }
+                setCount={(count) => {
+                  setAssignments(
+                    assignments.map((a, i) => {
+                      if (i === idx) {
+                        a.moddedCount = count;
+                      }
+                      return a;
+                    })
+                  );
+                }}
+                remove={() => {
+                  const filter = (_: any, i: number) => i !== idx;
+
+                  setAssignments(assignments.filter(filter));
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="flex gap-4 ml-12 my-4">
+        <button
+          className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+          onClick={addTestAssignment}
+        >
+          <IoAdd />
+          <span>Test Assignment</span>
+        </button>
+
+        {props.addTestCategory && (
+          <button
+            className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+            onClick={props.addTestCategory}
+          >
+            <IoAdd />
+            <span>Test Category</span>
+          </button>
+        )}
+
+        {props.removeTestCategory && (
+          <button
+            className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+            onClick={props.removeTestCategory}
+          >
+            <IoTrashBinOutline />
+            <span>Remove Me</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 }

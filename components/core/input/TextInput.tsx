@@ -3,7 +3,9 @@ import { IoCloseCircle, IoSearchOutline } from "react-icons/io5";
 
 export default function TextInput(props: {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((v: string) => void);
   placeholder?: string;
   label?: string;
   password?: boolean;
@@ -11,8 +13,10 @@ export default function TextInput(props: {
   onFocus?: () => void;
   focused?: boolean;
   error?: boolean;
+  sublabel?: string;
 }) {
   const {
+    sublabel,
     value,
     setValue,
     placeholder,
@@ -51,7 +55,7 @@ export default function TextInput(props: {
               : ""
           }${
             error
-              ? "bg-red-100 focus:bg-mono-l-100 dark:focus:bg-mono-d-100"
+              ? "bg-red-100 dark:bg-red-900/50 focus:bg-mono-l-100 dark:focus:bg-mono-d-100"
               : "bg-mono-l-100 dark:bg-mono-d-100"
           }`}
         />
@@ -72,6 +76,11 @@ export default function TextInput(props: {
           />
         )}
       </div>
+      {sublabel && (
+        <p className="text-mono-l-500 dark:text-mono-d-500 font-os text-sm">
+          {sublabel}
+        </p>
+      )}
     </div>
   );
 }
