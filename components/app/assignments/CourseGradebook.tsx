@@ -305,23 +305,7 @@ export default function CourseGradebook(props: { course: Course }) {
           <p className="p">Gradebook</p>
         </div>
 
-        {isTesting?.every((x) => x === false) || (
-          <div className="absolute right-5 top-3/4">
-            <p className="text-red-600 dark:text-red-500 inline">
-              Grade testing in progress!
-            </p>
-            <button
-              className="text-blue-500 hover:bg-slate-100 rounded-md p-1"
-              onClick={() => {
-                setIsTesting(isTesting?.fill(false));
-                setResetMods(true);
-              }}
-            >
-              Reset
-            </button>
-          </div>
-        )}
-        <div className="flex">
+        <div className="flex relative h-fit">
           <div className="children:w-fit flex h-fit gap-2">
             {isTesting?.every((x) => x === false) ? (
               <GradeChip spoiler={false}>
@@ -339,6 +323,50 @@ export default function CourseGradebook(props: { course: Course }) {
               </div>
             )}
           </div>
+          {isTesting?.every((x) => x === false) || (
+            <div>
+              <div className="bg-mono-l-100 dark:bg-mono-d-100 text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 top-full right-0 pointer-events-none mt-0.5 border border-mono-l-300 dark:border-mono-d-300">
+                <div className="flex gap-4 whitespace-nowrap items-center pl-4 pr-2">
+                  <p className="text-sm text-mono-l-500">
+                    You&apos;re in grade testing mode.
+                  </p>
+                  <button
+                    className="cursor-pointer bg-red-50 dark:bg-red-600 text-red-400 dark:text-white rounded-md py-1 px-2 text-sm w-fit pointer-events-auto "
+                    onClick={(e) => {
+                      setIsTesting(isTesting?.fill(false));
+                      setResetMods(true);
+                    }}
+                  >
+                    Reset
+                  </button>
+                </div>
+                <svg
+                  className="absolute text-mono-l-100 dark:text-mono-d-100 h-4 w-8 right-0 bottom-full z-0 translate-y-0 stroke-[20] stroke-mono-l-300 dark:stroke-mono-d-300"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 255 255"
+                  xmlSpace="preserve"
+                >
+                  <polygon
+                    className="fill-current "
+                    points="0,255 127.5,100 255,255"
+                  />
+                </svg>
+                <svg
+                  className="absolute text-mono-l-100 dark:text-mono-d-100 h-4 w-8 right-0 bottom-full z-20 translate-y-0.5"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 255 255"
+                  xmlSpace="preserve"
+                >
+                  <polygon
+                    className="fill-current "
+                    points="0,235 127.5,100 255,235"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <motion.div
