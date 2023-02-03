@@ -208,7 +208,7 @@ export default function AssignmentCategory(props: {
 
       <div className="flex gap-4 ml-12 my-4">
         <button
-          className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+          className="text-accent-300 border border-accent-200 bg-accent-100 dark:text-accent-250 dark:bg-accent-600 dark:border-accent-700 rounded-full text-sm px-4 py-1 flex items-center gap-2"
           onClick={addTestAssignment}
         >
           <IoAdd />
@@ -217,7 +217,7 @@ export default function AssignmentCategory(props: {
 
         {props.addTestCategory && (
           <button
-            className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+            className="text-accent-300 border border-accent-200 bg-accent-100 dark:text-accent-250 dark:bg-accent-600 dark:border-accent-700 rounded-full text-sm px-4 py-1 flex items-center gap-2"
             onClick={props.addTestCategory}
           >
             <IoAdd />
@@ -227,7 +227,7 @@ export default function AssignmentCategory(props: {
 
         {props.removeTestCategory && (
           <button
-            className="text-blue-500 border border-accent-200 bg-accent-100 rounded-full text-sm px-4 py-1 flex items-center gap-2"
+            className="text-accent-300 border border-accent-200 bg-accent-100 dark:text-accent-250 dark:bg-accent-600 dark:border-accent-700 rounded-full text-sm px-4 py-1 flex items-center gap-2"
             onClick={props.removeTestCategory}
           >
             <IoTrashBinOutline />

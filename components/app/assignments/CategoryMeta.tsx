@@ -16,8 +16,8 @@ export default function CategoryMeta(props: {
         <div className="flex items-center">
           <p className="p py-1 pr-3">{`Weight: ${weight}, Average: ${average}`}</p>
           {isTesting && (
-            <div className="flex items-center gap-2 bg-red-50 text-red-400 py-1 px-2 rounded-full">
-              <div className="w-2 h-2 rounded-full bg-red-500 grade-change-glow" />
+            <div className="flex items-center gap-2 bg-red-50 text-red-400 dark:bg-red-600 dark:text-white py-1 px-2 rounded-full">
+              <div className="w-2 h-2 rounded-full bg-red-300 grade-change-glow" />
               <p className="text-sm">Testing</p>
             </div>
           )}
