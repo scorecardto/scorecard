@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -27,6 +28,7 @@ const App: NextPage = () => {
     port.postMessage({ type: "requestCourseDisplayNames" });
     port.postMessage({ type: "requestNotifications" });
     port.postMessage({ type: "requestLoadingState" });
+    port.postMessage({ type: "requestSetup" });
   };
 
   const loadingContext = useContext(LoadingContext);
@@ -51,6 +53,23 @@ const App: NextPage = () => {
     }
     if (msg.type === "setLoadingState") {
       loadingContext.setLoading(msg.loading);
+    }
+    if (msg.type === "setSetup") {
+      if (msg.setup == null) {
+        router.push("/app/connect-account");
+      } else if (msg.setup?.host != null) {
+        // fetch /api/districts
+        axios.get("/api/districts").then((res) => {
+          const districts = res.data.districts;
+          const district = districts.find(
+            (district: any) => district.url === msg.setup.host
+          );
+
+          if (district == null) {
+            router.push("/app/connect-account?error=newlyInvalidDistrict");
+          }
+        });
+      }
     }
   };
 

@@ -43,9 +43,7 @@ export default function Summary() {
 
     if (href.indexOf("#") != -1) {
       const course = href.slice(href.indexOf("#") + 1);
-      let index = data.data?.courses.findIndex(
-        (c) => c.key == course
-      );
+      let index = data.data?.courses.findIndex((c) => c.key == course);
 
       if (index == -1) {
         index = data.data?.courses.findIndex(
@@ -83,7 +81,7 @@ export default function Summary() {
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
       <TopBar courseIdx={course} />
-      <AlertTray />
+      {/* <AlertTray /> */}
 
       <AssignmentsViewer course={course} setCourse={setCourse} />
       {setup && <FinishSetup done={() => setSetup(false)} />}
@@ -138,9 +136,9 @@ export default function Summary() {
 
                   // if within the last 5 days
                   if (new Date().getTime() - date.getTime() < 432000000) {
-                    return `Last updated ${
-                        Math.floor((new Date().getTime() - date.getTime()) / 86400000)
-                    } days ago.`;
+                    return `Last updated ${Math.floor(
+                      (new Date().getTime() - date.getTime()) / 86400000
+                    )} days ago.`;
                   }
 
                   return `Last updated ${date.toLocaleDateString("en-US", {

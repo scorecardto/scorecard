@@ -1,5 +1,5 @@
 {
-  "LAST_UPDATED": 1665287797000,
+  "LAST_UPDATED": 1673290692000,
 
   "status": "success",
   "data": {
@@ -63,8 +63,12 @@
             "url": "https://is-teams.aisd.net/mobileteacher/",
             "pages": []
           },
-          "Time Card": {
+          "time card": {
             "url": "https://is-teams.aisd.net/mobileemp/punch/",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://is-teams.aisd.net/mobilesub/selfserve",
             "pages": []
           },
           "student": {
@@ -84,19 +88,19 @@
         "id": "227901",
         "accounts": {
           "teacher": {
-            "url": "https://teams.austinisd.org/mobileteacher/",
+            "url": "https://austin.erp.frontlineeducation.com/mobileteacher/",
             "pages": []
           },
           "principal": {
-            "url": "https://teams.austinisd.org/mobileemployee/principal/",
+            "url": "https://austin.erp.frontlineeducation.com/mobileemployee/principal/",
             "pages": []
           },
           "student": {
-            "url": "https://grades.austinisd.org/mobile/student/",
+            "url": "https://austin.erp.frontlineeducation.com/mobile/student/",
             "pages": []
           },
           "parent": {
-            "url": "https://grades.austinisd.org/mobile/parent/",
+            "url": "https://austin.erp.frontlineeducation.com/mobile/parent/",
             "pages": []
           }
         }
@@ -155,6 +159,10 @@
         "altName": "Canutillo",
         "id": "071907",
         "accounts": {
+          "substitute": {
+            "url": "https://teams.canutillo-isd.org/mobilesub/selfserve",
+            "pages": []
+          },
           "student": {
             "url": "https://teams.canutillo-isd.org/mobile/student/",
             "pages": []
@@ -413,8 +421,12 @@
         "altName": "Forney",
         "id": "129902",
         "accounts": {
-          "Time Card": {
+          "time card": {
             "url": "https://forney.teams.hosting/mobileemp/punch",
+            "pages": []
+          },
+          "substitute": {
+            "url": "https://forney.teams.hosting/mobilesub/selfserve/",
             "pages": []
           },
           "student": {

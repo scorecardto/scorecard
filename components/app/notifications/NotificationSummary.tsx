@@ -1,6 +1,11 @@
 import { AnimatePresence } from "framer-motion";
 import React, { useContext, useMemo } from "react";
-import { IoChevronForwardOutline } from "react-icons/io5";
+import {
+  IoChevronForwardOutline,
+  IoClose,
+  IoCloseOutline,
+  IoExitOutline,
+} from "react-icons/io5";
 import { NotificationContext } from "scorecard-types";
 import { PortContext } from "../../core/ExtensionConnector";
 import Notification from "./Notification";
@@ -22,7 +27,7 @@ export default function NotificationSummary(props: { courseIdx: number }) {
   const showingNotification = !!unreadNotifications[0];
 
   return (
-    <div className="relative my-4">
+    <div className="notification-summary relative my-4">
       {notifications.map((notification, i) => {
         return (
           <React.Fragment key={i}>
@@ -36,7 +41,7 @@ export default function NotificationSummary(props: { courseIdx: number }) {
       })}
       {showingNotification && (
         <div
-          className="absolute top-1/2 -right-4 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
+          className="absolute top-2 -right-4 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
           tabIndex={props.courseIdx == -1 ? 0 : -1}
           onClick={() => {
             if (port) {
@@ -44,7 +49,7 @@ export default function NotificationSummary(props: { courseIdx: number }) {
             }
           }}
         >
-          <IoChevronForwardOutline />
+          <IoClose />
         </div>
       )}
       {!showingNotification && (

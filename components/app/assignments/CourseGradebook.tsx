@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 import { FiEdit2, FiRotateCw } from "react-icons/fi";
+import { MdClose, MdEdit } from "react-icons/md";
 import { Course, DataContext, GradeCategory } from "scorecard-types";
 import GradeChip from "../GradeChip";
 import AssignmentCategory, { AssignmentData } from "./AssignmentCategory";
@@ -60,60 +61,63 @@ export default function CourseGradebook(props: { course: Course }) {
     }
   }
 
-  function escapeName(evt: React.FocusEvent<HTMLHeadingElement>) {
-    if (evt.currentTarget) {
-      if (
-        saveName &&
-        evt.currentTarget.innerText !== data.courseDisplayNames[course.key]
-      ) {
-        // const newName = evt.currentTarget.innerText.trim();
+  const [editing, setEditing] = useState(false);
 
-        port?.postMessage({
-          type: "updateCourseDisplayName",
-          courseKey: course.key,
-          displayName: evt.currentTarget.innerText.trim(),
-        });
-      } else {
-        evt.currentTarget.innerText =
-          data.courseDisplayNames[course.key] || course.name;
+  const input = useRef<HTMLInputElement>(null);
+  const container = useRef<HTMLDivElement>(null);
+
+  const [customDisplayName, setCustomDisplayName] = useState(
+    data.courseDisplayNames[course.key]
+  );
+
+  const [currentCourse, setCurrentCourse] = useState(course);
+
+  useEffect(() => {
+    if (course !== currentCourse) {
+      setCurrentCourse(course);
+      return;
+    }
+
+    if (editing) {
+      const onEdit = (evt: KeyboardEvent) => {
+        if (evt.key === "Escape") {
+          setEditing(false);
+        }
+      };
+
+      input.current?.focus();
+    } else {
+      if (
+        course.name === customDisplayName ||
+        customDisplayName !== input.current?.value
+      ) {
+        return;
       }
 
-      evt.currentTarget.contentEditable = "false";
-
-      evt.currentTarget.previousElementSibling?.classList.add("opacity-0");
-      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = -1;
+      port?.postMessage({
+        type: "updateCourseDisplayName",
+        courseKey: course.key,
+        displayName: customDisplayName.trim(),
+      });
     }
-  }
-
-  function makeEditable(evt: React.MouseEvent<HTMLHeadingElement>) {
-    if (evt.currentTarget) {
-      evt.currentTarget.contentEditable = "true";
-
-      evt.currentTarget.previousElementSibling?.classList.remove("opacity-0");
-      (evt.currentTarget.previousElementSibling as HTMLElement).tabIndex = 0;
-
-      saveName = true;
-      evt.currentTarget.focus();
-
-      if (
-        getSelection()?.getRangeAt(0).startContainer.parentElement !=
-        evt.currentTarget
-      ) {
-        const range = document.createRange();
-        range.selectNodeContents(evt.currentTarget);
-        getSelection()?.removeAllRanges();
-        getSelection()?.addRange(range);
-      }
-    }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing, course]);
 
   function reset() {
+    setCustomDisplayName(course.name);
     port?.postMessage({
       type: "updateCourseDisplayName",
       courseKey: course.key,
       displayName: course.name,
     });
+    setEditing(false);
   }
+
+  useEffect(() => {
+    if (course) {
+      setCustomDisplayName(data.courseDisplayNames[course.key] || course.name);
+    }
+  }, [course]);
 
   const selectedGradeCategory = data.gradeCategory;
   const defaultGradeCategory = data.data?.gradeCategory;
@@ -281,30 +285,72 @@ export default function CourseGradebook(props: { course: Course }) {
         otherCategories={displayCategories}
         show={showCategoryWeightPrompt}
       />
-      <div className="flex justify-between pl-12 pr-4 pt-8 pb-4 relative">
-        <div className="flex flex-col gap-2">
-          <div className="flex gap-2 items-center relative">
-            <button
-              tabIndex={-1}
-              onClick={reset}
-              className="transition-opacity duration-200 opacity-0 text-mono-l-500 absolute right-full mr-1 hover:bg-slate-100 rounded-md p-1"
-            >
-              <FiRotateCw />
-            </button>
-            <h1
-              tabIndex={0}
-              className="h1 text-3xl outline-0 decoration-3 transition-colors duration-300 decoration-transparent focus:decoration-blue-300 focus:underline"
-              onClick={makeEditable}
-              onKeyDown={updateName}
-              onBlur={escapeName}
-            >
-              {data.courseDisplayNames[course.key] ?? course.name}
-            </h1>
-            <FiEdit2 className="text-mono-l-500" />
-          </div>
-          <p className="p">Gradebook</p>
-        </div>
+      <div className="flex justify-between pl-8 pt-4 pr-4">
+        <div
+          ref={container}
+          className={`flex flex-col rounded-xl relative group mr-20 ${
+            editing ? "" : "hover:bg-mono-l-200 cursor-pointer"
+          }`}
+          tabIndex={0}
+          onFocus={() => {
+            setEditing(true);
+          }}
+          onBlur={(evt) => {
+            setEditing(false);
+          }}
+        >
+          {!editing && (
+            <div className="hidden group-hover:flex absolute bg-accent-100 text-accent-300 z-10 py-2 px-4 rounded-full top-0 left-full whitespace-nowrap translate-x-4 text-sm gap-2 items-center">
+              <MdEdit />
+              <p>Click to Rename</p>
+            </div>
+          )}
+          <div
+            className={`flex gap-2 items-center relative pt-4 px-4 ${
+              editing ? "bg-accent-100" : ""
+            } rounded-xl`}
+          >
+            <input
+              onBlur={(e) => {
+                if (container.current?.contains(e.relatedTarget as Node)) {
+                  return;
+                }
 
+                setEditing(false);
+              }}
+              tabIndex={0}
+              // on press enter, save
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setEditing(false);
+                }
+              }}
+              className={`h1 text-3xl outline-none bg-transparent ${
+                editing ? "pb-4" : "pb-2 cursor-pointer"
+              }`}
+              ref={input}
+              type="text"
+              onChange={(evt) => {
+                setCustomDisplayName(evt.target.value);
+              }}
+              value={customDisplayName}
+              disabled={!editing}
+            />
+          </div>
+          {editing && (
+            // add a reset button
+            <button
+              className="bg-red-50 text-red-400 rounded-md py-1 px-2 text-sm mt-2 w-fit"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                reset();
+              }}
+            >
+              Reset
+            </button>
+          )}
+          {!editing && <p className="px-4 p pb-5">Gradebook</p>}
+        </div>
         <div className="flex relative h-fit">
           <div className="children:w-fit flex h-fit gap-2">
             {isTesting?.every((x) => x === false) ? (
