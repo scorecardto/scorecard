@@ -51,6 +51,7 @@ body {
 
 .grade-change-glow {
   animation: grade-change-glow 1s ease-in-out infinite alternate;
+}
 
 @keyframes notification-glow {
   from {
