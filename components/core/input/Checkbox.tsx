@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import {
   IoCheckbox,
   IoCheckmarkOutline,
@@ -8,25 +8,18 @@ import {
 export default function Checkbox(props: {
   checked: boolean;
   onChange: (checked: boolean) => void;
+  tabIndex: number;
 }) {
+  function onClick(e: MouseEvent<HTMLDivElement>) {
+    props.onChange(!props.checked);
+    e.currentTarget.blur();
+  }
   return (
-    <div>
+    <div tabIndex={props.tabIndex} onClick={onClick}>
       {props.checked ? (
-        <IoCheckbox
-          className={`w-5 h-5 text-accent-300`}
-          onClick={() => {
-            props.onChange(!props.checked);
-            console.log("clicked");
-          }}
-        />
+        <IoCheckbox className={`w-5 h-5 text-accent-300`} />
       ) : (
-        <IoSquareOutline
-          className={`w-5 h-5 text-mono-l-400`}
-          onClick={() => {
-            props.onChange(!props.checked);
-            console.log("clicked");
-          }}
-        />
+        <IoSquareOutline className={`w-5 h-5 text-mono-l-400`} />
       )}
     </div>
   );

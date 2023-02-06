@@ -116,6 +116,7 @@ export default function TableRow(props: {
 
   const filterInputForCount = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === "Enter") evt.currentTarget.blur();
+    if (evt.key.length > 1 || evt.altKey || evt.metaKey || evt.ctrlKey) return;
     if (!evt.key.match(/[0-9]/)) evt.preventDefault();
   };
 
@@ -170,17 +171,23 @@ export default function TableRow(props: {
         <div className="absolute right-full group-one-odd:bg-mono-l-200 dark:group-one-odd:bg-mono-d-300 w-12 h-full">
           <div className="flex flex-row items-center justify-end h-full pr-2">
             {props.test ? (
-              <IoCloseCircle
+              <div
+                className="hover:bg-mono-l-200 dark:hover:bg-mono-d-200 p-0.5 rounded-md focus:bg-accent-250 dark:focus:bg-accent-600 outline-none"
                 onClick={props.remove}
-                className="text-mono-l-500 dark:text-mono-d-500 w-4 h-4"
-              />
+                tabIndex={0}
+              >
+                <IoCloseCircle className="text-mono-l-500 dark:text-mono-d-500 w-4 h-4" />
+              </div>
             ) : (
               <div
                 className={`transition-opacity duration-200 ${
-                  props.showCheckboxes ? "opacity-100" : "opacity-0"
+                  props.showCheckboxes
+                    ? "opacity-100"
+                    : "opacity-0 focus-within:opacity-100"
                 }`}
               >
                 <Checkbox
+                  tabIndex={0}
                   checked={!props.dropped}
                   onChange={(b) => {
                     if (props.assignment.dropped !== !b) {
@@ -233,6 +240,14 @@ export default function TableRow(props: {
           <div className="w-14 hidden md:block">
             <div className="w-14">
               <div className="group relative">
+                {props.assignment.count && (
+                  <div className="hidden group-hover:block absolute right-full mr-1.5 top-1/2 -translate-y-1/2 bg-black/75 rounded-md">
+                    <p className="text-white py-1 px-2">
+                      Weighted {props.assignment.count} point
+                      {props.assignment.count === 1 ? "" : "s"}
+                    </p>
+                  </div>
+                )}
                 <div
                   className="bg-mono-l-300 dark:bg-mono-d-150 rounded-sm"
                   ref={countRef}
