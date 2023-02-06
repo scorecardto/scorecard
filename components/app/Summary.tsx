@@ -47,14 +47,15 @@ export default function Summary() {
 
       if (index == -1) {
         index = data.data?.courses.findIndex(
-          (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+            (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
         );
       }
 
       if (index != undefined && index != -1) {
         setCourse(index);
-        window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
       }
+
+      window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
     }
   }, [setup, data.data?.courses, data.courseDisplayNames]);
 

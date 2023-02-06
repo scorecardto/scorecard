@@ -39,6 +39,20 @@ body {
   --accent-800: #1c0313;
 }
 
+
+@keyframes grade-change-glow {
+  from {
+    box-shadow: 0rem 0rem 0.5rem 0.3rem #f5070755;
+  }
+  to {
+    box-shadow: 0rem 0rem 0.5rem 0.3rem #f5070700;
+  }
+}
+
+.grade-change-glow {
+  animation: grade-change-glow 1s ease-in-out infinite alternate;
+}
+
 @keyframes notification-glow {
   from {
     box-shadow: 0rem 0rem 2rem #426ac600;
@@ -47,6 +61,7 @@ body {
     box-shadow: 0rem 0rem 2rem #426ac655;
   }
 }
+
 .notification-summary .notification-glow {
   animation: notification-glow 1s ease-in-out infinite alternate;
 }

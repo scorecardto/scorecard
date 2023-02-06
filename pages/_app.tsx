@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === " ") {
+      if (e.key === " " || e.key === "Enter") {
         const el = e.view?.document.activeElement as HTMLElement;
 
         if (

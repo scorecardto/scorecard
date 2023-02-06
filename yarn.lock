@@ -2879,7 +2879,7 @@
     "loose-envify" "^1.1.0"
 
 "scorecard-types@github:scorecardto/types":
-  "resolved" "git+ssh://git@github.com/scorecardto/types.git#907b9090cc6d0167dc750feb58c7e59f41c44bd0"
+  "resolved" "git+ssh://git@github.com/scorecardto/types.git#e59e6a8252949533f923cda53274024b26c13bcd"
   "version" "0.0.24"
 
 "semver@^5.6.0":
@@ -3055,7 +3055,12 @@
     "lodash" "^4.17.15"
     "postcss-selector-parser" "^6.0.2"
 
-"tailwindcss@^3.1.4":
+"tailwindcss-scoped-groups@^2.0.0":
+  "integrity" "sha512-uE9PJzfjqzsKlZ0dUjG5yPwBmkEZ/qmrXMLjykRs0otolUHAIclbtV49JQGyeYLo8YA7WPMgzKOg2e4snVyHqw=="
+  "resolved" "https://registry.npmjs.org/tailwindcss-scoped-groups/-/tailwindcss-scoped-groups-2.0.0.tgz"
+  "version" "2.0.0"
+
+"tailwindcss@^3.1.4", "tailwindcss@>=3":
   "integrity" "sha512-NrxbFV4tYsga/hpWbRyUfIaBrNMXDxx5BsHgBS4v5tlyjf+sDsgBg5m9OxjrXIqAS/uR9kicxLKP+bEHI7BSeQ=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.1.4.tgz"
   "version" "3.1.4"
