@@ -3,8 +3,9 @@ import { IoRefreshOutline } from "react-icons/io5";
 import { DataContext, LoadingContext } from "scorecard-types";
 import { PortContext } from "../core/ExtensionConnector";
 import Loading from "../core/util/Loading";
+import Tooltip from "../core/util/Tooltip";
 
-export default function LastUpdated(props: {courseIdx: number}) {
+export default function LastUpdated(props: { courseIdx: number }) {
   const [text, setText] = useState("Click to Reload");
 
   const data = useContext(DataContext);
@@ -71,16 +72,19 @@ export default function LastUpdated(props: {courseIdx: number}) {
         <Loading />
       ) : (
         <div
-          className="text-sm flex gap-2 group items-center cursor-pointer"
+          className="text-sm flex gap-2 group items-center cursor-pointer relative"
           onClick={() => {
             port?.postMessage({ type: "requestReloadContent" });
             loading.setLoading(true);
           }}
         >
           <p className="p">{text}</p>
-          <div tabIndex={props.courseIdx == -1 ? 0 : -1} className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
-            <IoRefreshOutline />
-          </div>
+          <Tooltip
+            className="absolute top-full -left-2 mt-4 hidden group-hover:block"
+            side="left"
+          >
+            <p className="p">Click to refresh</p>
+          </Tooltip>
         </div>
       )}
     </div>

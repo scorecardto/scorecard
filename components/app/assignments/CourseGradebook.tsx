@@ -17,6 +17,7 @@ import Loading from "../../core/util/Loading";
 import GradeTestingButton from "./GradeTestingButton";
 import { IoArrowForward, IoArrowForwardOutline } from "react-icons/io5";
 import CategoryWeightPrompt from "./CategoryWeightPrompt";
+import Tooltip from "../../core/util/Tooltip";
 
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
@@ -371,9 +372,9 @@ export default function CourseGradebook(props: { course: Course }) {
           </div>
           {isTesting?.every((x) => x === false) || (
             <div>
-              <div className="bg-mono-l-100 dark:bg-mono-d-100 text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 top-full right-0 pointer-events-none mt-0.5 border border-mono-l-300 dark:border-mono-d-300">
-                <div className="flex gap-4 whitespace-nowrap items-center pl-4 pr-2">
-                  <p className="text-sm text-mono-l-500">
+              <div className="">
+                <Tooltip className="absolute z-10 top-full right-0">
+                  <p className="text-mono-l-500 pl-2">
                     You&apos;re in grade testing mode.
                   </p>
                   <button
@@ -385,6 +386,11 @@ export default function CourseGradebook(props: { course: Course }) {
                   >
                     Reset
                   </button>
+                </Tooltip>
+              </div>
+              {/* <div className="bg-mono-l-100 dark:bg-mono-d-100 text-center text-xs rounded-lg py-2 group-hover:opacity-100 pointer-events-none mt-0.5 border border-mono-l-300 dark:border-mono-d-300">
+                <div className="flex gap-4 whitespace-nowrap items-center pl-4 pr-2">
+                  
                 </div>
                 <svg
                   className="absolute text-mono-l-100 dark:text-mono-d-100 h-4 w-8 right-0 bottom-full z-0 translate-y-0 stroke-[20] stroke-mono-l-300 dark:stroke-mono-d-300"
@@ -410,7 +416,7 @@ export default function CourseGradebook(props: { course: Course }) {
                     points="0,235 127.5,100 255,235"
                   />
                 </svg>
-              </div>
+              </div> */}
             </div>
           )}
         </div>

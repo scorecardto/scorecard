@@ -47,7 +47,7 @@ export default function Summary() {
 
       if (index == -1) {
         index = data.data?.courses.findIndex(
-            (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+          (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
         );
       }
 
@@ -90,7 +90,7 @@ export default function Summary() {
 
       <div
         className={`max-w-6xl mx-auto px-8 flex flex-col pt-8 w-full ${
-          unreadNotifications.length > 0 ? "gap-8" : "gap-0"
+          unreadNotifications.length > 0 ? "gap-4" : "gap-0"
         }`}
       >
         <div className="flex flex-row justify-between items-end gap-8">
