@@ -107,6 +107,15 @@ module.exports = {
 
       addBase({
         "@font-face": {
+          fontFamily: "Inter",
+          fontStyle: "normal",
+          fontWeight: 600,
+          src: "url(font/Inter-Medium.ttf)",
+        },
+      });
+
+      addBase({
+        "@font-face": {
           fontFamily: "DMSans",
           fontStyle: "italic",
           fontWeight: 400,

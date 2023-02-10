@@ -6,9 +6,9 @@ export default function PrivacyCard(props: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-mono-l-100 dark:bg-mono-d-100 rounded-lg p-4 privacy-card-glow flex flex-col gap-2">
+    <div className="bg-mono-l-200 dark:bg-mono-d-200 rounded-lg p-4 flex flex-col gap-2">
       <div className="flex flex-col gap-2">
-        <h2 className="h2">{props.title}</h2>
+        <h2 className="h2 font-os font-medium">{props.title}</h2>
         <p className="p font-os">{props.description}</p>
       </div>
       <hr className="my-2 border-mono-l-300 dark:border-mono-d-300" />

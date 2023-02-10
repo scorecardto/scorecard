@@ -5,8 +5,10 @@ export default function PrivacyCardLine(props: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex gap-2 items-center text-mono-l-600 dark:text-mono-d-600">
-      <div>{props.children}</div>
+    <div className="flex gap-4 items-center text-mono-l-600 dark:text-mono-d-600 ">
+      <div className="text-mono-l-500 dark:text-mono-d-500">
+        {props.children}
+      </div>
       <p>{props.title}</p>
     </div>
   );

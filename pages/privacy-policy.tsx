@@ -1,69 +1,78 @@
 import Image from "next/image";
 import React from "react";
+import { FiClock, FiKey, FiSave, FiTag, FiTv } from "react-icons/fi";
 import {
+  IoArrowDown,
   IoDesktopOutline,
   IoKeyOutline,
   IoLeafOutline,
   IoSaveOutline,
   IoTimeOutline,
 } from "react-icons/io5";
+import BackLink from "../components/core/BackLink";
 import PrivacyCard from "../components/core/util/PrivacyCard";
 import PrivacyCardLine from "../components/core/util/PrivacyCardLine";
 
 export default function PrivacyPolicy() {
   return (
     <div className="">
-      <div className="px-20">
-        <div className="flex gap-8 flex-col md:flex-row py-8">
-          <div className="md:w-1/2 flex flex-col gap-8">
-            <div>
-              <Image
-                src="/assets/scorecard-512.png"
-                width={64}
-                height={64}
-                alt=""
-              />
+      <BackLink href="/?from=privacy_policy">Back to Home Page</BackLink>
+      <div className="max-w-4xl mx-auto px-10">
+        <div className="flex gap-8 flex-col py-8 w-full">
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
+              <div>
+                <Image
+                  src="/assets/scorecard-512.png"
+                  width={64}
+                  height={64}
+                  alt=""
+                />
+              </div>
+              <h1 className="h1">Privacy Policy</h1>
             </div>
-            <h1 className="h1">Privacy Policy</h1>
             <p className="p">
               Even though we don&apos;t have access to your grades, having an
               app that handles grade data in any way requires that we have a
               privacy policy. You can also view our simplified privacy info
               here.
             </p>
+            <PrivacyCard
+              title="Data We Collect"
+              description="This data is stored anonymously not linked to your grades."
+            >
+              <PrivacyCardLine title="Anonymous Install Date">
+                <FiClock />
+              </PrivacyCardLine>
+              <PrivacyCardLine title="Anonymous ID">
+                <FiTag />
+              </PrivacyCardLine>
+              <PrivacyCardLine title="Anonymous Operating System">
+                <FiTv />
+              </PrivacyCardLine>
+            </PrivacyCard>
+            <PrivacyCard
+              title="Stored On Device"
+              description="This data is stored offline and not accessible to Scorecard."
+            >
+              <PrivacyCardLine title="Frontline Login">
+                <FiKey />
+              </PrivacyCardLine>
+              <PrivacyCardLine title="Current and Past Grades">
+                <FiSave />
+              </PrivacyCardLine>
+            </PrivacyCard>
           </div>
-          <PrivacyCard
-            title="Data We Collect"
-            description="This data is stored anonymously not linked to your grades."
-          >
-            <PrivacyCardLine title="Anonymous Install Date">
-              <IoTimeOutline />
-            </PrivacyCardLine>
-            <PrivacyCardLine title="Anonymous ID">
-              <IoLeafOutline />
-            </PrivacyCardLine>
-            <PrivacyCardLine title="Anonymous Operating System">
-              <IoDesktopOutline />
-            </PrivacyCardLine>
-          </PrivacyCard>
-          <PrivacyCard
-            title="Stored On Device"
-            description="This data is stored offline and not accessible to Scorecard."
-          >
-            <PrivacyCardLine title="Frontline Login">
-              <IoKeyOutline />
-            </PrivacyCardLine>
-            <PrivacyCardLine title="Current and Past Grades">
-              <IoSaveOutline />
-            </PrivacyCardLine>
-          </PrivacyCard>
+        </div>
+        <div>
+          <div className="text-base text-mono-l-600 dark:text-mono-d-600 flex items-center justify-center gap-4 pb-10">
+            <IoArrowDown />
+            <p className="font-os">Legal Version Below</p>
+          </div>
         </div>
       </div>
-      <div className="bg-accent-100 dark:bg-accent-800 px-20">
-        <p className="pt-10 pb-4 font-medium text-lg text-mono-l-600 dark:text-mono-d-600">
-          Legal Version
-        </p>
-        <div className="p-8 shadow-lg bg-white font-os text-sm rounded-md">
+      <div className="bg-accent-100 dark:bg-accent-800 p-20">
+        <div className="p-8 shadow-lg bg-mono-l-100 dark:bg-mono-d-100 dark:text-mono-d-600 font-os text-sm rounded-md">
           <h1>Privacy Policy</h1>
           <p>Last updated: February 06, 2023</p>
           <p>
@@ -204,11 +213,11 @@ export default function PrivacyPolicy() {
           <h3>Usage Data</h3>
           <p>Usage Data is collected automatically when using the Service.</p>
           <p>
-            Usage Data may include information such as Your Device's Internet
-            Protocol address (e.g. IP address), browser type, browser version,
-            the pages of our Service that You visit, the time and date of Your
-            visit, the time spent on those pages, unique device identifiers and
-            other diagnostic data.
+            Usage Data may include information such as Your Device&apos;s
+            Internet Protocol address (e.g. IP address), browser type, browser
+            version, the pages of our Service that You visit, the time and date
+            of Your visit, the time spent on those pages, unique device
+            identifiers and other diagnostic data.
           </p>
           <p>
             When You access the Service by or through a mobile device, We may
@@ -347,11 +356,11 @@ export default function PrivacyPolicy() {
               <p>
                 <strong>To contact You:</strong> To contact You by email,
                 telephone calls, SMS, or other equivalent forms of electronic
-                communication, such as a mobile application's push notifications
-                regarding updates or informative communications related to the
-                functionalities, products or contracted services, including the
-                security updates, when necessary or reasonable for their
-                implementation.
+                communication, such as a mobile application&apos;s push
+                notifications regarding updates or informative communications
+                related to the functionalities, products or contracted services,
+                including the security updates, when necessary or reasonable for
+                their implementation.
               </p>
             </li>
             <li>
@@ -449,7 +458,7 @@ export default function PrivacyPolicy() {
           <h2>Transfer of Your Personal Data</h2>
           <p>
             Your information, including Personal Data, is processed at the
-            Company's operating offices and in any other places where the
+            Company&apos;s operating offices and in any other places where the
             parties involved in the processing are located. It means that this
             information may be transferred to — and maintained on — computers
             located outside of Your state, province, country or other
@@ -528,7 +537,7 @@ export default function PrivacyPolicy() {
             commercially acceptable means to protect Your Personal Data, We
             cannot guarantee its absolute security.
           </p>
-          <h1>Children's Privacy</h1>
+          <h1>Children&apos;s Privacy</h1>
           <p>
             Our Service does not address anyone under the age of 13. We do not
             knowingly collect personally identifiable information from anyone
@@ -541,14 +550,14 @@ export default function PrivacyPolicy() {
           <p>
             If We need to rely on consent as a legal basis for processing Your
             information and Your country requires consent from a parent, We may
-            require Your parent's consent before We collect and use that
+            require Your parent&apos;s consent before We collect and use that
             information.
           </p>
           <h1>Links to Other Websites</h1>
           <p>
             Our Service may contain links to other websites that are not
             operated by Us. If You click on a third party link, You will be
-            directed to that third party's site. We strongly advise You to
+            directed to that third party&apos;s site. We strongly advise You to
             review the Privacy Policy of every site You visit.
           </p>
           <p>
