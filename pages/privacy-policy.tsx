@@ -59,8 +59,10 @@ export default function PrivacyPolicy() {
           </PrivacyCard>
         </div>
       </div>
-      <div className="bg-accent-100 px-20">
-        <p className="pt-10 pb-4 font-medium text-lg">Legal Version</p>
+      <div className="bg-accent-100 dark:bg-accent-800 px-20">
+        <p className="pt-10 pb-4 font-medium text-lg text-mono-l-600 dark:text-mono-d-600">
+          Legal Version
+        </p>
         <div className="p-8 shadow-lg bg-white font-os text-sm rounded-md">
           <h1>Privacy Policy</h1>
           <p>Last updated: February 06, 2023</p>

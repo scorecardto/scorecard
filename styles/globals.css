@@ -70,7 +70,7 @@ body {
 }
 
 .privacy-card-glow {
-  box-shadow: 0rem 0rem 2rem #426ac655;
+  box-shadow: 0rem 0rem 2rem #426ac622;
 }
 .notification-summary .notification-glow {
   animation: notification-glow 1s ease-in-out infinite alternate;
