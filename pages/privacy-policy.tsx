@@ -39,7 +39,7 @@ export default function PrivacyPolicy() {
             </p>
             <PrivacyCard
               title="Data We Collect"
-              description="This data is stored anonymously not linked to your grades."
+              description="This data is stored anonymously and not linked to you."
             >
               <PrivacyCardLine title="Anonymous Install Date">
                 <FiClock />
