@@ -15,6 +15,14 @@ body {
   @apply font-semibold text-4xl text-mono-l-600 dark:text-mono-d-600;
 }
 
+.h2 {
+  @apply font-semibold text-xl text-mono-l-600 dark:text-mono-d-600;
+}
+
+.h3 {
+  @apply font-semibold text-lg text-mono-l-600 dark:text-mono-d-600;
+}
+
 .b {
   @apply text-mono-l-600 dark:text-mono-d-600 font-medium;
 }
@@ -39,7 +47,6 @@ body {
   --accent-800: #1c0313;
 }
 
-
 @keyframes grade-change-glow {
   from {
     box-shadow: 0rem 0rem 0.5rem 0.3rem #f5070755;
@@ -62,6 +69,9 @@ body {
   }
 }
 
+.privacy-card-glow {
+  box-shadow: 0rem 0rem 2rem #426ac655;
+}
 .notification-summary .notification-glow {
   animation: notification-glow 1s ease-in-out infinite alternate;
 }
