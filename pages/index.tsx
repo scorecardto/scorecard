@@ -6,8 +6,18 @@ import Link from "next/link";
 import { IoExtensionPuzzle } from "react-icons/io5";
 import ExampleCourseCard from "../components/info/ExampleCourseCard";
 import ExampleCourseCardArray from "../components/info/ExampleCourseCardArray";
+import { useEffect } from "react"
+import { hasExtension } from "../components/core/ExtensionConnector"
 
 const Home: NextPage = () => {
+
+	hasExtension().then(port => {
+		if (port != null) {
+			port[0].disconnect();
+			window.location.href = "/app";
+		}
+	});
+
   return (
     <div>
       <NextSeo titleTemplate="%s" title="Scorecard: Free Grade Viewer" />
