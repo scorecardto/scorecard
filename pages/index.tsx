@@ -11,12 +11,14 @@ import { hasExtension } from "../components/core/ExtensionConnector"
 
 const Home: NextPage = () => {
 
-	hasExtension().then(port => {
-		if (port != null) {
-			port[0].disconnect();
-			window.location.href = "/app";
-		}
-	});
+	useEffect(() => {
+		hasExtension().then(port => {
+			if (port != null) {
+				port[0].disconnect();
+				window.location.href = "/app";
+			}
+		});
+	}, []);
 
   return (
     <div>
