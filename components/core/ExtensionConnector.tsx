@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Settings, SettingsContext } from "scorecard-types";
+import Link from "next/link";
 
 export type AppLoadState =
   | "LOADING"
@@ -16,6 +17,49 @@ export interface PortContextProvider {
   port: chrome.runtime.Port | null;
 }
 
+export async function hasExtension(otherIndex?: number): Promise<[chrome.runtime.Port | null, any[]]> {
+  if (!(window["chrome"] && chrome.runtime && chrome.runtime["connect"])) return [null, []];
+
+	const OTHER_IDS = ["obgiekpfbkiikbplgclakaghmbmjgbma", "aklngfigbohkefhfdohjddonboonhbaf", "dodjlkfccbjnfiibmnghjhmdemejkaia"];
+
+  const EXTENSION_ID =
+    (otherIndex && OTHER_IDS[otherIndex-1]) || (otherIndex != null && document.cookie.includes("EXT_ID=") &&
+      decodeURIComponent(document.cookie)
+        .split("EXT_ID=")[1]
+        .split(";")[0]) ||
+    "kdcaikhoeplkmicnkjflbbpchjoadaki";
+
+  let port: chrome.runtime.Port | null = chrome.runtime.connect(EXTENSION_ID);
+  let waiting = false;
+
+  let messages: any[] = []
+  port.onMessage.addListener((msg) => messages.push(msg));
+
+  port.onDisconnect.addListener(async () => {
+    chrome.runtime.lastError;
+    otherIndex = (otherIndex ?? -1) + 1;
+    
+    if (otherIndex >= OTHER_IDS.length) {
+      port = null;
+    } else {
+      waiting = true;
+
+      let ret = await hasExtension(otherIndex);
+      port = ret[0];
+      messages = ret[1];
+
+      waiting = false;
+    }
+  });
+
+  await new Promise(r => setTimeout(r, 1));
+  while (waiting) {
+    await new Promise(r => setTimeout(r, 1));
+  }
+
+  return [port, messages];
+}
+
 export default function ExtensionConnector(props: {
   loadState: [AppLoadState, React.Dispatch<React.SetStateAction<AppLoadState>>];
   children: React.ReactNode;
@@ -30,69 +74,59 @@ export default function ExtensionConnector(props: {
 
   const [load, setLoad] = props.loadState;
 
-  const OTHER_IDS = ["obgiekpfbkiikbplgclakaghmbmjgbma", "aklngfigbohkefhfdohjddonboonhbaf"];
-
-  const connectChrome = (otherIndex?: number) => {
-    let connected = false;
-
-    const EXTENSION_ID =
-      (otherIndex && OTHER_IDS[otherIndex]) || (document.cookie.includes("EXT_ID=") &&
-        decodeURIComponent(document.cookie)
-          .split("EXT_ID=")[1]
-          .split(";")[0]) ||
-      "kdcaikhoeplkmicnkjflbbpchjoadaki";
-
-    const port = chrome.runtime.connect(EXTENSION_ID);
-
-    port.onDisconnect.addListener(() => {
-      if(connected) {
-        location.reload();
-      } else {
-        connectChrome(otherIndex != null ? otherIndex + 1 : 0)
+  const connectChrome = () => {
+    hasExtension().then(r => {
+      let port = r[0];
+      if (port == null) {
+        setLoad("ERR_EXT_NOT_INSTALLED");
+        return;
       }
-    });
 
-    setPort(port);
+      port.onDisconnect.addListener(() => location.reload());
 
-    port.onMessage.addListener((msg, port) => {
-      if (msg.type === "handshake") {
-        connected = true;
+      setPort(port);
 
-        if (msg.version === CURRENT_VERSION) {
-          setLoad("DONE");
-          props.onConnect(port);
-        } else {
-          setLoad("ERR_EXT_VERSION");
-        }
-      } else if (msg.type === "setSettings") {
-        const settings: Settings = msg.settings;
+      const onMessage = (msg: any, port: chrome.runtime.Port) => {
+        if (msg.type === "handshake") {
+          if (msg.version === CURRENT_VERSION) {
+            setLoad("DONE");
+            props.onConnect(port);
+          } else {
+            setLoad("ERR_EXT_VERSION");
+          }
+        } else if (msg.type === "setSettings") {
+          const settings: Settings = msg.settings;
 
-        settingsContext.setLoaded(true);
+          settingsContext.setLoaded(true);
 
-        if (settings?.appearance) {
-          settingsContext.setAppearance(settings?.appearance);
+          if (settings?.appearance) {
+            settingsContext.setAppearance(settings?.appearance);
+          }
+          if (settings?.accentColor) {
+            settingsContext.setAccentColor(settings?.accentColor);
+          }
+          if (settings?.spoilerMode) {
+            settingsContext.setSpoilerMode(settings?.spoilerMode);
+          }
+          if (settings?.checkGradesInterval) {
+            settingsContext.setCheckGradesInterval(settings?.checkGradesInterval);
+          }
+          if (settings?.usePushNotifications) {
+            settingsContext.setUsePushNotifications(
+              settings?.usePushNotifications
+            );
+          }
+          if (settings?.deleteNotificationsAfter) {
+            settingsContext.setDeleteNotificationsAfter(
+              settings?.deleteNotificationsAfter
+            );
+          }
         }
-        if (settings?.accentColor) {
-          settingsContext.setAccentColor(settings?.accentColor);
-        }
-        if (settings?.spoilerMode) {
-          settingsContext.setSpoilerMode(settings?.spoilerMode);
-        }
-        if (settings?.checkGradesInterval) {
-          settingsContext.setCheckGradesInterval(settings?.checkGradesInterval);
-        }
-        if (settings?.usePushNotifications) {
-          settingsContext.setUsePushNotifications(
-            settings?.usePushNotifications
-          );
-        }
-        if (settings?.deleteNotificationsAfter) {
-          settingsContext.setDeleteNotificationsAfter(
-            settings?.deleteNotificationsAfter
-          );
-        }
-      }
-      props.onMessage(msg, port);
+        props.onMessage(msg, port);
+      };
+
+      r[1].forEach((msg) => onMessage(msg, r[0]!));
+      port.onMessage.addListener(onMessage);
     });
   };
 
@@ -126,7 +160,7 @@ export default function ExtensionConnector(props: {
       {load === "LOADING" && <p>Loading...</p>}
       {load === "ERR_BROWSER" && <p>Sorry, your browser is not compatible.</p>}
       {load === "ERR_EXT_NOT_INSTALLED" && (
-        <p>Please install Scorecard to continue.</p>
+        <p>Please <Link href="/">install Scorecard</Link> to continue.</p>
       )}
       {load === "ERR_EXT_VERSION" && <p>Your Scorecard is outdated.</p>}
       {load === "DONE" && (
