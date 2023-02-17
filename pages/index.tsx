@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
 	useEffect(() => {
 		hasExtension().then(port => {
-			if (port != null) {
+			if (port[0] != null) {
 				port[0].disconnect();
 				window.location.href = "/app";
 			}

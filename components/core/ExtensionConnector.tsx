@@ -17,8 +17,8 @@ export interface PortContextProvider {
   port: chrome.runtime.Port | null;
 }
 
-export async function hasExtension(otherIndex?: number): [chrome.runtime.Port, any[]] {
-  if (!(window["chrome"] && chrome.runtime && chrome.runtime["connect"])) return null;
+export async function hasExtension(otherIndex?: number): Promise<[chrome.runtime.Port | null, any[]]> {
+  if (!(window["chrome"] && chrome.runtime && chrome.runtime["connect"])) return [null, []];
 
 	const OTHER_IDS = ["obgiekpfbkiikbplgclakaghmbmjgbma", "aklngfigbohkefhfdohjddonboonhbaf", "dodjlkfccbjnfiibmnghjhmdemejkaia"];
 
@@ -29,20 +29,22 @@ export async function hasExtension(otherIndex?: number): [chrome.runtime.Port, a
         .split(";")[0]) ||
     "kdcaikhoeplkmicnkjflbbpchjoadaki";
 
-  let port = chrome.runtime.connect(EXTENSION_ID);
+  let port: chrome.runtime.Port | null = chrome.runtime.connect(EXTENSION_ID);
   let waiting = false;
 
-  let messages = []
+  let messages: any[] = []
   port.onMessage.addListener((msg) => messages.push(msg));
 
   port.onDisconnect.addListener(async () => {
     chrome.runtime.lastError;
-    if (otherIndex + 1 > OTHER_IDS.length) {
+    otherIndex = (otherIndex ?? -1) + 1;
+    
+    if (otherIndex >= OTHER_IDS.length) {
       port = null;
     } else {
       waiting = true;
 
-      let ret = await hasExtension((otherIndex ?? -1) + 1);
+      let ret = await hasExtension(otherIndex);
       port = ret[0];
       messages = ret[1];
 
@@ -84,7 +86,7 @@ export default function ExtensionConnector(props: {
 
       setPort(port);
 
-      const onMessage = (msg, port) => {
+      const onMessage = (msg: any, port: chrome.runtime.Port) => {
         if (msg.type === "handshake") {
           if (msg.version === CURRENT_VERSION) {
             setLoad("DONE");
@@ -123,7 +125,7 @@ export default function ExtensionConnector(props: {
         props.onMessage(msg, port);
       };
 
-      r[1].forEach((msg) => onMessage(msg, r[0]));
+      r[1].forEach((msg) => onMessage(msg, r[0]!));
       port.onMessage.addListener(onMessage);
     });
   };
