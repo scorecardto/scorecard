@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Settings, SettingsContext } from "scorecard-types";
+import Link from "next/link";
 
 export type AppLoadState =
   | "LOADING"
@@ -157,7 +158,7 @@ export default function ExtensionConnector(props: {
       {load === "LOADING" && <p>Loading...</p>}
       {load === "ERR_BROWSER" && <p>Sorry, your browser is not compatible.</p>}
       {load === "ERR_EXT_NOT_INSTALLED" && (
-        <p>Please <a href="/" className="text-blue-500">install Scorecard</a> to continue.</p>
+        <p>Please <Link href="/">install Scorecard</Link> to continue.</p>
       )}
       {load === "ERR_EXT_VERSION" && <p>Your Scorecard is outdated.</p>}
       {load === "DONE" && (
