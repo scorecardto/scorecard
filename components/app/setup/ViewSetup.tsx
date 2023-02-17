@@ -16,6 +16,8 @@ export default function ViewSetup() {
 
   return (
     <FormPage
+      backLinkText="Back to Scorecard"
+      backLink="/app"
       title="Your Setup"
       description="Scorecard uses these login details to extract your grades from Frontline. We do not store your password or grades online."
     >

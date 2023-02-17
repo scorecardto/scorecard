@@ -105,7 +105,7 @@ export default function Preferences(props: {}) {
       >
         <LargeCard>
           <div className="flex justify-between items-center">
-            <p>Appearance</p>
+            <p className="text-mono-l-600 dark:text-mono-d-600">Appearance</p>
             <Dropdown
               tabIndex={0}
               disabled={disabled}
@@ -124,7 +124,7 @@ export default function Preferences(props: {}) {
             />
           </div>
           <div className="flex justify-between items-center">
-            <p>Accent Color</p>
+            <p className="text-mono-l-600 dark:text-mono-d-600">Accent Color</p>
             <div className="flex gap-2">
               <AnimateSharedLayout>
                 {Object.keys(COLOR_OPTIONS).map((key, idx) => {
@@ -190,7 +190,7 @@ export default function Preferences(props: {}) {
             </div>
           </div>
           <div className="flex justify-between items-center">
-            <div>
+            <div className="text-mono-l-600 dark:text-mono-d-600">
               Spoiler Mode
               <p className="p">
                 Hides grades on your Scorecard until hovered over.
@@ -209,7 +209,7 @@ export default function Preferences(props: {}) {
 
         <LargeCard>
           <div className="flex justify-between items-start gap-4">
-            <div>
+            <div className="text-mono-l-600 dark:text-mono-d-600">
               Check for New Grades Every
               <p className="p">
                 This affects how often you recieve notifications.
@@ -235,7 +235,7 @@ export default function Preferences(props: {}) {
             </div>
           </div>
           <div className="flex justify-between items-start gap-4">
-            <div>
+            <div className="text-mono-l-600 dark:text-mono-d-600">
               Push Notifications
               <p className="p">
                 Send notifications to your device. You can still see them in
@@ -255,7 +255,9 @@ export default function Preferences(props: {}) {
           </div>
 
           <div className="flex justify-between items-center gap-4">
-            <p>Delete Notifications After</p>
+            <p className="text-mono-l-600 dark:text-mono-d-600">
+              Delete Notifications After
+            </p>
             <div className="whitespace-nowrap">
               <Dropdown
                 tabIndex={0}

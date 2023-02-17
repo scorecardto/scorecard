@@ -258,7 +258,7 @@ export default function TableRow(props: {
                       evt.currentTarget.value = "";
                     }}
                     onBlur={focusLostForCount}
-                    className={`py-1 px-2 first-letter:cursor-text bg-transparent w-full ${color} dark:${darkColor} text-center border-none  outline-none ${
+                    className={`py-1 px-2 first-letter:cursor-text bg-transparent w-full ${color} dark:${darkColor} text-center border-none outline-none ${
                       editingCount ? "text-red-600 dark:text-red-500" : ""
                     }`}
                     defaultValue={props.count + "ct"}

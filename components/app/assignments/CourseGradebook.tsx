@@ -373,7 +373,10 @@ export default function CourseGradebook(props: { course: Course }) {
           {isTesting?.every((x) => x === false) || (
             <div>
               <div className="">
-                <Tooltip className="absolute z-10 top-full right-0">
+                <Tooltip
+                  className="absolute z-10 top-full right-0"
+                  side="right"
+                >
                   <p className="text-mono-l-500 pl-2">
                     You&apos;re in grade testing mode.
                   </p>

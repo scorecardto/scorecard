@@ -8,6 +8,14 @@ import Tooltip from "../core/util/Tooltip";
 export default function LastUpdated(props: { courseIdx: number }) {
   const [text, setText] = useState("Click to Reload");
 
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReady(true);
+    }, 1000);
+  }, []);
+
   const data = useContext(DataContext);
 
   const date = data.data?.date;
@@ -72,8 +80,11 @@ export default function LastUpdated(props: { courseIdx: number }) {
         <Loading />
       ) : (
         <div
-          className="text-sm flex gap-2 group items-center cursor-pointer relative"
+          className={`text-sm flex gap-2 group items-center cursor-pointer relative transition-opacity duration-200 ${
+            ready ? "opacity-100" : "opacity-50"
+          }`}
           onClick={() => {
+            if (!ready) return;
             port?.postMessage({ type: "requestReloadContent" });
             loading.setLoading(true);
           }}
