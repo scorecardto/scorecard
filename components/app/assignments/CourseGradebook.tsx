@@ -290,7 +290,7 @@ export default function CourseGradebook(props: { course: Course }) {
         <div
           ref={container}
           className={`flex flex-col rounded-xl relative group mr-20 ${
-            editing ? "" : "hover:bg-mono-l-200 cursor-pointer"
+            editing ? "" : "hover:bg-mono-l-200 dark:hover:bg-mono-d-200 cursor-pointer"
           }`}
           tabIndex={0}
           onFocus={() => {
@@ -308,7 +308,7 @@ export default function CourseGradebook(props: { course: Course }) {
           )}
           <div
             className={`flex gap-2 items-center relative pt-4 px-4 ${
-              editing ? "bg-accent-100" : ""
+              editing ? "bg-accent-100 dark:bg-mono-d-300" : ""
             } rounded-xl`}
           >
             <input
