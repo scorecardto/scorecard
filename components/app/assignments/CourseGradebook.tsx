@@ -430,7 +430,11 @@ export default function CourseGradebook(props: { course: Course }) {
       >
         {loaded ? (
           <div className="flex flex-col gap-6 pb-6">
-            {displayCategories?.map((category, idx) => {
+          	{(displayCategories?.length ?? 0) == 0 ?
+          		(
+          			<p className="text-xl text-mono-d-500 dark:text-mono-l-500 text-center m-auto">Nothing to see here yet! Check back later.</p>
+          		)
+         	: displayCategories?.map((category, idx) => {
               return (
                 <AssignmentCategory
                   testing={isTesting?.[idx] ?? false}
