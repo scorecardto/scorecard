@@ -49,8 +49,6 @@ const ViewSetupPage: NextPage = () => {
           search.set(key, value);
         });
 
-        console.log(msg.setup);
-
         router.push(`/app/connect-account?${search.toString()}`);
       } else {
         setupContext.setSetup(msg.setup);

@@ -9,6 +9,7 @@ import AssignmentsViewer from "./assignments/AssignmentsViewer";
 import Context from "./Context";
 import CourseCard from "./CourseCard";
 import NotificationSummary from "./notifications/NotificationSummary";
+import PreferencesButton from "./PreferencesButton";
 import FinishSetup from "./setup/FinishSetup";
 import Toolbar from "./Toolbar";
 import TopBar from "./TopBar";
@@ -109,7 +110,7 @@ export default function Summary() {
         <div className="flex flex-row justify-between items-end gap-8">
           <NotificationSummary courseIdx={course} />
 
-          {/* <Toolbar courseIdx={course} /> */}
+          <PreferencesButton courseIdx={course} />
         </div>
       </div>
 

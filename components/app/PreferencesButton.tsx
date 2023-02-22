@@ -1,16 +1,41 @@
 import Link from "next/link";
 import React from "react";
-import { IoSettingsOutline } from "react-icons/io5";
+import {
+  IoFingerPrintOutline,
+  IoFootstepsOutline,
+  IoHandLeft,
+  IoHandLeftOutline,
+  IoPersonOutline,
+  IoSettingsOutline,
+} from "react-icons/io5";
 
-export default function PreferencesButton(props: {courseIdx: number}) {
+export default function PreferencesButton(props: { courseIdx: number }) {
   return (
-    <Link href={"/app/preferences"}>
-      <div className="flex text-sm items-center gap-2 text-mono-l-500 dark:text-mono-d-500 group cursor-pointer">
-        <div tabIndex={props.courseIdx == -1 ? 0 : -1} className="group-hover:bg-accent-200 dark:group-hover:bg-accent-750 p-1 rounded-md text-mono-l-500 dark:text-mono-d-500">
-          <IoSettingsOutline />
+    <div className="flex gap-2 items-center pb-4">
+      <Link href={"/app/view-setup"}>
+        <div className="flex text-sm items-center gap-2 cursor-pointer py-2 px-4 rounded-lg border border-transparent text-mono-l-500 dark:text-mono-d-500 hover:bg-mono-l-200 hover:border-mono-l-300 dark:hover:bg-mono-d-200 dark:hover:border-mono-d-300">
+          <div tabIndex={props.courseIdx == -1 ? 0 : -1}>
+            <IoPersonOutline />
+          </div>
+          <p>Account</p>
         </div>
-        <p>Preferences</p>
-      </div>
-    </Link>
+      </Link>
+      <Link href={"/app/preferences"}>
+        <div className="flex text-sm items-center gap-2 cursor-pointer py-2 px-4 rounded-lg border border-transparent text-mono-l-500 dark:text-mono-d-500 hover:bg-mono-l-200 hover:border-mono-l-300 dark:hover:bg-mono-d-200 dark:hover:border-mono-d-300">
+          <div tabIndex={props.courseIdx == -1 ? 0 : -1}>
+            <IoSettingsOutline />
+          </div>
+          <p>Settings</p>
+        </div>
+      </Link>
+      <Link href={"/privacy-policy"}>
+        <div className="flex text-sm items-center gap-2 cursor-pointer py-2 px-4 rounded-lg border border-transparent text-mono-l-500 dark:text-mono-d-500 hover:bg-mono-l-200 hover:border-mono-l-300 dark:hover:bg-mono-d-200 dark:hover:border-mono-d-300">
+          <div tabIndex={props.courseIdx == -1 ? 0 : -1}>
+            <IoHandLeftOutline />
+          </div>
+          <p>Privacy</p>
+        </div>
+      </Link>
+    </div>
   );
 }
