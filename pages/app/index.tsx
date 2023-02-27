@@ -26,6 +26,8 @@ const App: NextPage = () => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
     port.postMessage({ type: "requestCourseSettings" });
+    port.postMessage({ type: "requestCourseDisplayNames" });
+    port.postMessage({ type: "requestCoursesLastUpdated" });
     port.postMessage({ type: "requestNotifications" });
     port.postMessage({ type: "requestLoadingState" });
     port.postMessage({ type: "requestSetup" });
@@ -43,6 +45,26 @@ const App: NextPage = () => {
       setLoaded(true);
     }
     if (msg.type == "setCourseSettings") {
+      dataContext.setCourseSettings(msg.settings ?? {});
+    }
+
+    // TODO: only has to check courseDisplayNames and lastUpdated for compatability
+    if (msg.type == "setCourseDisplayNames") {
+      for (const key of Object.keys(msg.courseDisplayNames)) {
+        if (dataContext.courseSettings[key] === null) {
+          dataContext.courseSettings[key] = {};
+        }
+        dataContext.courseSettings[key].displayName = msg.courseDisplayNames[key];
+      }
+      dataContext.setCourseSettings(msg.settings ?? {});
+    }
+    if (msg.type == "setCoursesLastUpdated") {
+      for (const key of Object.keys(msg.lastUpdated)) {
+        if (dataContext.courseSettings[key] === null) {
+          dataContext.courseSettings[key] = {};
+        }
+        dataContext.courseSettings[key].lastUpdated = msg.lastUpdated[key];
+      }
       dataContext.setCourseSettings(msg.settings ?? {});
     }
     if (msg.type === "setGradingCategory") {
