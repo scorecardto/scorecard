@@ -25,7 +25,7 @@ const App: NextPage = () => {
   const onConnect = (port: chrome.runtime.Port) => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
-    port.postMessage({ type: "requestCourseDisplayNames" });
+    port.postMessage({ type: "requestCourseSettings" });
     port.postMessage({ type: "requestNotifications" });
     port.postMessage({ type: "requestLoadingState" });
     port.postMessage({ type: "requestSetup" });
@@ -42,8 +42,8 @@ const App: NextPage = () => {
       dataContext.setData(msg.record);
       setLoaded(true);
     }
-    if (msg.type == "setCourseDisplayNames") {
-      dataContext.setCourseDisplayNames(msg.courseDisplayNames ?? {});
+    if (msg.type == "setCourseSettings") {
+      dataContext.setCourseSettings(msg.settings ?? {});
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradeCategory || 0);

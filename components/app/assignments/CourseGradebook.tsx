@@ -68,7 +68,7 @@ export default function CourseGradebook(props: { course: Course }) {
   const container = useRef<HTMLDivElement>(null);
 
   const [customDisplayName, setCustomDisplayName] = useState(
-    data.courseDisplayNames[course.key]
+    data.courseSettings[course.key]?.displayName
   );
 
   const [currentCourse, setCurrentCourse] = useState(course);
@@ -96,9 +96,9 @@ export default function CourseGradebook(props: { course: Course }) {
       }
 
       port?.postMessage({
-        type: "updateCourseDisplayName",
+        type: "updateCourseSettings",
         courseKey: course.key,
-        displayName: customDisplayName.trim(),
+        settings: { displayName: customDisplayName?.trim() },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,16 +107,16 @@ export default function CourseGradebook(props: { course: Course }) {
   function reset() {
     setCustomDisplayName(course.name);
     port?.postMessage({
-      type: "updateCourseDisplayName",
+      type: "updateCourseSettings",
       courseKey: course.key,
-      displayName: course.name,
+      settings: {displayName: course.name},
     });
     setEditing(false);
   }
 
   useEffect(() => {
     if (course) {
-      setCustomDisplayName(data.courseDisplayNames[course.key] || course.name);
+      setCustomDisplayName(data.courseSettings[course.key]?.displayName ?? course.name);
     }
   }, [course]);
 

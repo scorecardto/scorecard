@@ -16,7 +16,7 @@ import {
   CheckGradesInterval,
   UsePushNotifications,
   DeleteNotificationsAfter,
-  SettingsContext,
+  SettingsContext, CourseSettings,
 } from "scorecard-types";
 import { useEffect, useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
@@ -26,8 +26,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [data, setData] = useState<GradebookRecord | null>(null);
   const [gradeCategory, setGradeCategory] = useState<number>(0);
 
-  const [courseDisplayNames, setCourseDisplayNames] = useState<{
-    [key: string]: string;
+  const [courseSettings, setCourseSettings] = useState<{
+    [key: string]: CourseSettings;
   }>({});
 
   const dataContext = useMemo(
@@ -41,15 +41,15 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       //   // setCourseNames((prev) => ({ ...prev, [id]: name }));
       // },
       // setCourseNames,
-      courseDisplayNames,
-      setCourseDisplayNames,
+      courseSettings,
+      setCourseSettings,
     }),
     [
       data,
       gradeCategory,
       setGradeCategory,
-      courseDisplayNames,
-      setCourseDisplayNames,
+      courseSettings,
+      setCourseSettings,
     ]
   );
 
