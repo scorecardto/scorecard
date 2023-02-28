@@ -49,23 +49,27 @@ const App: NextPage = () => {
     }
 
     // TODO: only has to check courseDisplayNames and lastUpdated for compatability
-    if (msg.type == "setCourseDisplayNames") {
+    if (msg.type == "setCourseDisplayNames" && msg.courseDisplayNames) {
+      const settings = dataContext.courseSettings;
+
       for (const key of Object.keys(msg.courseDisplayNames)) {
-        if (dataContext.courseSettings[key] === null) {
-          dataContext.courseSettings[key] = {};
+        if (settings[key] === undefined) {
+          settings[key] = {};
         }
-        dataContext.courseSettings[key].displayName = msg.courseDisplayNames[key];
+        settings[key].displayName = msg.courseDisplayNames[key];
       }
-      dataContext.setCourseSettings(msg.settings ?? {});
+      dataContext.setCourseSettings(settings);
     }
     if (msg.type == "setCoursesLastUpdated") {
+      const settings = dataContext.courseSettings;
+
       for (const key of Object.keys(msg.lastUpdated)) {
-        if (dataContext.courseSettings[key] === null) {
-          dataContext.courseSettings[key] = {};
+        if (settings[key] === undefined) {
+          settings[key] = {};
         }
-        dataContext.courseSettings[key].lastUpdated = msg.lastUpdated[key];
+        settings[key].lastUpdated = msg.lastUpdated[key];
       }
-      dataContext.setCourseSettings(msg.settings ?? {});
+      dataContext.setCourseSettings(settings);
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradeCategory || 0);
