@@ -97,7 +97,7 @@ export default function Summary() {
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200 h-full">
         <div className="max-w-6xl mx-auto p-8 relative">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {data.data?.courses.map((c, idx) => {
+            {data.data?.courses.filter((c) => !data.courseSettings[c.key]?.hidden).map((c, idx) => {
               const updateString = (() => {
                 if (data.courseSettings[c.key]?.lastUpdated) {
                   const date = new Date(data.courseSettings[c.key].lastUpdated!);
