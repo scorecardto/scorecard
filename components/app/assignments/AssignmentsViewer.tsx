@@ -104,7 +104,13 @@ export default function AssignmentsViewer(props: {
             />
             <div className="flex-1 w-[44rem] overflow-scroll h-full">
               {data.data?.courses[course] ? (
-                <CourseGradebook course={data.data?.courses[course]} />
+                <CourseGradebook course={
+                  (
+                    data.courseOrder?.map(
+                        c => data.data?.courses.find((c2) => c2.key == c)
+                    ) ?? data.data?.courses
+                  ).filter(c => c && !data.courseSettings[c.key]?.hidden)[course]!
+                } />
               ) : (
                 <p></p>
               )}
