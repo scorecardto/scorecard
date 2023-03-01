@@ -29,6 +29,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   const [courseSettings, setCourseSettings] = useState<{
     [key: string]: CourseSettings;
   }>({});
+  const [courseOrder, setCourseOrder] = useState<string[] | null>(null);
 
   const dataContext = useMemo(
     () => ({
@@ -43,6 +44,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       // setCourseNames,
       courseSettings,
       setCourseSettings,
+      courseOrder,
+      setCourseOrder
     }),
     [
       data,
@@ -50,6 +53,8 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       setGradeCategory,
       courseSettings,
       setCourseSettings,
+      courseOrder,
+      setCourseOrder
     ]
   );
 

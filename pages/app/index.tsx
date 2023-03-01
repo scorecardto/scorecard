@@ -26,6 +26,7 @@ const App: NextPage = () => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
     port.postMessage({ type: "requestCourseSettings" });
+    port.postMessage({ type: "requestCourseOrder" });
     port.postMessage({ type: "requestCourseDisplayNames" });
     port.postMessage({ type: "requestCoursesLastUpdated" });
     port.postMessage({ type: "requestNotifications" });
@@ -73,6 +74,9 @@ const App: NextPage = () => {
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradeCategory || 0);
+    }
+    if (msg.type === "setCourseOrder") {
+      dataContext.setCourseOrder(msg.courseOrder);
     }
     if (msg.type === "setNotifications") {
       notificationContext.setNotifications(msg.notifications);
