@@ -142,7 +142,7 @@ export default function Summary() {
                   lastUpdated={updateString}
                   key={idx}
                   onClick={() => {
-                    setCourse(idx);
+                    setCourse(data.data?.courses.findIndex(c2 => c2.key == c.key) ?? 0);
                     (document.activeElement as HTMLElement)?.blur();
                   }}
                   courseName={data.courseSettings[c.key]?.displayName ?? c.name}
