@@ -100,6 +100,12 @@ export default function CourseGradebook(props: { course: Course }) {
         courseKey: course.key,
         settings: { displayName: customDisplayName?.trim() },
       });
+      // TODO: handling for old extension versions
+      port?.postMessage({
+        type: "updateCourseDisplayName",
+        courseKey: course.key,
+        displayName: customDisplayName?.trim(),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editing, course]);
@@ -110,6 +116,12 @@ export default function CourseGradebook(props: { course: Course }) {
       type: "updateCourseSettings",
       courseKey: course.key,
       settings: {displayName: course.name},
+    });
+    // TODO: handling for old extension versions
+    port?.postMessage({
+      type: "updateCourseDisplayName",
+      courseKey: course.key,
+      displayName: course.name,
     });
     setEditing(false);
   }
