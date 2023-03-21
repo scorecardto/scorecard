@@ -162,6 +162,7 @@ export default function Summary() {
                   description1={c.key}
                   description2=" "
                   grade={c.grades[data.gradeCategory]?.value ?? "NG"}
+                  active={c.grades[data.gradeCategory]?.active ?? true}
                   id={c.key}
                   courseIdx={course}
                 />

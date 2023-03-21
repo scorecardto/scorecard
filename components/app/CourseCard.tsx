@@ -8,6 +8,7 @@ export default function CourseCard(props: {
   description1: string;
   description2: string;
   grade: string;
+  active: boolean;
   id: string;
   courseIdx: number;
   onClick(id: string): void;
@@ -40,7 +41,7 @@ export default function CourseCard(props: {
             </div>
           </div>
           <div className="flex-none">
-            <GradeChip>{props.grade}</GradeChip>
+            <GradeChip active={props.active}>{props.grade}</GradeChip>
           </div>
         </div>
       </div>
