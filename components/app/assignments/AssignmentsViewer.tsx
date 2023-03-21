@@ -114,7 +114,7 @@ export default function AssignmentsViewer(props: {
               onClick={() => {
                 setCourse(-1);
               }}
-              className="absolute top-1 right-1 text-mono-l-500 hover:bg-slate-100 rounded-md p-1"
+              className="absolute top-1 right-1 text-mono-l-500 hover:bg-slate-100 dark:hover:bg-mono-d-300 rounded-md p-1"
             >
               <FiX />
             </button>

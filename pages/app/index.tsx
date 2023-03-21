@@ -25,7 +25,10 @@ const App: NextPage = () => {
   const onConnect = (port: chrome.runtime.Port) => {
     port.postMessage({ type: "requestCourses" });
     port.postMessage({ type: "requestGradingCategory" });
+    port.postMessage({ type: "requestCourseSettings" });
+    port.postMessage({ type: "requestCourseOrder" });
     port.postMessage({ type: "requestCourseDisplayNames" });
+    port.postMessage({ type: "requestCoursesLastUpdated" });
     port.postMessage({ type: "requestNotifications" });
     port.postMessage({ type: "requestLoadingState" });
     port.postMessage({ type: "requestSetup" });
@@ -42,11 +45,38 @@ const App: NextPage = () => {
       dataContext.setData(msg.record);
       setLoaded(true);
     }
-    if (msg.type == "setCourseDisplayNames") {
-      dataContext.setCourseDisplayNames(msg.courseDisplayNames ?? {});
+    if (msg.type == "setCourseSettings") {
+      dataContext.setCourseSettings(msg.settings ?? {});
+    }
+
+    // TODO: only has to check courseDisplayNames and lastUpdated for compatability
+    if (msg.type == "setCourseDisplayNames" && msg.courseDisplayNames) {
+      const settings = dataContext.courseSettings;
+
+      for (const key of Object.keys(msg.courseDisplayNames)) {
+        if (settings[key] === undefined) {
+          settings[key] = {};
+        }
+        settings[key].displayName = msg.courseDisplayNames[key];
+      }
+      dataContext.setCourseSettings(settings);
+    }
+    if (msg.type == "setCoursesLastUpdated") {
+      const settings = dataContext.courseSettings;
+
+      for (const key of Object.keys(msg.lastUpdated)) {
+        if (settings[key] === undefined) {
+          settings[key] = {};
+        }
+        settings[key].lastUpdated = msg.lastUpdated[key];
+      }
+      dataContext.setCourseSettings(settings);
     }
     if (msg.type === "setGradingCategory") {
       dataContext.setGradeCategory(msg.gradeCategory || 0);
+    }
+    if (msg.type === "setCourseOrder") {
+      dataContext.setCourseOrder(msg.courseOrder);
     }
     if (msg.type === "setNotifications") {
       notificationContext.setNotifications(msg.notifications);

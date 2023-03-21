@@ -21,14 +21,10 @@ export default function Summary() {
 
   const { unreadNotifications } = useContext(NotificationContext);
 
-  const [lastUpdated, setLastUpdated] = useState<{
-    [key: string]: number;
-  }>({});
-
   const title =
     course === -1
       ? "Your Scorecard"
-      : data.courseDisplayNames[data.data?.courses[course].key ?? ""] ??
+      : data.courseSettings[data.data?.courses[course].key ?? ""]?.displayName ??
         data.data?.courses[course].name;
 
   const [setup, setSetup] = useState(
@@ -48,7 +44,7 @@ export default function Summary() {
 
       if (index == -1) {
         index = data.data?.courses.findIndex(
-          (c) => (data.courseDisplayNames[c.key] ?? c.name) == course
+          (c) => (data.courseSettings[c.key]?.displayName ?? c.name) == course
         );
       }
 
@@ -58,25 +54,9 @@ export default function Summary() {
 
       window.history.pushState({}, "", href.slice(0, href.indexOf("#")));
     }
-  }, [setup, data.data?.courses, data.courseDisplayNames]);
+  }, [setup, data.data?.courses, data.courseSettings]);
 
   const port = useContext(PortContext).port;
-
-  useEffect(() => {
-    port?.postMessage({ type: "requestCoursesLastUpdated" });
-
-    const listener = (msg: any) => {
-      if (msg.type === "setCoursesLastUpdated") {
-        setLastUpdated(msg.lastUpdated);
-      }
-    };
-
-    port?.onMessage.addListener(listener);
-
-    return () => {
-      port?.onMessage.removeListener(listener);
-    };
-  }, []);
 
   return (
     <div className="w-full flex flex-col h-screen">
@@ -117,10 +97,17 @@ export default function Summary() {
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200 h-full">
         <div className="max-w-6xl mx-auto p-8 relative">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {data.data?.courses.map((c, idx) => {
+            {(
+                data.courseOrder?.map(
+                    c => data.data?.courses.find((c2) => c2.key == c)
+                )
+                ?? data.data?.courses
+            )?.filter(c => c && !data.courseSettings[c.key]?.hidden).map((c, idx) => {
+              if (!c) return;
+
               const updateString = (() => {
-                if (lastUpdated[c.key]) {
-                  const date = new Date(lastUpdated[c.key]);
+                if (data.courseSettings[c.key]?.lastUpdated) {
+                  const date = new Date(data.courseSettings[c.key].lastUpdated!);
 
                   // if today
                   if (date.toDateString() == new Date().toDateString()) {
@@ -155,10 +142,10 @@ export default function Summary() {
                   lastUpdated={updateString}
                   key={idx}
                   onClick={() => {
-                    setCourse(idx);
+                    setCourse(data.data?.courses.findIndex(c2 => c2.key == c.key) ?? 0);
                     (document.activeElement as HTMLElement)?.blur();
                   }}
-                  courseName={data.courseDisplayNames[c.key] ?? c.name}
+                  courseName={data.courseSettings[c.key]?.displayName ?? c.name}
                   description1={c.key}
                   description2=" "
                   grade={c.grades[data.gradeCategory]?.value ?? "NG"}

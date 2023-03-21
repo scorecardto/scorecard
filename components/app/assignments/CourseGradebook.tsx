@@ -68,7 +68,7 @@ export default function CourseGradebook(props: { course: Course }) {
   const container = useRef<HTMLDivElement>(null);
 
   const [customDisplayName, setCustomDisplayName] = useState(
-    data.courseDisplayNames[course.key]
+    data.courseSettings[course.key]?.displayName
   );
 
   const [currentCourse, setCurrentCourse] = useState(course);
@@ -96,9 +96,15 @@ export default function CourseGradebook(props: { course: Course }) {
       }
 
       port?.postMessage({
+        type: "updateCourseSettings",
+        courseKey: course.key,
+        settings: { displayName: customDisplayName?.trim() },
+      });
+      // TODO: handling for old extension versions
+      port?.postMessage({
         type: "updateCourseDisplayName",
         courseKey: course.key,
-        displayName: customDisplayName.trim(),
+        displayName: customDisplayName?.trim(),
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,6 +112,12 @@ export default function CourseGradebook(props: { course: Course }) {
 
   function reset() {
     setCustomDisplayName(course.name);
+    port?.postMessage({
+      type: "updateCourseSettings",
+      courseKey: course.key,
+      settings: {displayName: course.name},
+    });
+    // TODO: handling for old extension versions
     port?.postMessage({
       type: "updateCourseDisplayName",
       courseKey: course.key,
@@ -116,7 +128,7 @@ export default function CourseGradebook(props: { course: Course }) {
 
   useEffect(() => {
     if (course) {
-      setCustomDisplayName(data.courseDisplayNames[course.key] || course.name);
+      setCustomDisplayName(data.courseSettings[course.key]?.displayName ?? course.name);
     }
   }, [course]);
 
@@ -290,7 +302,7 @@ export default function CourseGradebook(props: { course: Course }) {
         <div
           ref={container}
           className={`flex flex-col rounded-xl relative group mr-20 ${
-            editing ? "" : "hover:bg-mono-l-200 cursor-pointer"
+            editing ? "" : "hover:bg-mono-l-200 dark:hover:bg-mono-d-200 cursor-pointer"
           }`}
           tabIndex={0}
           onFocus={() => {
@@ -308,7 +320,7 @@ export default function CourseGradebook(props: { course: Course }) {
           )}
           <div
             className={`flex gap-2 items-center relative pt-4 px-4 ${
-              editing ? "bg-accent-100" : ""
+              editing ? "bg-accent-100 dark:bg-mono-d-300" : ""
             } rounded-xl`}
           >
             <input
@@ -430,7 +442,11 @@ export default function CourseGradebook(props: { course: Course }) {
       >
         {loaded ? (
           <div className="flex flex-col gap-6 pb-6">
-            {displayCategories?.map((category, idx) => {
+          	{(displayCategories?.length ?? 0) == 0 ?
+          		(
+          			<p className="text-xl text-mono-d-500 dark:text-mono-l-500 text-center m-auto">Nothing to see here yet! Check back later.</p>
+          		)
+         	: displayCategories?.map((category, idx) => {
               return (
                 <AssignmentCategory
                   testing={isTesting?.[idx] ?? false}

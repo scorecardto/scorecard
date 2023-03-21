@@ -38,7 +38,16 @@ export default function AssignmentsSidebar(props: {
                     : ""
                 }`}
               >
-                {data.courseDisplayNames[c.key] ?? c.name}
+                {data.courseSettings[c.key]?.displayName ?? c.name}
+              </p>
+              <p
+              	className={`p ${
+                     currentCourse === idx
+              	    ? "text-accent-300 dark:text-accent-250"
+              	   	: ""
+         	    }`}
+              >
+              	{c.grades[gradingPeriod]?.value ?? "NG"}
               </p>
             </div>
           );

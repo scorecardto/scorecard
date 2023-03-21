@@ -160,7 +160,7 @@ export default function ExtensionConnector(props: {
       {load === "LOADING" && <p>Loading...</p>}
       {load === "ERR_BROWSER" && <p>Sorry, your browser is not compatible.</p>}
       {load === "ERR_EXT_NOT_INSTALLED" && (
-        <p>Please <Link href="/">install Scorecard</Link> to continue.</p>
+        <p>Please <Link href="/link/chrome" className="text-blue-500">install Scorecard</Link> to continue.</p>
       )}
       {load === "ERR_EXT_VERSION" && <p>Your Scorecard is outdated.</p>}
       {load === "DONE" && (

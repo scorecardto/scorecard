@@ -35,7 +35,7 @@ export default function CourseCard(props: {
               <b className="text-ellipsis overflow-hidden leading-normal b">
                 {props.courseName}
               </b>
-              <div className="flex flex-col gap-3 children:text-ellipsis children:overflow-hidden p">
+              <div className="flex flex-col gap-3 children:text-ellipsis p">
                 <p>{props.lastUpdated}</p>
               </div>
             </div>
