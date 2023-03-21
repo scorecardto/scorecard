@@ -14,7 +14,7 @@ export default function GradeChip(props: {
     <div
       className={`leading-none flex-none rounded-xl px-3 group min-w-[3rem] flex justify-center gap-2 items-center ${
         props.faded || !props.active
-          ? "bg-accent-100"
+          ? "bg-accent-100 dark:bg-accent-700"
           : "from-accent-400 to-accent-500 bg-gradient-to-tr"
       }`}
     >
