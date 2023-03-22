@@ -130,6 +130,7 @@ export default function AssignmentCategory(props: {
         weight={props.category.weight}
         average={average}
         isTesting={props.testing}
+        assignments={assignments}
       />
 
       <div className="flex">

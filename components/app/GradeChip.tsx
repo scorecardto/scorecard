@@ -13,7 +13,9 @@ export default function GradeChip(props: {
   return (
     <div
       className={`leading-none flex-none rounded-xl px-3 group min-w-[3rem] flex justify-center gap-2 items-center ${
-        props.faded || !props.active
+        props.faded
+          ? "bg-mono-l-300 dark:bg-mono-d-300"
+          : props.active === false
           ? "bg-accent-100 dark:bg-accent-700"
           : "from-accent-400 to-accent-500 bg-gradient-to-tr"
       }`}
@@ -22,7 +24,11 @@ export default function GradeChip(props: {
         {spoiler && (
           <p
             className={`align-middle font-mono group-hover:hidden text-center ${
-              props.faded || !props.active ? "text-accent-300" : "text-white"
+              props.faded
+                ? "text-mono-l-500 dark:text-mono-d-500"
+                : props.active === false
+                ? "text-accent-300"
+                : "text-white"
             }`}
           >
             {". . ."}
@@ -31,12 +37,20 @@ export default function GradeChip(props: {
         <p
           className={`align-middle text-center font-mono ${
             spoiler ? "hidden group-hover:block" : ""
-          } ${props.faded || !props.active ? "text-accent-300" : "text-white"}`}
+          } ${
+            props.faded
+              ? "text-mono-l-500 dark:text-mono-d-500"
+              : props.active === false
+              ? "text-accent-300"
+              : "text-white"
+          }`}
         >
           {props.children ?? "NG"}
         </p>
       </div>
-      {!props.active && <BsPatchCheckFill className="text-accent-300 " />}
+      {props.active === false && (
+        <BsPatchCheckFill className="text-accent-300 " />
+      )}
     </div>
   );
 }
