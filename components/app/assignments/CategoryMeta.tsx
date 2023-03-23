@@ -87,7 +87,7 @@ export default function CategoryMeta(props: {
           value={`${assignmentCount}`}
         />
         <CategoryMicroMeta name="Total Points" value={`${totalPoints}`} />
-        <CategoryMicroMeta name="Percent Known" value={`${percentKnown}%`} />
+        <CategoryMicroMeta name="Percent Known" value={`${percentKnown.toFixed(2)}%`} />
         {!isNaN(exactAverage) && (
           <CategoryMicroMeta
             name="Exact Average"
