@@ -160,6 +160,7 @@ export default function Summary() {
                 if (listView) {
                   return (
                     <CourseRow
+                      idx={idx}
                       courseName={
                         data.courseSettings[c.key]?.displayName ?? c.name
                       }
@@ -179,6 +180,7 @@ export default function Summary() {
                   return (
                     <CourseCard
                       lastUpdated={updateString}
+                      idx={idx}
                       key={idx}
                       onClick={() => {
                         setCourse(

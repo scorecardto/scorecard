@@ -2,6 +2,7 @@ import Link from "next/link";
 import GradeChip from "./GradeChip";
 import { Course, DataContext, NotificationContext } from "scorecard-types";
 import { useContext } from "react";
+import { motion } from "framer-motion";
 
 export default function CourseCard(props: {
   courseName: string;
@@ -13,13 +14,17 @@ export default function CourseCard(props: {
   courseIdx: number;
   onClick(id: string): void;
   lastUpdated: string;
+  idx: number;
 }) {
   const notifications = useContext(NotificationContext);
 
   // notifications.notifications[0].
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, translateY: -10 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ duration: 0.2, delay: props.idx * 0.05 }}
       className=""
       onClick={(e) => {
         props.onClick(props.id);
@@ -45,6 +50,6 @@ export default function CourseCard(props: {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
