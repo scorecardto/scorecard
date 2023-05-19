@@ -40,7 +40,7 @@ export default function CourseRow(props: {
               return (
                 <div
                   key={idx}
-                  className="flex flex-row gap-2 w-[5.5rem] my-2 border border-mono-l-200 p-1.5 last:border-r border-r-0 first:rounded-l-md last:rounded-r-md"
+                  className="flex flex-row gap-2 w-[5.5rem] my-2 border border-mono-l-200 dark:border-mono-d-300 p-1.5 last:border-r border-r-0 first:rounded-l-md last:rounded-r-md"
                 >
                   <GradeChip active={grade?.active}>{grade?.value}</GradeChip>
                 </div>
