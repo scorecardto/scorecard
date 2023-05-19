@@ -338,7 +338,10 @@ export default function CourseGradebook(props: { course: Course }) {
   );
 
   useEffect(() => {
-    if (!displayCategories) setExactAverage(undefined);
+    if (!displayCategories) {
+      setExactAverage(undefined);
+      return;
+    }
 
     let sum = 0;
     let weightSum = 0;
@@ -510,7 +513,11 @@ export default function CourseGradebook(props: { course: Course }) {
           <div className="w-full rounded-full">
             <GradebookMeta
               name="Exact Average"
-              value={isNaN(exactAverage) ? "NG" : exactAverage.toFixed(2)}
+              value={
+                exactAverage == null || isNaN(exactAverage)
+                  ? "NG"
+                  : exactAverage.toFixed(2)
+              }
             />
           </div>
         </div>
