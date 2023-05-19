@@ -124,7 +124,7 @@ export default function AssignmentCategory(props: {
   }, [showCheckboxes]);
 
   return (
-    <div>
+    <div className="w-full">
       <CategoryMeta
         name={props.category.name}
         weight={props.category.weight}
@@ -136,7 +136,7 @@ export default function AssignmentCategory(props: {
       <div className="flex">
         <div
           ref={siderailRef}
-          className={`w-12 relative top-0 bottom-0 ${
+          className={`w-12 flex-shrink-0 relative top-0 bottom-0 ${
             showCheckboxes ? "" : "z-10"
           }`}
           onMouseEnter={() => {

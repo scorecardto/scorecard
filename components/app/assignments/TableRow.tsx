@@ -168,7 +168,7 @@ export default function TableRow(props: {
       className={`group-one text-sm pr-4 odd:bg-mono-l-200 dark:odd:bg-mono-d-300`}
     >
       <div className="flex items-center whitespace-nowrap justify-start relative py-1">
-        <div className="absolute right-full group-one-odd:bg-mono-l-200 dark:group-one-odd:bg-mono-d-300 w-12 h-full">
+        <div className="absolute right-full group-one-odd:bg-mono-l-200 dark:group-one-odd:bg-mono-d-300 w-12 h-full shrink-0">
           <div className="flex flex-row items-center justify-end h-full pr-2">
             {props.test ? (
               <div
@@ -202,7 +202,7 @@ export default function TableRow(props: {
           </div>
         </div>
 
-        <div className="w-full pr-2 py-1">
+        <div className="w-full pr-2 py-1 mr-8">
           <p className={`${color} dark:${darkColor}`}>
             {props.assignment.name}
           </p>
@@ -234,7 +234,7 @@ export default function TableRow(props: {
                 : ""}
             </p>
           </div>
-          <div className="w-14 hidden md:block">
+          <div className="w-14 hidden lg:block">
             <p className="p">{props.dropped ? "Dropped" : ""}</p>
           </div>
           <div className="w-14 hidden md:block">

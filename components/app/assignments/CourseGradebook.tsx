@@ -259,7 +259,7 @@ export default function CourseGradebook(props: { course: Course }) {
       count += weight;
     });
 
-    return Math.round(sum / count);
+    return sum / count;
   };
 
   const [testCategoryIndex, setTestCategoryIndex] = useState(1);
@@ -333,8 +333,12 @@ export default function CourseGradebook(props: { course: Course }) {
     return sum;
   }, [displayCategories]);
 
-  const exactAverage = useMemo(() => {
-    if (!displayCategories) return 0;
+  const [exactAverage, setExactAverage] = useState<number | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (!displayCategories) setExactAverage(undefined);
 
     let sum = 0;
     let weightSum = 0;
@@ -348,7 +352,7 @@ export default function CourseGradebook(props: { course: Course }) {
       weightSum += category.weight ?? 0;
     });
 
-    return sum / weightSum;
+    setExactAverage(sum / weightSum);
   }, [displayCategories]);
 
   const percentKnown = useMemo(() => {
@@ -516,7 +520,7 @@ export default function CourseGradebook(props: { course: Course }) {
         animate={controls}
       >
         {loaded ? (
-          <div className="flex flex-col gap-6 pb-6">
+          <div className="flex flex-col gap-6 pb-6 w-full">
             {(displayCategories?.length ?? 0) == 0 ? (
               <p className="text-xl text-mono-d-500 dark:text-mono-l-500 text-center m-auto">
                 Nothing to see here yet! Check back later.
@@ -535,8 +539,9 @@ export default function CourseGradebook(props: { course: Course }) {
                         setAverage(
                           total == null || isNaN(total)
                             ? "NG"
-                            : total.toString()
+                            : Math.round(total).toString()
                         );
+                        setExactAverage(total);
                       }
                     }}
                     sum={sumCategory}
