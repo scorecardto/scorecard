@@ -1,6 +1,6 @@
 import { DefaultSeo, NextSeo } from "next-seo";
 import React, { useContext, useEffect, useState } from "react";
-import { IoTrendingUp } from "react-icons/io5";
+import { IoTimerOutline, IoTrendingUp } from "react-icons/io5";
 import { DataContext, NotificationContext } from "scorecard-types";
 import { PortContext } from "../core/ExtensionConnector";
 import Dropdown from "../core/input/Dropdown";
@@ -59,7 +59,8 @@ export default function Summary() {
 
   const port = useContext(PortContext).port;
 
-  const listView = true;
+  const [listView, setListView] = useState(false);
+
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
@@ -79,6 +80,13 @@ export default function Summary() {
         <div className="flex flex-row justify-between items-end gap-8">
           <h1 className="flex-shrink-0 h1">Your Scorecard</h1>
           <div className="flex gap-2">
+            <button
+              className="flex gap-2 items-center bg-accent-100 border border-accent-200 dark:bg-accent-600 dark:border-accent-700 rounded-md py-2 px-4 text-accent-300 dark:text-accent-100"
+              onClick={() => setListView(!listView)}
+            >
+              <IoTimerOutline />
+              {listView && <p>Back to Present</p>}
+            </button>
             <Dropdown
               options={data.data?.gradeCategoryNames ?? []}
               selected={data.gradeCategory}
