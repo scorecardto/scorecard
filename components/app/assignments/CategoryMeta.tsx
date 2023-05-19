@@ -84,7 +84,7 @@ export default function CategoryMeta(props: {
       <div className="flex gap-4">
         <CategoryMicroMeta name="Assignments" value={`${assignmentCount}`} />
         <CategoryMicroMeta name="Total Points" value={`${totalPoints}`} />
-        <CategoryMicroMeta name="Percent Known" value={`${percentKnown}%`} />
+        <CategoryMicroMeta name="Percent Known" value={`${percentKnown.toFixed(2)}%`} />
         {!isNaN(exactAverage) && (
           <CategoryMicroMeta
             name="Exact Average"
