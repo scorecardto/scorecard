@@ -13,6 +13,7 @@ import PreferencesButton from "./PreferencesButton";
 import FinishSetup from "./setup/FinishSetup";
 import Toolbar from "./Toolbar";
 import TopBar from "./TopBar";
+import CourseRow from "./CourseRow";
 
 export default function Summary() {
   const data = useContext(DataContext);
@@ -24,8 +25,8 @@ export default function Summary() {
   const title =
     course === -1
       ? "Your Scorecard"
-      : data.courseSettings[data.data?.courses[course].key ?? ""]?.displayName ??
-        data.data?.courses[course].name;
+      : data.courseSettings[data.data?.courses[course].key ?? ""]
+          ?.displayName ?? data.data?.courses[course].name;
 
   const [setup, setSetup] = useState(
     // true if setup in url params
@@ -58,6 +59,7 @@ export default function Summary() {
 
   const port = useContext(PortContext).port;
 
+  const listView = true;
   return (
     <div className="w-full flex flex-col h-screen">
       <NextSeo title={title} />
@@ -96,66 +98,102 @@ export default function Summary() {
 
       <div className="w-full bg-mono-l-200 dark:bg-mono-d-200 h-full">
         <div className="max-w-6xl mx-auto p-8 relative">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            className={
+              listView
+                ? "gap-4 flex flex-col"
+                : "grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+            }
+          >
             {(
-                data.courseOrder?.map(
-                    c => data.data?.courses.find((c2) => c2.key == c)
-                )
-                ?? data.data?.courses
-            )?.filter(c => c && !data.courseSettings[c.key]?.hidden).map((c, idx) => {
-              if (!c) return;
+              data.courseOrder?.map((c) =>
+                data.data?.courses.find((c2) => c2.key == c)
+              ) ?? data.data?.courses
+            )
+              ?.filter((c) => c && !data.courseSettings[c.key]?.hidden)
+              .map((c, idx) => {
+                if (!c) return;
 
-              const updateString = (() => {
-                if (data.courseSettings[c.key]?.lastUpdated) {
-                  const date = new Date(data.courseSettings[c.key].lastUpdated!);
+                const updateString = (() => {
+                  if (data.courseSettings[c.key]?.lastUpdated) {
+                    const date = new Date(
+                      data.courseSettings[c.key].lastUpdated!
+                    );
 
-                  // if today
-                  if (date.toDateString() == new Date().toDateString()) {
-                    return `Last updated today.`;
+                    // if today
+                    if (date.toDateString() == new Date().toDateString()) {
+                      return `Last updated today.`;
+                    }
+
+                    // if yesterday
+                    if (
+                      date.toDateString() ==
+                      new Date(new Date().getTime() - 86400000).toDateString()
+                    ) {
+                      return `Last updated yesterday.`;
+                    }
+
+                    // if within the last 5 days
+                    if (new Date().getTime() - date.getTime() < 432000000) {
+                      return `Last updated ${Math.floor(
+                        (new Date().getTime() - date.getTime()) / 86400000
+                      )} days ago.`;
+                    }
+
+                    return `Last updated ${date.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}.`;
+                  } else {
+                    return "No recent updates.";
                   }
+                })();
 
-                  // if yesterday
-                  if (
-                    date.toDateString() ==
-                    new Date(new Date().getTime() - 86400000).toDateString()
-                  ) {
-                    return `Last updated yesterday.`;
-                  }
-
-                  // if within the last 5 days
-                  if (new Date().getTime() - date.getTime() < 432000000) {
-                    return `Last updated ${Math.floor(
-                      (new Date().getTime() - date.getTime()) / 86400000
-                    )} days ago.`;
-                  }
-
-                  return `Last updated ${date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}.`;
+                if (listView) {
+                  return (
+                    <CourseRow
+                      courseName={
+                        data.courseSettings[c.key]?.displayName ?? c.name
+                      }
+                      course={c}
+                      key={idx}
+                      onClick={() => {
+                        setCourse(
+                          data.data?.courses.findIndex(
+                            (c2) => c2.key == c.key
+                          ) ?? 0
+                        );
+                        (document.activeElement as HTMLElement)?.blur();
+                      }}
+                    />
+                  );
                 } else {
-                  return "No recent updates.";
+                  return (
+                    <CourseCard
+                      lastUpdated={updateString}
+                      key={idx}
+                      onClick={() => {
+                        setCourse(
+                          data.data?.courses.findIndex(
+                            (c2) => c2.key == c.key
+                          ) ?? 0
+                        );
+                        (document.activeElement as HTMLElement)?.blur();
+                      }}
+                      courseName={
+                        data.courseSettings[c.key]?.displayName ?? c.name
+                      }
+                      description1={c.key}
+                      description2=" "
+                      grade={c.grades[data.gradeCategory]?.value ?? "NG"}
+                      active={c.grades[data.gradeCategory]?.active ?? true}
+                      id={c.key}
+                      courseIdx={course}
+                    />
+                    //
+                  );
                 }
-              })();
-              return (
-                <CourseCard
-                  lastUpdated={updateString}
-                  key={idx}
-                  onClick={() => {
-                    setCourse(data.data?.courses.findIndex(c2 => c2.key == c.key) ?? 0);
-                    (document.activeElement as HTMLElement)?.blur();
-                  }}
-                  courseName={data.courseSettings[c.key]?.displayName ?? c.name}
-                  description1={c.key}
-                  description2=" "
-                  grade={c.grades[data.gradeCategory]?.value ?? "NG"}
-                  active={c.grades[data.gradeCategory]?.active ?? true}
-                  id={c.key}
-                  courseIdx={course}
-                />
-                //
-              );
-            })}
+              })}
           </div>
         </div>
       </div>

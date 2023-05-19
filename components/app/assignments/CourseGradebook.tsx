@@ -18,6 +18,8 @@ import GradeTestingButton from "./GradeTestingButton";
 import { IoArrowForward, IoArrowForwardOutline } from "react-icons/io5";
 import CategoryWeightPrompt from "./CategoryWeightPrompt";
 import Tooltip from "../../core/util/Tooltip";
+import { CategoryMicroMeta } from "./CategoryMeta";
+import GradebookMeta from "./GradebookMeta";
 
 export default function CourseGradebook(props: { course: Course }) {
   const { course } = props;
@@ -115,7 +117,7 @@ export default function CourseGradebook(props: { course: Course }) {
     port?.postMessage({
       type: "updateCourseSettings",
       courseKey: course.key,
-      settings: {displayName: course.name},
+      settings: { displayName: course.name },
     });
     // TODO: handling for old extension versions
     port?.postMessage({
@@ -128,7 +130,9 @@ export default function CourseGradebook(props: { course: Course }) {
 
   useEffect(() => {
     if (course) {
-      setCustomDisplayName(data.courseSettings[course.key]?.displayName ?? course.name);
+      setCustomDisplayName(
+        data.courseSettings[course.key]?.displayName ?? course.name
+      );
     }
   }, [course]);
 
@@ -291,6 +295,66 @@ export default function CourseGradebook(props: { course: Course }) {
     setDisplayCategories(newCategories);
   };
 
+  const totalPoints = useMemo(() => {
+    if (!displayCategories) return 0;
+
+    let sum = 0;
+
+    displayCategories.forEach((category) => {
+      if (category.assignments) {
+        sum += category.assignments.reduce((x, a) => {
+          if (a.dropped) return x;
+          return x + (a.count ?? 0);
+        }, 0);
+      }
+    });
+
+    return sum;
+  }, [displayCategories]);
+
+  const usablePoints = useMemo(() => {
+    if (!displayCategories) return 0;
+
+    let sum = 0;
+
+    displayCategories.forEach((category) => {
+      if (category.assignments) {
+        sum += category.assignments.reduce((x, a) => {
+          if (a.dropped) return x;
+
+          const grade: number = parseFloat(a.grade ?? "");
+          if (!isNaN(grade)) return x + (a.count ?? 0);
+          if (a.grade === "MSG") return x + (a.count ?? 0);
+          return x;
+        }, 0);
+      }
+    });
+
+    return sum;
+  }, [displayCategories]);
+
+  const exactAverage = useMemo(() => {
+    if (!displayCategories) return 0;
+
+    let sum = 0;
+    let weightSum = 0;
+
+    displayCategories.forEach((category) => {
+      const avg = parseFloat(category.average);
+
+      if (isNaN(avg)) return;
+
+      sum += avg * (category.weight ?? 0);
+      weightSum += category.weight ?? 0;
+    });
+
+    return sum / weightSum;
+  }, [displayCategories]);
+
+  const percentKnown = useMemo(() => {
+    return Math.round((usablePoints / totalPoints) * 100);
+  }, [totalPoints, usablePoints]);
+
   return (
     <motion.div className="flex flex-col gap-4">
       <CategoryWeightPrompt
@@ -302,7 +366,9 @@ export default function CourseGradebook(props: { course: Course }) {
         <div
           ref={container}
           className={`flex flex-col rounded-xl relative group mr-20 ${
-            editing ? "" : "hover:bg-mono-l-200 dark:hover:bg-mono-d-200 cursor-pointer"
+            editing
+              ? ""
+              : "hover:bg-mono-l-200 dark:hover:bg-mono-d-200 cursor-pointer"
           }`}
           tabIndex={0}
           onFocus={() => {
@@ -362,7 +428,6 @@ export default function CourseGradebook(props: { course: Course }) {
               Reset
             </button>
           )}
-          {!editing && <p className="px-4 p pb-5">Gradebook</p>}
         </div>
         <div className="flex relative h-fit">
           <div className="children:w-fit flex h-fit gap-2">
@@ -436,62 +501,76 @@ export default function CourseGradebook(props: { course: Course }) {
           )}
         </div>
       </div>
+      {!editing && (
+        <div className="w-full px-12">
+          <div className="w-full rounded-full">
+            <GradebookMeta
+              name="Exact Average"
+              value={isNaN(exactAverage) ? "NG" : exactAverage.toFixed(2)}
+            />
+          </div>
+        </div>
+      )}
       <motion.div
         transition={{ duration: 0.3, type: "keyframes", ease: "easeOut" }}
         animate={controls}
       >
         {loaded ? (
           <div className="flex flex-col gap-6 pb-6">
-          	{(displayCategories?.length ?? 0) == 0 ?
-          		(
-          			<p className="text-xl text-mono-d-500 dark:text-mono-l-500 text-center m-auto">Nothing to see here yet! Check back later.</p>
-          		)
-         	: displayCategories?.map((category, idx) => {
-              return (
-                <AssignmentCategory
-                  testing={isTesting?.[idx] ?? false}
-                  key={idx}
-                  category={category}
-                  setCategoryAverage={(avg: number | undefined) => {
-                    if (moddedAvgs) {
-                      moddedAvgs[idx] = avg;
-                      const total = sumTotal();
-                      setAverage(
-                        total == null || isNaN(total) ? "NG" : total.toString()
-                      );
-                    }
-                  }}
-                  sum={sumCategory}
-                  setChanged={(changed: boolean) => {
-                    setIsTesting((isTesting) => {
-                      return isTesting?.map((x, i) =>
-                        i === idx ? changed : x
-                      );
-                    });
-                  }}
-                  reset={resetMods}
-                  addTestCategory={
-                    idx === displayCategories.length - 1
-                      ? () => {
-                          setIsTesting(isTesting?.fill(false));
-                          setResetMods(true);
+            {(displayCategories?.length ?? 0) == 0 ? (
+              <p className="text-xl text-mono-d-500 dark:text-mono-l-500 text-center m-auto">
+                Nothing to see here yet! Check back later.
+              </p>
+            ) : (
+              displayCategories?.map((category, idx) => {
+                return (
+                  <AssignmentCategory
+                    testing={isTesting?.[idx] ?? false}
+                    key={idx}
+                    category={category}
+                    setCategoryAverage={(avg: number | undefined) => {
+                      if (moddedAvgs) {
+                        moddedAvgs[idx] = avg;
+                        const total = sumTotal();
+                        setAverage(
+                          total == null || isNaN(total)
+                            ? "NG"
+                            : total.toString()
+                        );
+                      }
+                    }}
+                    sum={sumCategory}
+                    setChanged={(changed: boolean) => {
+                      setIsTesting((isTesting) => {
+                        return isTesting?.map((x, i) =>
+                          i === idx ? changed : x
+                        );
+                      });
+                    }}
+                    reset={resetMods}
+                    addTestCategory={
+                      idx === displayCategories.length - 1
+                        ? () => {
+                            setIsTesting(isTesting?.fill(false));
+                            setResetMods(true);
 
-                          setShowCategoryWeightPrompt(true);
-                        }
-                      : undefined
-                  }
-                  removeTestCategory={
-                    displayCategories[idx].id.startsWith(
-                      "scorecard-test-category"
-                    )
-                      ? () => {
-                          removeTestCategory(displayCategories[idx].id);
-                        }
-                      : undefined
-                  }
-                />
-              );
-            })}
+                            setShowCategoryWeightPrompt(true);
+                          }
+                        : undefined
+                    }
+                    removeTestCategory={
+                      displayCategories[idx].id.startsWith(
+                        "scorecard-test-category"
+                      )
+                        ? () => {
+                            removeTestCategory(displayCategories[idx].id);
+                          }
+                        : undefined
+                    }
+                  />
+                );
+              })
+            )}
           </div>
         ) : (
           <div className="w-full h-full flex justify-center items-center">

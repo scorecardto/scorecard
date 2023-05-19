@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import GradeChip from "../GradeChip";
 import { AssignmentData } from "./AssignmentCategory";
 
-function CategoryMicroMeta(props: { name: string; value: string }) {
+export function CategoryMicroMeta(props: { name: string; value: string }) {
   const { name, value } = props;
 
   return (
@@ -82,10 +82,7 @@ export default function CategoryMeta(props: {
         </div>
       </div>
       <div className="flex gap-4">
-        <CategoryMicroMeta
-          name="Assignment Count"
-          value={`${assignmentCount}`}
-        />
+        <CategoryMicroMeta name="Assignments" value={`${assignmentCount}`} />
         <CategoryMicroMeta name="Total Points" value={`${totalPoints}`} />
         <CategoryMicroMeta name="Percent Known" value={`${percentKnown}%`} />
         {!isNaN(exactAverage) && (
