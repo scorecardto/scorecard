@@ -17,28 +17,35 @@ export interface PortContextProvider {
   port: chrome.runtime.Port | null;
 }
 
-export async function hasExtension(otherIndex?: number): Promise<[chrome.runtime.Port | null, any[]]> {
-  if (!(window["chrome"] && chrome.runtime && chrome.runtime["connect"])) return [null, []];
+export async function hasExtension(
+  otherIndex?: number
+): Promise<[chrome.runtime.Port | null, any[]]> {
+  if (!(window["chrome"] && chrome.runtime && chrome.runtime["connect"]))
+    return [null, []];
 
-	const OTHER_IDS = ["obgiekpfbkiikbplgclakaghmbmjgbma", "aklngfigbohkefhfdohjddonboonhbaf", "dodjlkfccbjnfiibmnghjhmdemejkaia"];
+  const OTHER_IDS = [
+    "obgiekpfbkiikbplgclakaghmbmjgbma",
+    "aklngfigbohkefhfdohjddonboonhbaf",
+    "dodjlkfccbjnfiibmnghjhmdemejkaia",
+  ];
 
   const EXTENSION_ID =
-    (otherIndex && OTHER_IDS[otherIndex-1]) || (otherIndex != null && document.cookie.includes("EXT_ID=") &&
-      decodeURIComponent(document.cookie)
-        .split("EXT_ID=")[1]
-        .split(";")[0]) ||
+    (otherIndex && OTHER_IDS[otherIndex - 1]) ||
+    (otherIndex != null &&
+      document.cookie.includes("EXT_ID=") &&
+      decodeURIComponent(document.cookie).split("EXT_ID=")[1].split(";")[0]) ||
     "kdcaikhoeplkmicnkjflbbpchjoadaki";
 
   let port: chrome.runtime.Port | null = chrome.runtime.connect(EXTENSION_ID);
   let waiting = false;
 
-  let messages: any[] = []
+  let messages: any[] = [];
   port.onMessage.addListener((msg) => messages.push(msg));
 
   port.onDisconnect.addListener(async () => {
     chrome.runtime.lastError;
     otherIndex = (otherIndex ?? -1) + 1;
-    
+
     if (otherIndex >= OTHER_IDS.length) {
       port = null;
     } else {
@@ -52,9 +59,9 @@ export async function hasExtension(otherIndex?: number): Promise<[chrome.runtime
     }
   });
 
-  await new Promise(r => setTimeout(r, 1));
+  await new Promise((r) => setTimeout(r, 1));
   while (waiting) {
-    await new Promise(r => setTimeout(r, 1));
+    await new Promise((r) => setTimeout(r, 1));
   }
 
   return [port, messages];
@@ -75,14 +82,21 @@ export default function ExtensionConnector(props: {
   const [load, setLoad] = props.loadState;
 
   const connectChrome = () => {
-    hasExtension().then(r => {
+    hasExtension().then((r) => {
       let port = r[0];
       if (port == null) {
         setLoad("ERR_EXT_NOT_INSTALLED");
         return;
       }
 
-      port.onDisconnect.addListener(() => location.reload());
+      const heartbeat = setInterval(() => {
+        port?.postMessage({ type: "heartbeat" });
+      }, 1000);
+
+      port.onDisconnect.addListener(() => {
+        clearInterval(heartbeat);
+        connectChrome();
+      });
 
       setPort(port);
 
@@ -109,7 +123,9 @@ export default function ExtensionConnector(props: {
             settingsContext.setSpoilerMode(settings?.spoilerMode);
           }
           if (settings?.checkGradesInterval) {
-            settingsContext.setCheckGradesInterval(settings?.checkGradesInterval);
+            settingsContext.setCheckGradesInterval(
+              settings?.checkGradesInterval
+            );
           }
           if (settings?.usePushNotifications) {
             settingsContext.setUsePushNotifications(
@@ -160,7 +176,13 @@ export default function ExtensionConnector(props: {
       {load === "LOADING" && <p>Loading...</p>}
       {load === "ERR_BROWSER" && <p>Sorry, your browser is not compatible.</p>}
       {load === "ERR_EXT_NOT_INSTALLED" && (
-        <p>Please <Link href="/link/chrome" className="text-blue-500">install Scorecard</Link> to continue.</p>
+        <p>
+          Please{" "}
+          <Link href="/link/chrome" className="text-blue-500">
+            install Scorecard
+          </Link>{" "}
+          to continue.
+        </p>
       )}
       {load === "ERR_EXT_VERSION" && <p>Your Scorecard is outdated.</p>}
       {load === "DONE" && (
