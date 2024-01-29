@@ -133,7 +133,7 @@ export default async function handler(
 
     await octokit.request('POST /repos/{owner}/{repo}/issues', {
       owner: 'scorecardto',
-      repo,
+      repo: repo ?? 'app', // TODO: null check is temporary
       title: `User Feedback`,
       body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
       labels: [reason.toLowerCase()],
