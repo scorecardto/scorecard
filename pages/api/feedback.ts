@@ -52,56 +52,56 @@ export default async function handler(
   const decodedToken = await admin.auth().verifyIdToken(token);
 
   if (reason !== "HELP" && reason !== "BUG" && reason !== "SUGGESTION") {
-    res.status(400).json({ success: false, error: "INVALID_REASON" });
+    res.status(200).json({ success: false, error: "INVALID_REASON" });
     return;
   }
 
   if (repo != "app" && repo != "scorecard" && repo != "extension") {
-    res.status(400).json({ success: false, error: "INVALID_REPO" });
+    res.status(200).json({ success: false, error: "INVALID_REPO" });
     return;
   }
 
   if (!firstName || firstName.length < 1) {
-    res.status(400).json({ success: false, error: "INVALID_FIRST_NAME" });
+    res.status(200).json({ success: false, error: "INVALID_FIRST_NAME" });
     return;
   }
 
   if (firstName && firstName.length > 50) {
-    res.status(400).json({ success: false, error: "INVALID_FIRST_NAME" });
+    res.status(200).json({ success: false, error: "INVALID_FIRST_NAME" });
     return;
   }
 
   if (lastName && lastName.length > 50) {
-    res.status(400).json({ success: false, error: "INVALID_LAST_NAME" });
+    res.status(200).json({ success: false, error: "INVALID_LAST_NAME" });
     return;
   }
 
   if (lastName && lastName.length > 50) {
-    res.status(400).json({ success: false, error: "INVALID_LAST_NAME" });
+    res.status(200).json({ success: false, error: "INVALID_LAST_NAME" });
     return;
   }
 
   if (!message || message.length < 1) {
-    res.status(400).json({ success: false, error: "INVALID_MESSAGE" });
+    res.status(200).json({ success: false, error: "INVALID_MESSAGE" });
     return;
   }
   if (message && message.length > 5000) {
-    res.status(400).json({ success: false, error: "INVALID_MESSAGE" });
+    res.status(200).json({ success: false, error: "INVALID_MESSAGE" });
     return;
   }
 
   if (district && district.length > 100) {
-    res.status(400).json({ success: false, error: "INVALID_DISTRICT" });
+    res.status(200).json({ success: false, error: "INVALID_DISTRICT" });
     return;
   }
 
   if (username && username.length > 50) {
-    res.status(400).json({ success: false, error: "INVALID_USERNAME" });
+    res.status(200).json({ success: false, error: "INVALID_USERNAME" });
     return;
   }
 
   if (password && password.length > 50) {
-    res.status(400).json({ success: false, error: "INVALID_PASSWORD" });
+    res.status(200).json({ success: false, error: "INVALID_PASSWORD" });
     return;
   }
 
