@@ -124,22 +124,28 @@ export default async function handler(
 
   const doc = await docRef.get();
 
-  if (reason != "HELP") {
-    const octokit = await new App({
-      appId: process.env.GH_APP_ID!,
-      privateKey: process.env.GH_PRIVATE_KEY!
-    }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
+  const octokit = await new App({
+    appId: process.env.GH_APP_ID!,
+    privateKey: process.env.GH_PRIVATE_KEY!
+  }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
 
+  console.log('submitting feedback:', {
+    owner: 'scorecardto',
+        repo: repo ?? 'app', // TODO: null check is temporary
+        title: `User Feedback`,
+        body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
+        labels: [reason.toLowerCase()],
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+  });
 
-    await octokit.request('POST /repos/{owner}/{repo}/issues', {
-      owner: 'scorecardto',
-      repo: repo ?? 'app', // TODO: null check is temporary
-      title: `User Feedback`,
-      body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
-      labels: [reason.toLowerCase()],
-      headers: { 'X-GitHub-Api-Version': '2022-11-28' }
-    });
-  }
+  await octokit.request('POST /repos/{owner}/{repo}/issues', {
+    owner: 'scorecardto',
+    repo: repo ?? 'app', // TODO: null check is temporary
+    title: `User Feedback`,
+    body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
+    labels: [reason.toLowerCase()],
+    headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+  });
 
   res.status(200).json({ success: true });
 }
