@@ -105,7 +105,10 @@ export default async function handler(
         firstName,
         lastName,
       },
+      phoneNumber: decodedToken.phone_number || "NONE",
       urgent: urgent || false,
+      respondToMe: respondToMe || false,
+      message,
     });
 
     const doc = await docRef.get();
@@ -126,6 +129,7 @@ export default async function handler(
       },
       respondToMe: respondToMe || false,
       urgent: urgent || false,
+      message,
     });
 
     const doc = await docRef.get();
