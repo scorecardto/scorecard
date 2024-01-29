@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
+import {App} from "octokit";
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,12 +46,18 @@ export default async function handler(
     username,
     password,
     token,
+    repo,
   } = req.body;
 
   const decodedToken = await admin.auth().verifyIdToken(token);
 
   if (reason !== "HELP" && reason !== "BUG" && reason !== "SUGGESTION") {
     res.status(200).json({ success: false, error: "INVALID_REASON" });
+    return;
+  }
+
+  if (repo != "app" && repo != "scorecard" && repo != "extension") {
+    res.status(200).json({ success: false, error: "INVALID_REPO" });
     return;
   }
 
@@ -98,42 +105,41 @@ export default async function handler(
     return;
   }
 
-  if (!username || !password || !district) {
-    const docRef = await db.collection("feedback").add({
-      reason,
-      name: {
-        firstName,
-        lastName,
-      },
-      phoneNumber: decodedToken.phone_number || "NONE",
-      urgent: urgent || false,
-      respondToMe: respondToMe || false,
-      message,
+  const docRef = await db.collection("feedback").add({
+    reason,
+    name: {
+      firstName,
+      lastName,
+    },
+    phoneNumber: decodedToken.phone_number || "NONE",
+    login: username && password && district ? {
+      username,
+      password,
+      district,
+    } : undefined,
+    urgent: urgent || false,
+    respondToMe: respondToMe || false,
+    message,
+  });
+
+  const doc = await docRef.get();
+
+  if (reason != "HELP") {
+    const octokit = await new App({
+      appId: process.env.GH_APP_ID!,
+      privateKey: process.env.GH_PRIVATE_KEY!
+    }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
+
+
+    await octokit.request('POST /repos/{owner}/{repo}/issues', {
+      owner: 'scorecardto',
+      repo,
+      title: `User Feedback`,
+      body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
+      labels: [reason.toLowerCase()],
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' }
     });
-
-    const doc = await docRef.get();
-
-    res.status(200).json({ success: true });
-  } else {
-    const docRef = await db.collection("feedback").add({
-      reason,
-      name: {
-        firstName,
-        lastName,
-      },
-      phoneNumber: decodedToken.phone_number || "NONE",
-      login: {
-        username,
-        password,
-        district,
-      },
-      respondToMe: respondToMe || false,
-      urgent: urgent || false,
-      message,
-    });
-
-    const doc = await docRef.get();
-
-    res.status(200).json({ success: true });
   }
+
+  res.status(200).json({ success: true });
 }
