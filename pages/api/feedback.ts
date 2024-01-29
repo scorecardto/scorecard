@@ -105,7 +105,7 @@ export default async function handler(
     return;
   }
 
-  const db = {
+  let data: any = {
     reason,
     name: {
       firstName,
@@ -116,9 +116,18 @@ export default async function handler(
     respondToMe: respondToMe || false,
     message,
   }
-  if (username && password && district) db.login = { username, password, district };
+  if (username && password && district) {
+    data = {
+      ...data,
+      login: {
+        username,
+        password,
+        district,
+      }
+    }
+  }
 
-  const docRef = await db.collection("feedback").add(db);
+  const docRef = await db.collection("feedback").add(data);
 
   const doc = await docRef.get();
 
