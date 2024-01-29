@@ -41,7 +41,7 @@ export default async function handler(
     message,
     respondToMe,
     urgent,
-    distrct,
+    district,
     username,
     password,
     token,
@@ -83,7 +83,7 @@ export default async function handler(
     return;
   }
 
-  if (distrct && distrct.length > 100) {
+  if (district && district.length > 100) {
     res.status(200).json({ success: false, error: "INVALID_DISTRICT" });
     return;
   }
@@ -98,7 +98,7 @@ export default async function handler(
     return;
   }
 
-  if (!username || !password || !distrct) {
+  if (!username || !password || !district) {
     const docRef = await db.collection("feedback").add({
       reason,
       name: {
@@ -125,7 +125,7 @@ export default async function handler(
       login: {
         username,
         password,
-        distrct,
+        district,
       },
       respondToMe: respondToMe || false,
       urgent: urgent || false,
