@@ -105,22 +105,20 @@ export default async function handler(
     return;
   }
 
-  const docRef = await db.collection("feedback").add({
+  const db = {
     reason,
     name: {
       firstName,
       lastName,
     },
     phoneNumber: decodedToken.phone_number || "NONE",
-    login: username && password && district ? {
-      username,
-      password,
-      district,
-    } : undefined,
     urgent: urgent || false,
     respondToMe: respondToMe || false,
     message,
-  });
+  }
+  if (username && password && district) db.login = { username, password, district };
+
+  const docRef = await db.collection("feedback").add(db);
 
   const doc = await docRef.get();
 
