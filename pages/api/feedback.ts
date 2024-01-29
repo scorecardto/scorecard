@@ -39,6 +39,7 @@ export default async function handler(
     firstName,
     lastName,
     message,
+    respondToMe,
     urgent,
     distrct,
     username,
@@ -123,6 +124,7 @@ export default async function handler(
         password,
         distrct,
       },
+      respondToMe: respondToMe || false,
       urgent: urgent || false,
     });
 
