@@ -139,9 +139,9 @@ export default async function handler(
   await octokit.request('POST /repos/{owner}/{repo}/issues', {
     owner: 'scorecardto',
     repo,
-    title: `User Feedback`,
+    title: `User Feedback [${doc.id}]`,
     body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
-    labels: [reason.toLowerCase()],
+    labels: ['user feedback', reason.toLowerCase()],
     headers: { 'X-GitHub-Api-Version': '2022-11-28' }
   });
 
