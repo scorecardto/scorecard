@@ -31,8 +31,6 @@ export default async function handler(
         credential: admin.credential.cert(firebaseConfig),
       });
 
-  console.log(req);
-
   const db = getFirestore(app);
 
   const {
