@@ -40,8 +40,8 @@ export default async function handler(
     fcmToken,
     expoPushToken,
     courseId,
-    courseName,       // optional
-    onetime           // optional
+    courseName,         // optional
+    onetime             // optional
   } = req.body;
 
   const decodedToken = await admin.auth().verifyIdToken(fcmToken).catch(() => {
@@ -81,12 +81,13 @@ export default async function handler(
 
     let messages = [];
     for (let doc of coll.docs) {
-      if (doc.data().onetime) await doc.ref.delete();
+      const data = doc.data();
+      if (data.onetime) await doc.ref.delete();
 
       messages.push({
         to: doc.id,
         title: "New Grades",
-        body: `New grades have been posted for ${courseName || courseId}`,
+        body: `New grades have been posted for ${data.courseName || courseId}`,
         badge: 1,
       });
     }
