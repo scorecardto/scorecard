@@ -47,9 +47,11 @@ export default async function handler(
   const decodedToken = await admin.auth().verifyIdToken(fcmToken).catch(() => {
     res.status(200).json({success: false, error: "INVALID_FCM_TOKEN"});
   });
+  if (!decodedToken) return;
 
   if (!Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
+    return;
   }
 
   if (method === 'register') {
