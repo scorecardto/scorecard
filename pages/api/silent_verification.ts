@@ -46,7 +46,7 @@ export default async function handler(
 
   const doc = await db
       .collection("silentPushVerification")
-      .doc(id).get();
+      .doc(id).set({});
 
   res.status(200).json({success: true});
 }
