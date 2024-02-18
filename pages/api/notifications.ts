@@ -103,9 +103,9 @@ export default async function handler(
               chunk.map(m=>{return {to: m.to, data: m.data}}),
               {
                 headers: {
-                  // 'Accept': 'application/json',
-                  // 'Content-Type': 'application/json',
-                  // 'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
                   }
               }));
       for (let i = 0; i < response.data.length; i++) {
