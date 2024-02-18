@@ -33,7 +33,6 @@ export default async function handler(
       });
 
   const db = getFirestore(app);
-  let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
   const {
     fcmToken,
