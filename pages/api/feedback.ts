@@ -31,8 +31,6 @@ export default async function handler(
         credential: admin.credential.cert(firebaseConfig),
       });
 
-  console.log(req);
-
   const db = getFirestore(app);
 
   const {
@@ -131,28 +129,19 @@ export default async function handler(
 
   const doc = await docRef.get();
 
-  // const octokit = await new App({
-  //   appId: process.env.GH_APP_ID!,
-  //   privateKey: process.env.GH_PRIVATE_KEY!
-  // }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
-  //
-  // console.log('submitting feedback:', {
-  //   owner: 'scorecardto',
-  //       repo: repo ?? 'app', // TODO: null check is temporary
-  //       title: `User Feedback`,
-  //       body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
-  //       labels: [reason.toLowerCase()],
-  //       headers: { 'X-GitHub-Api-Version': '2022-11-28' }
-  // });
-  //
-  // await octokit.request('POST /repos/{owner}/{repo}/issues', {
-  //   owner: 'scorecardto',
-  //   repo: repo ?? 'app', // TODO: null check is temporary
-  //   title: `User Feedback`,
-  //   body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
-  //   labels: [reason.toLowerCase()],
-  //   headers: { 'X-GitHub-Api-Version': '2022-11-28' }
-  // });
+  const octokit = await new App({
+    appId: process.env.GH_APP_ID!,
+    privateKey: process.env.GH_PRIVATE_KEY!
+  }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
+
+  await octokit.request('POST /repos/{owner}/{repo}/issues', {
+    owner: 'scorecardto',
+    repo,
+    title: `User Feedback [${doc.id}]`,
+    body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
+    labels: ['user feedback', reason.toLowerCase()],
+    headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+  });
 
   res.status(200).json({ success: true });
 }
