@@ -133,7 +133,7 @@ export default async function handler(
       for (let message of messages) {
         if (invalidTokens.includes(message.to as string)) continue;
 
-        const uuid = message.data!.id;
+        const uuid = (message.data! as any).id;
 
         if (coll.docs.find(d=> d.id === uuid)) {
           await db
