@@ -88,7 +88,6 @@ export default async function handler(
         to: doc.id,
         title: "New Grades",
         body: `New grades have been posted for ${data.courseName || courseId}`,
-        badge: 1,
       });
     }
 
