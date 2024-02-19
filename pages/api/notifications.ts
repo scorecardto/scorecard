@@ -102,16 +102,15 @@ export default async function handler(
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
-      const response = JSON.parse(
-          await axios.post("https://exp.host/--/api/v2/push/send",
-              chunk.map(m=>{return {to: m.to, data: m.data}}),
-              {
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
-                  }
-              }));
+      const response = JSON.parse((await axios.post("https://exp.host/--/api/v2/push/send",
+          chunk.map(m=>{return {to: m.to, data: m.data}}),
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+            }
+          })).data);
       for (let i = 0; i < response.data.length; i++) {
         const ticket = response.data[i];
 
