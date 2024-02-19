@@ -43,8 +43,8 @@ export default async function handler(
   let pageToken = undefined;
 
   while (true) {
-    const result = await auth.listUsers(1000, pageToken);
-    result.users.forEach((userRecord) => {
+    const result: any = await auth.listUsers(1000, pageToken);
+    result?.users?.forEach((userRecord: any) => {
       if (userRecord.phoneNumber) {
         if (phoneNumbers.includes(userRecord.phoneNumber)) {
           users[userRecord.phoneNumber] = {
