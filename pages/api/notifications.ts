@@ -126,6 +126,8 @@ export default async function handler(
       }
     }
 
+    res.status(200).json({success: true});
+
     setTimeout(async () => {
       const coll = await db
           .collection("silentPushVerification").get();
@@ -137,12 +139,10 @@ export default async function handler(
         const uuid = (message.data! as any).id;
 
         if (coll.docs.find(d=> d.id === uuid)) {
-          console.log('had '+uuid);
           await db
               .collection("silentPushVerification")
               .doc(uuid).delete();
         } else {
-          console.log("didn't have "+uuid);
           newMessages.push(message);
         }
       }
@@ -150,8 +150,6 @@ export default async function handler(
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-
-      res.status(200).json({success: true});
     }, 1000 * 4);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
