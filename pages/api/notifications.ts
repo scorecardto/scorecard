@@ -7,6 +7,11 @@ import {App} from "octokit";
 import Expo, {ExpoPushMessage, ExpoPushToken} from "expo-server-sdk";
 import axios from "axios";
 
+function randomUUID(){
+  // @ts-ignore
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,a=>(a^Math.random()*16>>a/4).toString(16));
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -82,7 +87,6 @@ export default async function handler(
 
     let messages: ExpoPushMessage[] = [];
 
-    const crypto = new Crypto();
     for (let doc of coll.docs) {
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
@@ -91,7 +95,7 @@ export default async function handler(
         to: doc.id,
         title: data.courseName || courseId,
         body: 'Other users reported new grades. Tap to check.',
-        data: {courseId, id: crypto.randomUUID()}
+        data: {courseId, id: randomUUID()}
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
