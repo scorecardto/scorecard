@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "@types/chrome": "^0.0.193",
+    "@vercel/og": "^0.6.2",
     "axios": "^1.1.2",
     "dotenv": "^16.0.3",
     "expo-server-sdk": "^3.7.0",
     "firebase-admin": "^11.3.0",
     "framer-motion": "^7.5.4",
+    "jimp": "^0.22.10",
     "multiparty": "^4.2.3",
     "next": "^13.1.6",
     "next-seo": "^5.4.0",

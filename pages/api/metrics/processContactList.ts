@@ -67,8 +67,9 @@ export default async function handler(
 
     if (result.pageToken) {
       pageToken = result.pageToken;
+    } else {
+      break;
     }
-    break;
   }
 
   res.status(200).json(users);
