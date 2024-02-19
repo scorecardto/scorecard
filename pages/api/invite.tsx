@@ -8,21 +8,21 @@ export const config = {
   runtime: "edge",
 };
 export default async function handler(request: NextRequest) {
-  const nameParam = new URLSearchParams(request.url).get("name");
+  const nameParam = new URL(request.url).searchParams.get("name");
 
   let userCount = 0;
 
-  // try {
-  //   userCount = (
-  //     await (
-  //       await fetch(
-  //         new URL("https://scorecardgrades.com/api/metrics/getUserCount")
-  //       )
-  //     ).json()
-  //   )?.userCount;
-  // } catch (e: any) {
-  //   console.log(e.message);
-  // }
+  try {
+    userCount = (
+      await (
+        await fetch(
+          new URL("https://scorecardgrades.com/api/metrics/getUserCount")
+        )
+      ).json()
+    )?.userCount;
+  } catch (e: any) {
+    console.log(e.message);
+  }
 
   // const bold = await fetch(
   //   "https://scorecardgrades.com/assets/font/sf-rounded-bold.ttf"
@@ -107,6 +107,8 @@ export default async function handler(request: NextRequest) {
               style={{
                 fontSize: 46,
                 color: "black",
+                paddingLeft: 30,
+                paddingRight: 30,
               }}
             >
               Join {nameParam ?? "me"} on Scorecard 💌
