@@ -5,6 +5,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
 import {App} from "octokit";
 import Expo, {ExpoPushMessage, ExpoPushToken} from "expo-server-sdk";
+import axios from "axios";
 
 export default async function handler(
   req: NextApiRequest,
@@ -79,35 +80,74 @@ export default async function handler(
         .doc("courses")
         .collection(courseId).get();
 
-    let messages = [];
+    let messages: ExpoPushMessage[] = [];
+
+    const crypto = new Crypto();
     for (let doc of coll.docs) {
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
       messages.push({
         to: doc.id,
-        title: "New Grades",
-        body: `New grades have been posted for ${data.courseName || courseId}`,
-        badge: 1,
+        title: data.courseName || courseId,
+        body: 'Other users reported new grades. Tap to check.',
+        data: {courseId, id: crypto.randomUUID()}
       });
     }
+    const chunks = expo.chunkPushNotifications(messages);
 
-    let tickets = [];
-    for (let chunk of expo.chunkPushNotifications(messages)) {
-      tickets.push(...await expo.sendPushNotificationsAsync(chunk));
-    }
+    let invalidTokens: string[] = [];
+    for (let chunk of chunks) {
+      const response = JSON.parse(
+          await axios.post("https://exp.host/--/api/v2/push/send",
+              chunk.map(m=>{return {to: m.to, data: m.data}}),
+              {
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+                  }
+              }));
+      for (let i = 0; i < response.data.length; i++) {
+        const ticket = response.data[i];
 
-    for (let ticket of tickets) {
-      if (ticket.status === "error" && ticket.details?.error === 'DeviceNotRegistered') {
-        await db
-            .collection("notifications")
-            .doc("courses")
-            .collection(courseId)
-            .doc(ticket.message).delete();
+        if (ticket.status === "error" && ticket.details.error === 'DeviceNotRegistered') {
+          await db
+              .collection("notifications")
+              .doc("courses")
+              .collection(courseId)
+              .doc(ticket.details.expoPushToken).delete();
+
+          invalidTokens.push(ticket.details.expoPushToken);
+        }
       }
     }
 
     res.status(200).json({success: true});
+
+    setTimeout(async () => {
+      const coll = await db
+          .collection("silentPushVerification").get();
+
+      let newMessages: ExpoPushMessage[] = [];
+      for (let message of messages) {
+        if (invalidTokens.includes(message.to as string)) continue;
+
+        const uuid = (message.data! as any).id;
+
+        if (coll.docs.find(d=> d.id === uuid)) {
+          await db
+              .collection("silentPushVerification")
+              .doc(uuid).delete();
+        } else {
+          newMessages.push(message);
+        }
+      }
+
+      for (const chunk of expo.chunkPushNotifications(newMessages)) {
+        await expo.sendPushNotificationsAsync(chunk);
+      }
+    }, 1000 * 4);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
