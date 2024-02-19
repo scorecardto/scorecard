@@ -34,10 +34,8 @@ export default async function handler(
   let pageToken = undefined;
 
   while (true) {
-    const result = await auth.listUsers(1000, pageToken);
-    result.users.forEach((userRecord) => {
-      userCount++;
-    });
+    const result: any = await auth.listUsers(1000, pageToken);
+    userCount += result?.users?.length;
 
     if (result.pageToken) {
       pageToken = result.pageToken;
