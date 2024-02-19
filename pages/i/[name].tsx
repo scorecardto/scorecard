@@ -17,3 +17,9 @@ export default function DyanmicInvitePage() {
     </div>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}
