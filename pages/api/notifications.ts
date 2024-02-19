@@ -139,12 +139,12 @@ export default async function handler(
         const uuid = (message.data! as any).id;
 
         if (coll.docs.find(d=> d.id === uuid)) {
-          console.log('had '+d.id);
+          console.log('had '+uuid);
           await db
               .collection("silentPushVerification")
               .doc(uuid).delete();
         } else {
-          console.log("didn't have "+d.id);
+          console.log("didn't have "+uuid);
           newMessages.push(message);
         }
       }
