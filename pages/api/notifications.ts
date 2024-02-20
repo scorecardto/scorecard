@@ -42,10 +42,11 @@ export default async function handler(
   let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
   const {
-    method,           // 'isRegistered' | 'register' | 'deregister' | 'update'
+    method,             // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
     expoPushToken,
     courseId,
+    courseIds,          // only used for 'isRegistered'
     assignmentId,       // only needed for 'update'
     courseName,         // optional
     onetime             // optional
@@ -56,7 +57,7 @@ export default async function handler(
   });
   if (!decodedToken) return;
 
-  if (!courseId) {
+  if (!courseId && !courseIds || courseIds.find((o: string)=>!o)) {
     res.status(200).json({success: false, error: "INVALID_COURSE_ID"});
     return;
   }
@@ -67,12 +68,27 @@ export default async function handler(
   }
 
   if (method === 'isRegistered') {
-    res.status(200).json({success: true, result: (await db
-          .collection("notifications")
-          .doc("courses")
-          .collection(courseId)
-          .listDocuments())
-          .find(d=>d.id === expoPushToken) !== undefined});
+
+    if (!courseIds) {
+      res.status(200).json({success: true, result: (await db
+            .collection("notifications")
+            .doc("courses")
+            .collection(courseId)
+            .listDocuments())
+            .find(d=>d.id === expoPushToken) !== undefined});
+    } else {
+      let result = [];
+      for (const id of courseIds) {
+        result.push((await db
+            .collection("notifications")
+            .doc("courses")
+            .collection(id)
+            .listDocuments())
+            .find(d=>d.id === expoPushToken) !== undefined);
+      }
+
+      res.status(200).json({success: true, result: result});
+    }
   } else if (method === 'register') {
     const doc = await db
         .collection("notifications")
