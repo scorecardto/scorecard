@@ -45,7 +45,7 @@ export default async function handler(
     method,             // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
     expoPushToken,      // not needed for 'update'
-    deviceId,           // alternative to expoPushToken; only needed for 'update'
+    deviceId,
     courseId,
     courseIds,          // only used for 'isRegistered'
     assignmentId,       // only needed for 'update'
@@ -68,7 +68,7 @@ export default async function handler(
     return;
   }
 
-  if (method === 'update' && !deviceId) {
+  if (!deviceId) {
     res.status(200).json({success: false, error: "INVALID_DEVICE_ID"})
     return;
   }
@@ -106,6 +106,7 @@ export default async function handler(
         .doc(expoPushToken).set({
           onetime: onetime || false,
           courseName: courseName ?? "",
+          deviceId,
         });
 
     res.status(200).json({success: true});
@@ -156,7 +157,7 @@ export default async function handler(
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
-      if (assignments[assignmentId].contains(doc.id)) continue;
+      if (assignments[assignmentId].includes(data.deviceId)) continue;
 
       messages.push({
         to: doc.id,
