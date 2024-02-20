@@ -103,7 +103,7 @@ export default async function handler(
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
       const response = (await axios.post("https://exp.host/--/api/v2/push/send",
-          chunk.map(m=>{return {to: m.to, data: m.data}}),
+          chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}),
           {
             headers: {
               'Accept': 'application/json',
