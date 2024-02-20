@@ -124,6 +124,8 @@ export default async function handler(
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
+      if (assignments[assignmentId].contains(doc.id)) continue;
+
       messages.push({
         to: doc.id,
         title: data.courseName || courseId,
