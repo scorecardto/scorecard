@@ -4,7 +4,7 @@ import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
 import {App} from "octokit";
-import Expo, {ExpoPushMessage, ExpoPushToken} from "expo-server-sdk";
+import Expo, {ExpoPushMessage} from "expo-server-sdk";
 import axios from "axios";
 
 function randomUUID(){
@@ -45,6 +45,7 @@ export default async function handler(
     method,             // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
     expoPushToken,      // not needed for 'update'
+    deviceId,           // alternative to expoPushToken; only needed for 'update'
     courseId,
     courseIds,          // only used for 'isRegistered'
     assignmentId,       // only needed for 'update'
@@ -64,6 +65,11 @@ export default async function handler(
 
   if (method !== 'update' && !Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
+    return;
+  }
+
+  if (method === 'update' && !deviceId) {
+    res.status(200).json({success: false, error: "INVALID_DEVICE_ID"})
     return;
   }
 
@@ -128,7 +134,7 @@ export default async function handler(
     }
 
     const assignments = (await course.doc("assignments").get()).data() ?? {};
-    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(expoPushToken)));
+    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(deviceId)));
 
     if (assignments[assignmentId].length < 2) {
       await course.doc("assignments").set(assignments);
