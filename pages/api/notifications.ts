@@ -42,7 +42,7 @@ export default async function handler(
   let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
   const {
-    method,           // 'register' | 'deregister' | 'update'
+    method,           // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
     expoPushToken,
     courseId,
@@ -66,7 +66,14 @@ export default async function handler(
     return;
   }
 
-  if (method === 'register') {
+  if (method === 'isRegistered') {
+    res.status(200).json({success: true, result: (await db
+          .collection("notifications")
+          .doc("courses")
+          .collection(courseId)
+          .listDocuments())
+          .find(d=>d.id === expoPushToken) !== undefined});
+  } else if (method === 'register') {
     const doc = await db
         .collection("notifications")
         .doc("courses")
