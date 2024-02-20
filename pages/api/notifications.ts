@@ -44,7 +44,7 @@ export default async function handler(
   const {
     method,             // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
-    expoPushToken,
+    expoPushToken,      // not needed for 'update'
     courseId,
     courseIds,          // only used for 'isRegistered'
     assignmentId,       // only needed for 'update'
@@ -62,7 +62,7 @@ export default async function handler(
     return;
   }
 
-  if (!Expo.isExpoPushToken(expoPushToken)) {
+  if (method !== 'update' && !Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
     return;
   }
