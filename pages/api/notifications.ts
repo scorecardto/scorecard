@@ -57,7 +57,7 @@ export default async function handler(
   });
   if (!decodedToken) return;
 
-  if (!courseId && !courseIds || courseIds.find((o: string)=>!o)) {
+  if (!courseId && (!courseIds || courseIds.find((o: string)=>!o))) {
     res.status(200).json({success: false, error: "INVALID_COURSE_ID"});
     return;
   }
