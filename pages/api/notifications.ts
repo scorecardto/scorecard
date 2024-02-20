@@ -102,10 +102,9 @@ export default async function handler(
     }
 
     const assignments = (await course.doc("assignments").get()).data() ?? {};
-    assignments[assignmentId] = (assignments[assignmentId] ?? 0) + 1;
+    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(expoPushToken)));
 
-
-    if (assignments[assignmentId] < 2) {
+    if (assignments[assignmentId].length < 2) {
       await course.doc("assignments").set(assignments);
       res.status(200).json({success: true});
       return;
