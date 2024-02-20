@@ -7,6 +7,11 @@ import {App} from "octokit";
 import Expo, {ExpoPushMessage, ExpoPushToken} from "expo-server-sdk";
 import axios from "axios";
 
+function randomUUID(){
+  // @ts-ignore
+  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,a=>(a^Math.random()*16>>a/4).toString(16));
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -41,6 +46,7 @@ export default async function handler(
     fcmToken,
     expoPushToken,
     courseId,
+    assignmentId,       // only needed for 'update'
     courseName,         // optional
     onetime             // optional
   } = req.body;
@@ -49,6 +55,11 @@ export default async function handler(
     res.status(200).json({success: false, error: "INVALID_FCM_TOKEN"});
   });
   if (!decodedToken) return;
+
+  if (!courseId) {
+    res.status(200).json({success: false, error: "INVALID_COURSE_ID"});
+    return;
+  }
 
   if (!Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
@@ -75,6 +86,33 @@ export default async function handler(
 
     res.status(200).json({success: true});
   } else if (method === 'update') {
+    if (!assignmentId) {
+      res.status(200).json({success: false, error: "INVALID_ASSIGNMENT_ID"});
+      return;
+    }
+
+    const course = db
+        .collection("newGradeCounts")
+        .doc("courses")
+        .collection(courseId);
+
+    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
+        res.status(200).json({success: true});
+        return;
+    }
+
+    const assignments = (await course.doc("assignments").get()).data() ?? {};
+    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(expoPushToken)));
+
+    if (assignments[assignmentId].length < 2) {
+      await course.doc("assignments").set(assignments);
+      res.status(200).json({success: true});
+      return;
+    }
+
+    await course.doc("assignments").delete();
+    await course.doc("lastNotification").set({time: Date.now()});
+
     const coll = await db
         .collection("notifications")
         .doc("courses")
@@ -82,32 +120,32 @@ export default async function handler(
 
     let messages: ExpoPushMessage[] = [];
 
-    const crypto = new Crypto();
     for (let doc of coll.docs) {
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
+
+      if (assignments[assignmentId].contains(doc.id)) continue;
 
       messages.push({
         to: doc.id,
         title: data.courseName || courseId,
         body: 'Other users reported new grades. Tap to check.',
-        data: {courseId, id: crypto.randomUUID()}
+        data: {courseId, id: randomUUID()}
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
-      const response = JSON.parse(
-          await axios.post("https://exp.host/--/api/v2/push/send",
-              chunk.map(m=>{return {to: m.to, data: m.data}}),
-              {
-                headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
-                  }
-              }));
+      const response = (await axios.post("https://exp.host/--/api/v2/push/send",
+          chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}),
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+            }
+          })).data;
       for (let i = 0; i < response.data.length; i++) {
         const ticket = response.data[i];
 
