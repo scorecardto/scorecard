@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
-import {App} from "octokit";
+import { App } from "octokit";
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,7 +45,38 @@ export default async function handler(
     password,
     token,
     repo,
+    contactMethod,
+    type,
   } = req.body;
+
+  if (type === "anon") {
+    if (!message || message.length < 1) {
+      res.status(200).json({ success: false, error: "INVALID_MESSAGE" });
+      return;
+    }
+    if (message && message.length > 5000) {
+      res.status(200).json({ success: false, error: "INVALID_MESSAGE" });
+      return;
+    }
+
+    if (!contactMethod || contactMethod.length < 1) {
+      res.status(200).json({ success: false, error: "INVALID_CONTACT_METHOD" });
+      return;
+    }
+    if (contactMethod && contactMethod.length > 100) {
+      res.status(200).json({ success: false, error: "INVALID_CONTACT_METHOD" });
+      return;
+    }
+
+    const docRef = await db.collection("feedback").add({
+      reason: "ANON",
+      message,
+      contactMethod,
+    });
+
+    res.status(200).json({ success: true });
+    return;
+  }
 
   const decodedToken = await admin.auth().verifyIdToken(token);
 
@@ -113,7 +144,7 @@ export default async function handler(
     urgent: urgent || false,
     respondToMe: respondToMe || false,
     message,
-  }
+  };
   if (username && password && district) {
     data = {
       ...data,
@@ -121,8 +152,8 @@ export default async function handler(
         username,
         password,
         district,
-      }
-    }
+      },
+    };
   }
 
   const docRef = await db.collection("feedback").add(data);
@@ -131,16 +162,16 @@ export default async function handler(
 
   const octokit = await new App({
     appId: process.env.GH_APP_ID!,
-    privateKey: process.env.GH_PRIVATE_KEY!
+    privateKey: process.env.GH_PRIVATE_KEY!,
   }).getInstallationOctokit(parseInt(process.env.GH_INSTALLATION_ID!));
 
-  await octokit.request('POST /repos/{owner}/{repo}/issues', {
-    owner: 'scorecardto',
+  await octokit.request("POST /repos/{owner}/{repo}/issues", {
+    owner: "scorecardto",
     repo,
     title: `User Feedback [${doc.id}]`,
     body: `A user has submitted feedback.\n\n**ID:** ${doc.id}`,
-    labels: ['user feedback', reason.toLowerCase()],
-    headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+    labels: ["user feedback", reason.toLowerCase()],
+    headers: { "X-GitHub-Api-Version": "2022-11-28" },
   });
 
   res.status(200).json({ success: true });
