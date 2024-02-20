@@ -130,7 +130,7 @@ export default async function handler(
         to: doc.id,
         title: data.courseName || courseId,
         body: 'Other users reported new grades. Tap to check.',
-        data: {courseId, id: randomUUID()}
+        data: {courseId, displayName: data.courseName || courseId, id: randomUUID()}
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
