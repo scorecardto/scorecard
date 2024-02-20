@@ -70,24 +70,27 @@ export default async function handler(
   if (method === 'isRegistered') {
 
     if (!courseIds) {
-      res.status(200).json({success: true, result: (await db
-            .collection("notifications")
-            .doc("courses")
-            .collection(courseId)
-            .listDocuments())
-            .find(d=>d.id === expoPushToken) !== undefined});
+      const doc = await db
+          .collection("notifications")
+          .doc("courses")
+          .collection(courseId)
+          .doc(expoPushToken)
+          .get();
+
+      res.status(200).json({success: true, result: {key: courseId, value: doc.exists ? doc.data()!.onetime ? "ON_ONCE" : "ON_ALWAYS" : "OFF"}});
     } else {
       let result = [];
       for (const id of courseIds) {
-        result.push((await db
+        const doc = await db
             .collection("notifications")
             .doc("courses")
             .collection(id)
-            .listDocuments())
-            .find(d=>d.id === expoPushToken) !== undefined);
+            .doc(expoPushToken)
+            .get();
+        result.push({key: id, value: doc.exists ? doc.data()!.onetime ? "ON_ONCE" : "ON_ALWAYS" : "OFF"});
       }
 
-      res.status(200).json({success: true, result: result});
+      res.status(200).json({success: true, result});
     }
   } else if (method === 'register') {
     const doc = await db
