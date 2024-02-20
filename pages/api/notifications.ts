@@ -46,6 +46,7 @@ export default async function handler(
     fcmToken,
     expoPushToken,
     courseId,
+    assignmentId,       // only needed for 'update'
     courseName,         // optional
     onetime             // optional
   } = req.body;
@@ -54,6 +55,11 @@ export default async function handler(
     res.status(200).json({success: false, error: "INVALID_FCM_TOKEN"});
   });
   if (!decodedToken) return;
+
+  if (!courseId) {
+    res.status(200).json({success: false, error: "INVALID_COURSE_ID"});
+    return;
+  }
 
   if (!Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
@@ -80,6 +86,34 @@ export default async function handler(
 
     res.status(200).json({success: true});
   } else if (method === 'update') {
+    if (!assignmentId) {
+      res.status(200).json({success: false, error: "INVALID_ASSIGNMENT_ID"});
+      return;
+    }
+
+    const course = db
+        .collection("newGradeCounts")
+        .doc("courses")
+        .collection(courseId);
+
+    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
+        res.status(200).json({success: true});
+        return;
+    }
+
+    const assignments = (await course.doc("assignments").get()).data() ?? {};
+    assignments[assignmentId] = (assignments[assignmentId] ?? 0) + 1;
+
+
+    if (assignments[assignmentId] < 2) {
+      await course.doc("assignments").set(assignments);
+      res.status(200).json({success: true});
+      return;
+    }
+
+    await course.doc("assignments").delete();
+    await course.doc("lastNotification").set({time: Date.now()});
+
     const coll = await db
         .collection("notifications")
         .doc("courses")
