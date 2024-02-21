@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { FiClock, FiKey, FiSave, FiTag, FiTv } from "react-icons/fi";
 import {
   IoArrowDown,
@@ -14,6 +14,11 @@ import PrivacyCard from "../components/core/util/PrivacyCard";
 import PrivacyCardLine from "../components/core/util/PrivacyCardLine";
 
 export default function PrivacyPolicy() {
+  useEffect(() => {
+    if (window.location.search.includes("type=mobile")) {
+      window.location.href = "/privacy-policy-mobile";
+    }
+  }, []);
   return (
     <div className="">
       <BackLink href="/?from=privacy_policy">Back to Home Page</BackLink>
@@ -29,7 +34,7 @@ export default function PrivacyPolicy() {
                   alt=""
                 />
               </div>
-              <h1 className="h1">Privacy Policy</h1>
+              <h1 className="h1">Privacy Policy (Desktop)</h1>
             </div>
             <p className="p">
               Even though we don&apos;t have access to your grades, having an
@@ -71,6 +76,7 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </div>
+      <div></div>
       <div className="bg-accent-100 dark:bg-accent-800 p-20">
         <div className="p-8 shadow-lg bg-mono-l-100 dark:bg-mono-d-100 dark:text-mono-d-600 font-os text-sm rounded-md">
           <h1>Privacy Policy</h1>

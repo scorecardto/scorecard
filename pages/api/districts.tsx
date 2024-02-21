@@ -12,6 +12,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       url: url ? new URL(url).hostname : null,
     };
   });
+
   res.status(200).json({
     lastUpdated: districtsJson.LAST_UPDATED,
     districts,
