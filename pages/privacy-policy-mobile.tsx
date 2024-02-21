@@ -103,7 +103,10 @@ export default function PrivacyPolicy() {
             height: 1000,
           }}
         >
-          <iframe src="/privacy-policy-mobile.html" className="w-full h-full" />
+          <iframe
+            src="/privacy-policy-mobile-html.html"
+            className="w-full h-full"
+          />
         </div>
       </div>
     </div>
