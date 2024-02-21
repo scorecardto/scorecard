@@ -7,6 +7,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       district.accounts["student"].url || district.accounts["Student"]?.url;
     return {
       pinned: district.name === "Austin ISD",
+      vipProgramDate: district.name === "Austin ISD" ? "2024-03-11" : null,
       name: district.name,
       url: url ? new URL(url).hostname : null,
     };
