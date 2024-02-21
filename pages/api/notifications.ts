@@ -4,7 +4,7 @@ import admin from "firebase-admin";
 import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
 import {App} from "octokit";
-import Expo, {ExpoPushMessage, ExpoPushToken} from "expo-server-sdk";
+import Expo, {ExpoPushMessage} from "expo-server-sdk";
 import axios from "axios";
 
 function randomUUID(){
@@ -42,10 +42,12 @@ export default async function handler(
   let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
   const {
-    method,           // 'register' | 'deregister' | 'update'
+    method,             // 'isRegistered' | 'register' | 'deregister' | 'update'
     fcmToken,
-    expoPushToken,
+    expoPushToken,      // not needed for 'update'
+    deviceId,
     courseId,
+    courseIds,          // only used for 'isRegistered'
     assignmentId,       // only needed for 'update'
     courseName,         // optional
     onetime             // optional
@@ -56,17 +58,47 @@ export default async function handler(
   });
   if (!decodedToken) return;
 
-  if (!courseId) {
+  if (!courseId && (!courseIds || courseIds.find((o: string)=>!o))) {
     res.status(200).json({success: false, error: "INVALID_COURSE_ID"});
     return;
   }
 
-  if (!Expo.isExpoPushToken(expoPushToken)) {
+  if (method !== 'update' && !Expo.isExpoPushToken(expoPushToken)) {
     res.status(200).json({success: false, error: "INVALID_EXPO_PUSH_TOKEN"})
     return;
   }
 
-  if (method === 'register') {
+  if (!deviceId) {
+    res.status(200).json({success: false, error: "INVALID_DEVICE_ID"})
+    return;
+  }
+
+  if (method === 'isRegistered') {
+
+    if (!courseIds) {
+      const doc = await db
+          .collection("notifications")
+          .doc("courses")
+          .collection(courseId)
+          .doc(expoPushToken)
+          .get();
+
+      res.status(200).json({success: true, result: {key: courseId, value: doc.exists ? doc.data()!.onetime ? "ON_ONCE" : "ON_ALWAYS" : "OFF"}});
+    } else {
+      let result = [];
+      for (const id of courseIds) {
+        const doc = await db
+            .collection("notifications")
+            .doc("courses")
+            .collection(id)
+            .doc(expoPushToken)
+            .get();
+        result.push({key: id, value: doc.exists ? doc.data()!.onetime ? "ON_ONCE" : "ON_ALWAYS" : "OFF"});
+      }
+
+      res.status(200).json({success: true, result});
+    }
+  } else if (method === 'register') {
     const doc = await db
         .collection("notifications")
         .doc("courses")
@@ -74,6 +106,7 @@ export default async function handler(
         .doc(expoPushToken).set({
           onetime: onetime || false,
           courseName: courseName ?? "",
+          deviceId,
         });
 
     res.status(200).json({success: true});
@@ -102,7 +135,7 @@ export default async function handler(
     }
 
     const assignments = (await course.doc("assignments").get()).data() ?? {};
-    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(expoPushToken)));
+    assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(deviceId)));
 
     if (assignments[assignmentId].length < 2) {
       await course.doc("assignments").set(assignments);
@@ -124,13 +157,13 @@ export default async function handler(
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
-      if (assignments[assignmentId].contains(doc.id)) continue;
+      if (assignments[assignmentId].includes(data.deviceId)) continue;
 
       messages.push({
         to: doc.id,
         title: data.courseName || courseId,
         body: 'Other users reported new grades. Tap to check.',
-        data: {courseId, id: randomUUID()}
+        data: {courseId, displayName: data.courseName || courseId, id: randomUUID()}
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
