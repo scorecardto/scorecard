@@ -288,6 +288,19 @@
         }
       },
       {
+        "_id": "",
+        "name": "Dino ISD",
+        "altName": "Dino",
+        "id": "",
+        "accounts": {
+          "Student": {
+            "url": "https://dino.scorecardgrades.com/mobile/student",
+            "pages": []
+          },
+          "student": { "pages": [] }
+        }
+      },
+      {
         "_id": "558302b938d192b02e9f3ad2",
         "name": "Donna ISD",
         "altName": "Donna",
