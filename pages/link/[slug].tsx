@@ -5,6 +5,8 @@ import Redirect from "../../components/core/util/Redirect";
 const LINKS: { [key: string]: string } = {
   chrome:
     "https://chrome.google.com/webstore/detail/scorecard-gradebook-viewe/kdcaikhoeplkmicnkjflbbpchjoadaki",
+  "delete-data-android":
+    "https://docs.google.com/forms/d/e/1FAIpQLSdQ-BPnOLU8w7uQdboTKD-fjmVU0Ik0gaucqwRhH9zO084QHA/viewform?usp=sf_link",
 };
 
 export default function LinkPage() {
