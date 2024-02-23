@@ -6,9 +6,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const url =
       district.accounts["student"].url || district.accounts["Student"]?.url;
     return {
-      pinned: district.name === "Austin ISD" || district.name === "Dino ISD",
+      pinned:
+        district.name === "Austin ISD" || district.name === "Austin ISD (Demo)",
       vipProgramDate:
-        district.name === "Austin ISD" || district.name === "Dino ISD"
+        district.name === "Austin ISD" || district.name === "Austin ISD (Demo)"
           ? "2023-03-11"
           : null,
       name: district.name,
