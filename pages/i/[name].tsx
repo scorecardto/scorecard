@@ -5,6 +5,16 @@ export default function DyanmicInvitePage() {
   const router = useRouter();
   const { name } = router.query;
 
+  // if on an iphone, redirect to the app store
+  if (
+    typeof window !== "undefined" &&
+    window.navigator.userAgent.includes("iPhone")
+  ) {
+    router.push("/link/ios");
+  } else {
+    router.push("/");
+  }
+
   return (
     <div>
       <meta property="og:title" content="Join me on Scorecard" />
