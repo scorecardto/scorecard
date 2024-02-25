@@ -5,12 +5,16 @@ import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
 import {App} from "octokit";
 import Expo, {ExpoPushMessage} from "expo-server-sdk";
+import promiseLimit from 'promise-limit';
+import promiseRetry from 'promise-retry';
 import axios from "axios";
 
 function randomUUID(){
   // @ts-ignore
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,a=>(a^Math.random()*16>>a/4).toString(16));
 }
+
+const limitConcurrentRequests = promiseLimit(6);
 
 export default async function handler(
   req: NextApiRequest,
@@ -169,17 +173,36 @@ export default async function handler(
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
-      const response = (await axios.post("https://exp.host/--/api/v2/push/send",
-          chunk.map(m => {
-            return {to: m.to, _contentAvailable: true, data: m.data}
-          }),
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+      const response: any = await limitConcurrentRequests(async () => {
+        return await promiseRetry(
+            async (retry): Promise<any> => {
+              try {
+                return (await axios.post("https://exp.host/--/api/v2/push/send",
+                    chunk.map(m => {
+                      return {to: m.to, _contentAvailable: true, data: m.data}
+                    }),
+                    {
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+                      }
+                    })).data;
+              } catch (e: any) {
+                if (e.statusCode === 429) {
+                  return retry(e);
+                }
+                throw e;
+              }
+            },
+            {
+              retries: 2,
+              factor: 2,
+              minTimeout: 1000,
             }
-          })).data;
+        );
+      });
+
       for (let i = 0; i < response.data.length; i++) {
         const ticket = response.data[i];
 
