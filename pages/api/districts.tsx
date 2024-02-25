@@ -8,10 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return {
       pinned:
         district.name === "Austin ISD" || district.name === "Austin ISD (Demo)",
-      vipProgramDate:
-        district.name === "Austin ISD" || district.name === "Austin ISD (Demo)"
-          ? "2023-03-11"
-          : null,
+      vipProgramDate: district.name === "Austin ISD" ? "2024-03-15" : null,
       name: district.name,
       url: url ? new URL(url).hostname : null,
     };
