@@ -173,6 +173,8 @@ export default async function handler(
       for (let i = 0; i < tickets.length; i++) {
         const ticket = tickets[i];
 
+        console.log("ticket", i, ticket);
+
         if (ticket.status === "error" && ticket.details?.error === 'DeviceNotRegistered') {
           await db
               .collection("notifications")
@@ -212,7 +214,7 @@ export default async function handler(
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-    }, 1000 * 4);
+    }, 1000 * 3.5);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
