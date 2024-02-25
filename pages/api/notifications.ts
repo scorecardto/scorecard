@@ -7,7 +7,7 @@ import {App} from "octokit";
 import Expo, {ExpoPushMessage} from "expo-server-sdk";
 import promiseLimit from 'promise-limit';
 import promiseRetry from 'promise-retry';
-import axios from "axios";
+import axios, {HttpStatusCode} from "axios";
 
 function randomUUID(){
   // @ts-ignore
@@ -188,10 +188,12 @@ export default async function handler(
                         'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
                       }
                     })).data
-                console.log(data);
+                console.log(chunk.map(m => {
+                  return {to: m.to, _contentAvailable: true, data: m.data}
+                }), data);
                 return data;
               } catch (e: any) {
-                if (e.statusCode === 429) {
+                if (e.statusCode === HttpStatusCode.TooManyRequests) {
                   return retry(e);
                 }
                 throw e;
@@ -257,9 +259,11 @@ export default async function handler(
         }
       }
 
+      console.log("sending", newMessages);
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
+      console.log("sent");
     }, 1000 * 3.5);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
