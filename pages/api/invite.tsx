@@ -88,7 +88,7 @@ export default async function handler(request: NextRequest) {
             style={{
               display: "flex",
               flexDirection: "column",
-              marginTop: 80,
+              marginTop: 40,
               gap: 32,
             }}
           >
@@ -108,6 +108,7 @@ export default async function handler(request: NextRequest) {
                 fontSize: 46,
                 color: "black",
                 paddingLeft: 30,
+                fontFamily: "SF Rounded Bold",
                 paddingRight: 30,
               }}
             >
@@ -152,12 +153,13 @@ export default async function handler(request: NextRequest) {
       ),
       {
         width: 430,
-        height: 890,
-        // fonts: [
-        //   // {
-        //   //   data: boldBuffer,
-        //   //   name: "SF Rounded Bold",
-        //   // },
+        height: 750,
+        fonts: [
+          {
+            data: boldBuffer,
+            name: "SF Rounded Bold",
+          },
+        ],
         //   // {
         //   //   data: semiBuffer,
         //   //   name: "SF Rounded Semi",
