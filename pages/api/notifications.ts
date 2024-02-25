@@ -177,7 +177,7 @@ export default async function handler(
         return await promiseRetry(
             async (retry): Promise<any> => {
               try {
-                return (await axios.post("https://exp.host/--/api/v2/push/send",
+                const data = (await axios.post("https://exp.host/--/api/v2/push/send",
                     chunk.map(m => {
                       return {to: m.to, _contentAvailable: true, data: m.data}
                     }),
@@ -187,7 +187,9 @@ export default async function handler(
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
                       }
-                    })).data;
+                    })).data
+                console.log(data);
+                return data;
               } catch (e: any) {
                 if (e.statusCode === 429) {
                   return retry(e);
