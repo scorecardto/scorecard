@@ -11,7 +11,7 @@ export default function DyanmicInvitePage() {
     window.navigator.userAgent.includes("iPhone")
   ) {
     router.push("/link/ios");
-  } else {
+  } else if (typeof window !== undefined) {
     router.push("/");
   }
 
