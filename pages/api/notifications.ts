@@ -132,8 +132,8 @@ export default async function handler(
     const assignments = (await course.doc("assignments").get()).data() ?? {};
     assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(deviceId)));
 
+    await course.doc("assignments").set(assignments);
     if (assignments[assignmentId].length != 2) {
-      await course.doc("assignments").set(assignments);
       res.status(200).json({success: true});
       return;
     }
@@ -166,6 +166,7 @@ export default async function handler(
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
+    console.log("chunks", chunks);
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
@@ -189,7 +190,9 @@ export default async function handler(
 
     res.status(200).json({success: true});
 
+    console.log("timeout");
     setTimeout(async () => {
+      console.log("checking verification");
       const coll = await db
           .collection("silentPushVerification").get();
 
@@ -208,6 +211,7 @@ export default async function handler(
         }
       }
 
+      console.log("newMessages", newMessages);
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
