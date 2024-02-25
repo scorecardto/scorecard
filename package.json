@@ -23,6 +23,8 @@
     "next-transpile-modules": "^9.0.0",
     "octokit": "^3.1.2",
     "phone": "^3.1.42",
+    "promise-limit": "^2.7.0",
+    "promise-retry": "^2.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
@@ -34,6 +36,7 @@
   "devDependencies": {
     "@types/multiparty": "^0.0.36",
     "@types/node": "18.0.1",
+    "@types/promise-retry": "^1.1.6",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
     "@types/ua-parser-js": "^0.7.36",

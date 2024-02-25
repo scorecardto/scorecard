@@ -5,12 +5,16 @@ import { getFirestore } from "firebase-admin/firestore";
 import multiparty from "multiparty";
 import {App} from "octokit";
 import Expo, {ExpoPushMessage} from "expo-server-sdk";
-import axios from "axios";
+import promiseLimit from 'promise-limit';
+import promiseRetry from 'promise-retry';
+import axios, {HttpStatusCode} from "axios";
 
 function randomUUID(){
   // @ts-ignore
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,a=>(a^Math.random()*16>>a/4).toString(16));
 }
+
+const limitConcurrentRequests = promiseLimit(6);
 
 export default async function handler(
   req: NextApiRequest,
@@ -129,21 +133,20 @@ export default async function handler(
         .doc("courses")
         .collection(courseId);
 
-    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
-        res.status(200).json({success: true});
-        return;
-    }
-
     const assignments = (await course.doc("assignments").get()).data() ?? {};
     assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(deviceId)));
 
-    if (assignments[assignmentId].length < 2) {
-      await course.doc("assignments").set(assignments);
+    await course.doc("assignments").set(assignments);
+    if (assignments[assignmentId].length != 2) {
       res.status(200).json({success: true});
       return;
     }
 
-    await course.doc("assignments").delete();
+    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
+      res.status(200).json({success: true});
+      return;
+    }
+
     await course.doc("lastNotification").set({time: Date.now()});
 
     const coll = await db
@@ -170,15 +173,40 @@ export default async function handler(
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
-      const response = (await axios.post("https://exp.host/--/api/v2/push/send",
-          chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}),
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+      const response: any = await limitConcurrentRequests(async () => {
+        return await promiseRetry(
+            async (retry): Promise<any> => {
+              try {
+                const data = (await axios.post("https://exp.host/--/api/v2/push/send",
+                    chunk.map(m => {
+                      return {to: m.to, _contentAvailable: true, data: m.data}
+                    }),
+                    {
+                      headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+                      }
+                    })).data
+                console.log(chunk.map(m => {
+                  return {to: m.to, _contentAvailable: true, data: m.data}
+                }), data);
+                return data;
+              } catch (e: any) {
+                if (e.statusCode === HttpStatusCode.TooManyRequests) {
+                  return retry(e);
+                }
+                throw e;
+              }
+            },
+            {
+              retries: 2,
+              factor: 2,
+              minTimeout: 1000,
             }
-          })).data;
+        );
+      });
+
       for (let i = 0; i < response.data.length; i++) {
         const ticket = response.data[i];
 
@@ -191,12 +219,28 @@ export default async function handler(
 
           invalidTokens.push(ticket.details.expoPushToken);
         }
+        // const tickets = await expo.sendPushNotificationsAsync(chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}));
+        // for (let i = 0; i < tickets.length; i++) {
+        //   const ticket = tickets[i];
+        //
+        //   if (ticket.status === "error" && ticket.details?.error === 'DeviceNotRegistered') {
+        //     await db
+        //         .collection("notifications")
+        //         .doc("courses")
+        //         .collection(courseId)
+        //         // @ts-ignore
+        //         .doc(ticket.details.expoPushToken).delete();
+        //
+        //     // @ts-ignore
+        //     invalidTokens.push(ticket.details.expoPushToken);
+        //   }
       }
     }
 
     res.status(200).json({success: true});
 
     setTimeout(async () => {
+      console.log("checking verification");
       const coll = await db
           .collection("silentPushVerification").get();
 
@@ -215,10 +259,12 @@ export default async function handler(
         }
       }
 
+      console.log("sending", newMessages);
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-    }, 1000 * 4);
+      console.log("sent");
+    }, 1000 * 3.5);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
