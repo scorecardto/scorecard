@@ -1,20 +1,20 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function DyanmicInvitePage() {
   const router = useRouter();
   const { name } = router.query;
 
-  // if on an iphone, redirect to the app store
-  if (
-    typeof window !== "undefined" &&
-    window.navigator.userAgent.includes("iPhone")
-  ) {
-    router.push("/link/ios");
-  } else if (typeof window !== undefined) {
-    router.push("/");
-  }
-
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      window.navigator.userAgent.includes("iPhone")
+    ) {
+      router.push("/link/ios");
+    } else if (typeof window !== undefined) {
+      router.push("/");
+    }
+  }, [router]);
   return (
     <div>
       <meta property="og:title" content="Join me on Scorecard" />
