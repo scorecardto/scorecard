@@ -156,6 +156,7 @@ export default async function handler(
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
+      console.log(assignments[assignmentId], data.deviceId);
       if (assignments[assignmentId].includes(data.deviceId)) continue;
 
       messages.push({
@@ -215,7 +216,7 @@ export default async function handler(
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-    }, 1000 * 6);
+    }, 1000 * 4.75);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
