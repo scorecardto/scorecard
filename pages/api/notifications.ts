@@ -169,23 +169,44 @@ export default async function handler(
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
-      const tickets = await expo.sendPushNotificationsAsync(chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}));
-      for (let i = 0; i < tickets.length; i++) {
-        const ticket = tickets[i];
+      const response = (await axios.post("https://exp.host/--/api/v2/push/send",
+          chunk.map(m => {
+            return {to: m.to, _contentAvailable: true, data: m.data}
+          }),
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.EXPO_ACCESS_TOKEN}`
+            }
+          })).data;
+      for (let i = 0; i < response.data.length; i++) {
+        const ticket = response.data[i];
 
-        console.log("ticket", i, ticket);
-
-        if (ticket.status === "error" && ticket.details?.error === 'DeviceNotRegistered') {
+        if (ticket.status === "error" && ticket.details.error === 'DeviceNotRegistered') {
           await db
               .collection("notifications")
               .doc("courses")
               .collection(courseId)
-              // @ts-ignore
               .doc(ticket.details.expoPushToken).delete();
 
-          // @ts-ignore
           invalidTokens.push(ticket.details.expoPushToken);
         }
+        // const tickets = await expo.sendPushNotificationsAsync(chunk.map(m=>{return {to: m.to, _contentAvailable: true, data: m.data}}));
+        // for (let i = 0; i < tickets.length; i++) {
+        //   const ticket = tickets[i];
+        //
+        //   if (ticket.status === "error" && ticket.details?.error === 'DeviceNotRegistered') {
+        //     await db
+        //         .collection("notifications")
+        //         .doc("courses")
+        //         .collection(courseId)
+        //         // @ts-ignore
+        //         .doc(ticket.details.expoPushToken).delete();
+        //
+        //     // @ts-ignore
+        //     invalidTokens.push(ticket.details.expoPushToken);
+        //   }
       }
     }
 
