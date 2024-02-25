@@ -24,9 +24,9 @@ export default async function handler(request: NextRequest) {
     console.log(e.message);
   }
 
-  // const bold = await fetch(
-  //   "https://scorecardgrades.com/assets/font/sf-rounded-bold.ttf"
-  // );
+  const bold = await fetch(
+    "https://scorecardgrades.com/assets/font/sf-rounded-bold.ttf"
+  );
 
   // const semi = await fetch(
   //   "https://scorecardgrades.com/assets/font/sf-rounded-semibold.ttf"
@@ -35,11 +35,11 @@ export default async function handler(request: NextRequest) {
   //   "https://scorecardgrades.com/assets/font/sf-rounded-medium.ttf"
   // );
 
-  // if (!bold.ok || !semi.ok || !medium.ok) {
-  //   throw new Error("Failed to fetch the font file");
-  // }
+  if (!bold.ok /*|| !semi.ok || !medium.ok*/) {
+    throw new Error("Failed to fetch the font file");
+  }
 
-  // const boldBuffer = await bold.arrayBuffer();
+  const boldBuffer = await bold.arrayBuffer();
   // const semiBuffer = await semi.arrayBuffer();
   // const mediumBuffer = await medium.arrayBuffer();
 
