@@ -129,21 +129,20 @@ export default async function handler(
         .doc("courses")
         .collection(courseId);
 
-    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
-        res.status(200).json({success: true});
-        return;
-    }
-
     const assignments = (await course.doc("assignments").get()).data() ?? {};
     assignments[assignmentId] = Array.from(new Set((assignments[assignmentId] ?? []).concat(deviceId)));
 
-    if (assignments[assignmentId].length < 2) {
+    if (assignments[assignmentId].length != 2) {
       await course.doc("assignments").set(assignments);
       res.status(200).json({success: true});
       return;
     }
 
-    await course.doc("assignments").delete();
+    if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
+      res.status(200).json({success: true});
+      return;
+    }
+
     await course.doc("lastNotification").set({time: Date.now()});
 
     const coll = await db
@@ -218,7 +217,7 @@ export default async function handler(
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-    }, 1000 * 4);
+    }, 1000 * 6);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
