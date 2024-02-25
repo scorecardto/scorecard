@@ -156,7 +156,6 @@ export default async function handler(
       const data = doc.data();
       if (data.onetime) await doc.ref.delete();
 
-      console.log(assignments[assignmentId], data.deviceId);
       if (assignments[assignmentId].includes(data.deviceId)) continue;
 
       messages.push({
@@ -167,7 +166,6 @@ export default async function handler(
       });
     }
     const chunks = expo.chunkPushNotifications(messages);
-    console.log("chunks", chunks);
 
     let invalidTokens: string[] = [];
     for (let chunk of chunks) {
@@ -191,7 +189,6 @@ export default async function handler(
 
     res.status(200).json({success: true});
 
-    console.log("timeout");
     setTimeout(async () => {
       console.log("checking verification");
       const coll = await db
@@ -212,11 +209,10 @@ export default async function handler(
         }
       }
 
-      console.log("newMessages", newMessages);
       for (const chunk of expo.chunkPushNotifications(newMessages)) {
         await expo.sendPushNotificationsAsync(chunk);
       }
-    }, 1000 * 4.75);
+    }, 1000 * 4);
   } else {
     res.status(200).json({success: false, error: "INVALID_METHOD"});
   }
