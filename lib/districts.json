@@ -289,8 +289,8 @@
       },
       {
         "_id": "",
-        "name": "Austin ISD (Demo)",
-        "altName": "Austin ISD (Demo)",
+        "name": "Demo ISD",
+        "altName": "Demo ISD",
         "id": "",
         "accounts": {
           "Student": {
