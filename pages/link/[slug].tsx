@@ -12,6 +12,7 @@ const LINKS: { [key: string]: string } = {
     "https://apps.apple.com/us/app/scorecard-gradebook-viewer/id6476124418",
   iphone:
     "https://apps.apple.com/us/app/scorecard-gradebook-viewer/id6476124418",
+  android: "https://forms.gle/fdE4WfnTkxgJv8wF9",
 };
 
 export default function LinkPage() {

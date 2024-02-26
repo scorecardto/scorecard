@@ -79,16 +79,28 @@ const Home: NextPage = () => {
             Scorecard is the best way to check your grades: you can customize
             classes, get notifications, and test potential grades.
           </p>
-          <Link href="/link/ios">
-            <div className="hover:rotate-3 cursor-pointer transform transition-all duration-300">
-              <Image
-                src="/assets/img/display/download-badge.svg"
-                width={200}
-                height={200}
-                alt="Scorecard"
-              />
-            </div>
-          </Link>
+          <div className="flex flex-row gap-4">
+            <Link href="/link/ios">
+              <div className="hover:rotate-3 cursor-pointer transform transition-all duration-300">
+                <Image
+                  src="/assets/img/display/download-badge.svg"
+                  width={200}
+                  height={200}
+                  alt="Scorecard"
+                />
+              </div>
+            </Link>
+            <Link href="/link/android">
+              <div className="hover:rotate-3 cursor-pointer transform transition-all duration-300">
+                <Image
+                  src="/assets/img/display/google-play-badge.png"
+                  width={224}
+                  height={224}
+                  alt="Scorecard"
+                />
+              </div>
+            </Link>
+          </div>
         </div>
       </main>
     </div>
