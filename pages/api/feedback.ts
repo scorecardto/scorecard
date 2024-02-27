@@ -72,6 +72,7 @@ export default async function handler(
       reason: "ANON",
       message,
       read: false,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
       contactMethod,
     });
 
@@ -145,6 +146,7 @@ export default async function handler(
     urgent: urgent || false,
     respondToMe: respondToMe || false,
     read: false,
+    timestamp: admin.firestore.FieldValue.serverTimestamp(),
     message,
   };
   if (username && password && district) {
