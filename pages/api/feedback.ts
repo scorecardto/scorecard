@@ -143,6 +143,7 @@ export default async function handler(
     phoneNumber: decodedToken.phone_number || "NONE",
     urgent: urgent || false,
     respondToMe: respondToMe || false,
+    read: false,
     message,
   };
   if (username && password && district) {
