@@ -71,6 +71,7 @@ export default async function handler(
     const docRef = await db.collection("feedback").add({
       reason: "ANON",
       message,
+      read: false,
       contactMethod,
     });
 
