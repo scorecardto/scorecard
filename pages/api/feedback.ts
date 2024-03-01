@@ -49,6 +49,8 @@ export default async function handler(
     type,
   } = req.body;
 
+  const device = req.body.device ?? req.headers["user-agent"];  // backwards compatability
+
   if (type === "anon") {
     if (!message || message.length < 1) {
       res.status(200).json({ success: false, error: "INVALID_MESSAGE" });
@@ -70,6 +72,7 @@ export default async function handler(
 
     const docRef = await db.collection("feedback").add({
       reason: "ANON",
+      device,
       message,
       read: false,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
@@ -138,6 +141,7 @@ export default async function handler(
 
   let data: any = {
     reason,
+    device,
     name: {
       firstName,
       lastName,
