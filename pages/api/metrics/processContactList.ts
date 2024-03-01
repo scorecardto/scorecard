@@ -30,47 +30,65 @@ export default async function handler(
         credential: admin.credential.cert(firebaseConfig),
       });
 
-  const phoneNumbers: string[] = req.body.phoneNumbers;
+  const { graph, token, contacts } = req.body;
 
-  const auth = admin.auth();
+  if (!graph) {
+    const phoneNumbers: string[] = req.body.phoneNumbers;
 
-  const users: {
-    [phoneNumber: string]: {
-      score: number;
-      alreadyOnScorecard: boolean;
-    };
-  } = {};
-  let pageToken = undefined;
+    const auth = admin.auth();
 
-  while (true) {
-    const result: any = await auth.listUsers(1000, pageToken);
-    result?.users?.forEach((userRecord: any) => {
-      if (userRecord.phoneNumber) {
-        if (phoneNumbers.includes(userRecord.phoneNumber)) {
-          users[userRecord.phoneNumber] = {
-            score: 1,
-            alreadyOnScorecard: true,
-          };
+    const users: {
+      [phoneNumber: string]: {
+        score: number;
+        alreadyOnScorecard: boolean;
+      };
+    } = {};
+    let pageToken = undefined;
+
+    while (true) {
+      const result: any = await auth.listUsers(1000, pageToken);
+      result?.users?.forEach((userRecord: any) => {
+        if (userRecord.phoneNumber) {
+          if (phoneNumbers.includes(userRecord.phoneNumber)) {
+            users[userRecord.phoneNumber] = {
+              score: 1,
+              alreadyOnScorecard: true,
+            };
+          }
         }
-      }
-    });
+      });
 
-    phoneNumbers.forEach((phoneNumber) => {
-      if (!users[phoneNumber]) {
-        users[phoneNumber] = {
-          score: 0,
-          alreadyOnScorecard: false,
-        };
+      phoneNumbers.forEach((phoneNumber) => {
+        if (!users[phoneNumber]) {
+          users[phoneNumber] = {
+            score: 0,
+            alreadyOnScorecard: false,
+          };
+        } else {
+        }
+      });
+
+      if (result.pageToken) {
+        pageToken = result.pageToken;
       } else {
+        break;
       }
+    }
+
+    res.status(200).json(users);
+    return;
+  } else {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+
+    const db = getFirestore(app);
+
+    await db.collection("contacts").doc(decodedToken.uid).set({
+      contacts: contacts,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    if (result.pageToken) {
-      pageToken = result.pageToken;
-    } else {
-      break;
-    }
+    res.status(200).json({
+      success: true,
+    });
   }
-
-  res.status(200).json(users);
 }
