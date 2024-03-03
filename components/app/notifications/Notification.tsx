@@ -11,7 +11,7 @@ import React from "react";
 export default function Notification(props: {
   notification: GradebookNotification;
   index: number;
-  onClose: () => void;
+  onClose?: () => void;
 }) {
   const { notification, index } = props;
   return (
@@ -44,13 +44,15 @@ export default function Notification(props: {
           }}
           className="relative"
       >
-          <div
-              className="z-50 absolute top-2 -left-3.5 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
-              tabIndex={-1}
-              onClick={props.onClose}
-          >
-              <IoClose/>
-          </div>
+          {props.onClose && (
+              <div
+                  className="z-50 absolute top-2 -left-3.5 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
+                  tabIndex={-1}
+                  onClick={props.onClose}
+              >
+                  <IoClose/>
+              </div>
+          )}
 
           <div
               className="notification-glow relative py-4 pl-6 pr-10 flex border border-mono-l-300 dark:border-mono-d-300 rounded-lg max-w-[30rem] w-full bg-mono-l-100 dark:bg-mono-d-100">
