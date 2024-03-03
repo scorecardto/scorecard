@@ -1,5 +1,5 @@
 import { AnimatePresence } from "framer-motion";
-import React, { useContext, useMemo } from "react";
+import React, {useContext, useEffect, useMemo, useRef, useState} from "react";
 import {
   IoChevronForwardOutline,
   IoClose,
@@ -33,25 +33,21 @@ export default function NotificationSummary(props: { courseIdx: number }) {
           <React.Fragment key={i}>
             <AnimatePresence>
               {currentNotificationId === notification.id && (
-                <Notification notification={notification} key={i} index={i} />
+                <Notification
+                    notification={notification}
+                    key={i}
+                    index={i}
+                    onClose={() => {
+                      if (port) {
+                        markRead(port);
+                      }
+                    }}
+                />
               )}
             </AnimatePresence>
           </React.Fragment>
         );
       })}
-      {showingNotification && (
-        <div
-          className="absolute top-2 -right-4 -translate-y-1/2 text-mono-100 bg-accent-350 hover:bg-accent-400 cursor-pointer border border-accent-400 w-8 h-8 rounded-full flex items-center justify-center text-white"
-          tabIndex={props.courseIdx == -1 ? 0 : -1}
-          onClick={() => {
-            if (port) {
-              markRead(port);
-            }
-          }}
-        >
-          <IoClose />
-        </div>
-      )}
       {!showingNotification && (
         <Link href="/app/notifications">
           <div
