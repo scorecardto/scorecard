@@ -142,6 +142,13 @@ export default async function handler(
       return;
     }
 
+    // TODO: THIS BLOCK DISABLES CROWDSOURCED NOTIFICATIONS
+    {
+      res.status(200).json({success: true});
+      return;
+    }
+
+
     if (Date.now() - ((await course.doc("lastNotification").get()).data()?.time ?? 0) < 1000 * 60 * 60 * 12) {
       res.status(200).json({success: true});
       return;
