@@ -1,0 +1,19 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appIDs": [ "com.scorecardgrades.mobile" ],
+             "components": [
+               {
+                  "/": "/joinclub",
+                  "?": { "handle": "*" },
+                  "comment": "Matches all club join links."
+               }
+             ]
+           }
+       ]
+   },
+   "webcredentials": {
+      "apps": [ "com.scorecardgrades.mobile" ]
+   },
+}
