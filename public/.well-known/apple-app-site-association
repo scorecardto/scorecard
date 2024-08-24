@@ -9,7 +9,7 @@
             "/": "/joinclub/*",
             "comment": "Matches any URL whose path starts with /joinclub/"
           }
-        ]
+        ],
         "paths": ["/joinclub/*"]
       }
     ]
