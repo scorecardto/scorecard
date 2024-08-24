@@ -14,11 +14,9 @@
       }
     ]
   },
-  // This section enables Apple Handoff
   "activitycontinuation": {
     "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
   },
-  // This section enable Shared Web Credentials
   "webcredentials": {
     "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
   }
