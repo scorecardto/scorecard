@@ -1,19 +1,19 @@
 {
   "applinks": {
-      "details": [
-           {
-             "appIDs": [ "com.scorecardgrades.mobile" ],
-             "components": [
-               {
-                  "/": "/joinclub",
-                  "?": { "handle": "*" },
-                  "comment": "Matches all club join links."
-               }
-             ]
-           }
-       ]
-   },
-   "webcredentials": {
-      "apps": [ "com.scorecardgrades.mobile" ]
-   },
+    "apps": [],
+    "details": [
+      {
+        "appID": "H29JJ3FSST.com.scorecardgrades.mobile",
+        "paths": ["/joinclub/*"]
+      }
+    ]
+  },
+  // This section enables Apple Handoff
+  "activitycontinuation": {
+    "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
+  },
+  // This section enable Shared Web Credentials
+  "webcredentials": {
+    "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
+  }
 }
