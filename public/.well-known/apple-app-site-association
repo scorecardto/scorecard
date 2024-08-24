@@ -13,11 +13,5 @@
         "paths": ["/joinclub/*"]
       }
     ]
-  },
-  "activitycontinuation": {
-    "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
-  },
-  "webcredentials": {
-    "apps": ["H29JJ3FSST.com.scorecardgrades.mobile"]
   }
 }
