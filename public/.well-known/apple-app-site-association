@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "H29JJ3FSST.com.scorecardgrades.mobile",
+        "components": [
+          {
+            "/": "/joinclub/*",
+            "comment": "Matches any URL whose path starts with /joinclub/"
+          }
+        ],
+        "paths": ["/joinclub/*"]
+      }
+    ]
+  }
+}
