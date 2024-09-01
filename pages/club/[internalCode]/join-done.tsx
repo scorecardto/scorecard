@@ -48,7 +48,7 @@ export default function JoinDone(props: {
     }, 700);
   }, []);
   return (
-    <div className="w-full h-full from-club-100 to-club-101 bg-gradient-to-b overflow-hidden ">
+    <div className="w-full h-full from-club-100 to-club-101 bg-gradient-to-b overflow-x-hidden ">
       <meta name="theme-color" id="themeMetaTag" content="#B4E4FF" />
       <div className="max-w-lg w-full mx-auto px-4 overflow-hidden">
         <div className="">

@@ -151,7 +151,7 @@ export default function Join(props: { internalCode: string }) {
   };
 
   return (
-    <div className="w-full h-full bg-club-25 overflow-hidden font-os tracking-normal">
+    <div className="w-full h-full bg-club-25 overflow-x-hidden font-os tracking-normal">
       <meta name="theme-color" id="themeMetaTag" content="#fbfcfd" />
       <div className="max-w-lg w-full mx-auto px-4 pt-2 ">
         {error && (

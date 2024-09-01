@@ -7,7 +7,7 @@ export default function Index({ clubs }: any) {
   return (
     <div className="from-club-100 to-club-101 bg-gradient-to-b h-full">
       <meta name="theme-color" id="themeMetaTag" content="#B4E4FF" />
-      <div className="max-w-lg w-full mx-auto px-4  h-full overflow-hidden">
+      <div className="max-w-lg w-full mx-auto px-4  h-full overflow-x-hidden">
         {clubs.length === 1 ? (
           <>
             <ClubMajorPreviewCard {...clubs[0]} />
