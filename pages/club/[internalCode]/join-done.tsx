@@ -65,13 +65,14 @@ export default function JoinDone(props: {
               Welcome!
             </h1>
             <p className="font-os font-bold text-blue-800 tracking-normal text-center">
-              You'll recieve texts and emails whenever there's a new post. Now,
-              download the Scorecard app to participate in the club.
+              You&apos;ll recieve texts and emails whenever there&apos;s a new
+              post. Now, download the Scorecard app to participate in the club.
             </p>
           </div>
           <div className="flex flex-col gap-2 items-center flex-shrink-0">
             <Link href={LINKS.ios}>
               <ClubActionButton>
+                <span>💙</span>
                 <span>Download</span>
               </ClubActionButton>
             </Link>

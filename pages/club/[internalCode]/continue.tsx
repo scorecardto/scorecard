@@ -55,6 +55,7 @@ export default function Continue(props: {
           <div className="flex flex-col gap-2 items-center flex-shrink-0">
             <Link href={LINKS.ios}>
               <ClubActionButton>
+                {/* <span>💙</span> */}
                 <span>Continue</span>
               </ClubActionButton>
             </Link>
