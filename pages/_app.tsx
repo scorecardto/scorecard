@@ -16,7 +16,8 @@ import {
   CheckGradesInterval,
   UsePushNotifications,
   DeleteNotificationsAfter,
-  SettingsContext, CourseSettings,
+  SettingsContext,
+  CourseSettings,
 } from "scorecard-types";
 import { useEffect, useMemo, useState } from "react";
 import { SetupContext } from "../components/core/context/SetupContext";
@@ -45,7 +46,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       courseSettings,
       setCourseSettings,
       courseOrder,
-      setCourseOrder
+      setCourseOrder,
     }),
     [
       data,
@@ -54,7 +55,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       courseSettings,
       setCourseSettings,
       courseOrder,
-      setCourseOrder
+      setCourseOrder,
     ]
   );
 
@@ -256,6 +257,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           href={`${router.basePath}/favicon.ico`}
           key="favicon"
         />
+        <meta name="apple-itunes-app" content="app-id=6476124418"></meta>
       </Head>
       <DefaultSeo
         titleTemplate="%s - Scorecard"

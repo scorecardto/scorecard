@@ -78,6 +78,15 @@ module.exports = {
           500: "#909090",
           600: "#FFFFFF",
         },
+        club: {
+          25: "#FBFCFD",
+          50: "#BFDAFF",
+          100: "#B4E4FF",
+          101: "#95B9FF",
+          200: "#5757FF",
+          201: "#2F97F8",
+          500: "#2939CB",
+        },
       },
     },
   },
@@ -111,6 +120,15 @@ module.exports = {
           fontStyle: "normal",
           fontWeight: 600,
           src: "url(font/Inter-Medium.ttf)",
+        },
+      });
+
+      addBase({
+        "@font-face": {
+          fontFamily: "Inter",
+          fontStyle: "normal",
+          fontWeight: 700,
+          src: "url(font/Inter-Bold.ttf)",
         },
       });
 
