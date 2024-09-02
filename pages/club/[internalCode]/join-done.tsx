@@ -15,6 +15,7 @@ import { validate } from "email-validator";
 import { Oval } from "react-loader-spinner";
 import { useRouter } from "next/router";
 import { LINKS } from "../../link/[slug]";
+import ClubImage from "../../../components/app/club/ClubImage";
 
 export async function getServerSideProps(context: any) {
   const internalCode = context.params.internalCode;
@@ -33,6 +34,8 @@ export async function getServerSideProps(context: any) {
     props: {
       internalCode: internalCode,
       clubPicture: res.data.clubPicture,
+      emoji: res.data.emoji || "🙂",
+      heroColor: res.data.heroColor || "#4A93FF",
     },
   };
 }
@@ -40,6 +43,8 @@ export async function getServerSideProps(context: any) {
 export default function JoinDone(props: {
   internalCode: string;
   clubPicture: string;
+  emoji?: string;
+  heroColor?: string;
 }) {
   const router = useRouter();
   useEffect(() => {
@@ -54,11 +59,14 @@ export default function JoinDone(props: {
         <div className="">
           <div className="mt-8 mb-24 px-12 flex-shrink">
             <div className="w-32 h-32 border-4 border-white rounded-full overflow-hidden mx-auto">
-              <Image
-                src={`https://api.scorecardgrades.com/v1/images/get/${props.clubPicture}`}
+              <ClubImage
+                borderWidth={4}
                 width={128}
                 height={128}
-                alt="Club photo"
+                clubPicture={props.clubPicture}
+                internalCode={props.internalCode}
+                emoji={props.emoji}
+                heroColor={props.heroColor}
               />
             </div>
             <h1 className="font-bold text-3xl text-center mb-4 mt-8">
