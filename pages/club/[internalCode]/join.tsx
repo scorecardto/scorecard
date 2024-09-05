@@ -195,47 +195,53 @@ export default function Join(props: { internalCode: string }) {
               type="email"
             />
             <div className="w-full justify-center flex absolute bottom-0 left-0 translate-y-1/2">
-              <button
-                type="submit"
-                onClick={() => {}}
-                disabled={numberValid !== 4}
-              >
-                <div className="font-os font-bold tracking-normal bg-gray-300 text-white py-4 px-8 text-xl w-fit rounded-full relative overflow-hidden">
-                  <div
-                    className="absolute bg-gray-700 h-full top-0 left-0 z-0 transition-all duration-200"
-                    style={{
-                      width: `${numberValid * 25}%`,
-                    }}
-                  ></div>
-                  <div
-                    className={`flex gap-4 z-50 w-full h-full relative items-center ${
-                      numberValid === 4 ? "" : "opacity-75"
-                    }`}
-                  >
-                    {loading ? (
-                      <>
-                        <Oval
-                          visible={true}
-                          height={20}
-                          width={20}
-                          color="white"
-                          secondaryColor="white"
-                          strokeWidth={5}
-                        />
-                        <span>Loading...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>💟</span>
-                        <span>Sign Up</span>
-                      </>
-                    )}
+              <div>
+                <button
+                  type="submit"
+                  onClick={() => {}}
+                  disabled={numberValid !== 4}
+                >
+                  <div className="font-os font-bold tracking-normal bg-gray-300 text-white py-4 px-8 text-xl w-fit rounded-full relative overflow-hidden">
+                    <div
+                      className="absolute bg-gray-700 h-full top-0 left-0 z-0 transition-all duration-200"
+                      style={{
+                        width: `${numberValid * 25}%`,
+                      }}
+                    ></div>
+                    <div
+                      className={`flex gap-4 z-50 w-full h-full relative items-center ${
+                        numberValid === 4 ? "" : "opacity-75"
+                      }`}
+                    >
+                      {loading ? (
+                        <>
+                          <Oval
+                            visible={true}
+                            height={20}
+                            width={20}
+                            color="white"
+                            secondaryColor="white"
+                            strokeWidth={5}
+                          />
+                          <span>Loading...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>💟</span>
+                          <span>Sign Up</span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           </form>
         </div>
+        <p className="text-gray-400 text-center mt-12 mx-8 text-sm">
+          By signing up, you agree to recieve text notifications from this club
+          when they post.
+        </p>
       </div>
     </div>
   );
