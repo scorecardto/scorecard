@@ -7,14 +7,27 @@ export default async function handler(
 ) {
   const data = req.body;
 
-  try {
-    const r = await axios.post(
-      "https://api.scorecardgrades.com/v1/clubs/public/join",
-      data
-    );
+  if (data.special === "onboardClub") {
+    try {
+      const r = await axios.post(
+        "https://api.scorecardgrades.com/v1/clubs/onboardClub",
+        data
+      );
 
-    res.status(200).send(r.data);
-  } catch (e: any) {
-    res.status(e.response.status).send(e.response.data);
+      res.status(200).send(r.data);
+    } catch (e: any) {
+      res.status(e.response.status).send(e.response.data);
+    }
+  } else {
+    try {
+      const r = await axios.post(
+        "https://api.scorecardgrades.com/v1/clubs/public/join",
+        data
+      );
+
+      res.status(200).send(r.data);
+    } catch (e: any) {
+      res.status(e.response.status).send(e.response.data);
+    }
   }
 }
