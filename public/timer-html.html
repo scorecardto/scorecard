@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Timer App</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; background-color: #f0f4f8; margin: 0; }
+        h1 { color: #333; }
+        .container { display: flex; justify-content: space-around; width: 100%; max-width: 1200px; padding: 10px; }
+        .timer { flex: 1; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; margin: 10px; text-align: center; transition: background-color 0.3s; }
+        .timer.running { background-color: #e0f7fa; } /* Highlight active timer */
+        .timer h2 { font-size: 2em; color: #555; margin: 15px 0; }
+        .timer-label { font-size: 1.6em; margin-bottom: 12px; padding: 12px; width: 80%; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
+        .timer-controls { margin: 15px 0; display: flex; flex-wrap: wrap; justify-content: center; }
+        .timer-controls button { margin: 5px; padding: 8px 12px; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; transition: background-color 0.3s; }
+        .start-button, .stop-button { font-size: 1.2em; padding: 12px 20px; border-radius: 8px; color: white; }
+        .start-button { background-color: #4CAF50; }
+        .stop-button { background-color: #f44336; }
+        .start-button:hover { background-color: #45a049; }
+        .stop-button:hover { background-color: #e53935; }
+        .add-time-button { background-color: #2196F3; color: white; }
+        .add-time-button:hover { background-color: #1e88e5; }
+        .subtract-time-button { background-color: #FFC107; color: white; }
+        .subtract-time-button:hover { background-color: #ffb300; }
+        .reset-button { background-color: #f44336; color: white; }
+        .reset-button:hover { background-color: #e53935; }
+    </style>
+</head>
+<body>
+
+<h1>Multi-Timer App</h1>
+
+<div class="container">
+    <div class="timer" id="timer1">
+        <input type="text" class="timer-label" placeholder="add a name here">
+        <h2 id="display1">00:00:00</h2>
+        <button class="start-button" id="start1" onclick="toggleTimer(1)">Start</button>
+        <div class="timer-controls">
+            <button class="add-time-button" onclick="addTime(1, 5)">+5 sec</button>
+            <button class="add-time-button" onclick="addTime(1, 15)">+15 sec</button>
+            <button class="add-time-button" onclick="addTime(1, 30)">+30 sec</button>
+            <button class="add-time-button" onclick="addTime(1, 60)">+1 min</button>
+            <button class="subtract-time-button" onclick="subtractTime(1, 5)">-5 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(1, 15)">-15 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(1, 30)">-30 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(1, 60)">-1 min</button>
+            <button class="reset-button" onclick="resetTimer(1)">Reset</button>
+        </div>
+    </div>
+
+    <div class="timer" id="timer2">
+        <input type="text" class="timer-label" placeholder="add a name here">
+        <h2 id="display2">00:00:00</h2>
+        <button class="start-button" id="start2" onclick="toggleTimer(2)">Start</button>
+        <div class="timer-controls">
+            <button class="add-time-button" onclick="addTime(2, 5)">+5 sec</button>
+            <button class="add-time-button" onclick="addTime(2, 15)">+15 sec</button>
+            <button class="add-time-button" onclick="addTime(2, 30)">+30 sec</button>
+            <button class="add-time-button" onclick="addTime(2, 60)">+1 min</button>
+            <button class="subtract-time-button" onclick="subtractTime(2, 5)">-5 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(2, 15)">-15 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(2, 30)">-30 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(2, 60)">-1 min</button>
+            <button class="reset-button" onclick="resetTimer(2)">Reset</button>
+        </div>
+    </div>
+
+    <div class="timer" id="timer3">
+        <input type="text" class="timer-label" placeholder="add a name here">
+        <h2 id="display3">00:00:00</h2>
+        <button class="start-button" id="start3" onclick="toggleTimer(3)">Start</button>
+        <div class="timer-controls">
+            <button class="add-time-button" onclick="addTime(3, 5)">+5 sec</button>
+            <button class="add-time-button" onclick="addTime(3, 15)">+15 sec</button>
+            <button class="add-time-button" onclick="addTime(3, 30)">+30 sec</button>
+            <button class="add-time-button" onclick="addTime(3, 60)">+1 min</button>
+            <button class="subtract-time-button" onclick="subtractTime(3, 5)">-5 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(3, 15)">-15 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(3, 30)">-30 sec</button>
+            <button class="subtract-time-button" onclick="subtractTime(3, 60)">-1 min</button>
+            <button class="reset-button" onclick="resetTimer(3)">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let timers = [0, 0, 0];
+    let intervalIds = [null, null, null];
+
+    function formatTime(milliseconds) {
+        const mins = Math.floor(milliseconds / 60000);
+        const secs = Math.floor((milliseconds % 60000) / 1000);
+        const ms = Math.floor((milliseconds % 1000) / 10); // Show two digits for milliseconds
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}:${String(ms).padStart(2, '0')}`;
+    }
+
+    function updateDisplay(timerIndex) {
+        document.getElementById(`display${timerIndex}`).textContent = formatTime(timers[timerIndex - 1]);
+    }
+
+    function toggleTimer(timerIndex) {
+        if (intervalIds[timerIndex - 1]) {
+            stopCurrentTimer();
+        } else {
+            startTimer(timerIndex);
+        }
+    }
+
+    function startTimer(timerIndex) {
+        stopCurrentTimer(); // Stop any other running timer first
+        document.getElementById(`timer${timerIndex}`).classList.add("running");
+        document.getElementById(`start${timerIndex}`).classList.replace("start-button", "stop-button");
+        document.getElementById(`start${timerIndex}`).textContent = "Stop";
+
+        intervalIds[timerIndex - 1] = setInterval(() => {
+            timers[timerIndex - 1] += 10;
+            updateDisplay(timerIndex);
+        }, 10);
+    }
+
+    function stopCurrentTimer() {
+        intervalIds.forEach((id, index) => {
+            if (id) {
+                clearInterval(id);
+                intervalIds[index] = null;
+                document.getElementById(`timer${index + 1}`).classList.remove("running");
+                const button = document.getElementById(`start${index + 1}`);
+                button.classList.replace("stop-button", "start-button");
+                button.textContent = "Start";
+            }
+        });
+    }
+
+    function resetTimer(timerIndex) {
+        timers[timerIndex - 1] = 0;
+        updateDisplay(timerIndex);
+        stopCurrentTimer();
+    }
+
+    function addTime(timerIndex, seconds) {
+        timers[timerIndex - 1] += seconds * 1000;
+        updateDisplay(timerIndex);
+    }
+
+    function subtractTime(timerIndex, seconds) {
+        timers[timerIndex - 1] = Math.max(0, timers[timerIndex - 1] - seconds * 1000);
+        updateDisplay(timerIndex);
+    }
+</script>
+
+</body>
+</html>

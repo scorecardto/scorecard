@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Redirect from "../../components/core/util/Redirect";
 
-const LINKS: { [key: string]: string } = {
+export const LINKS: { [key: string]: string } = {
   chrome:
     "https://chrome.google.com/webstore/detail/scorecard-gradebook-viewe/kdcaikhoeplkmicnkjflbbpchjoadaki",
   "delete-data-android":

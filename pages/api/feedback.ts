@@ -49,7 +49,7 @@ export default async function handler(
     type,
   } = req.body;
 
-  const device = req.body.device ?? req.headers["user-agent"];  // backwards compatability
+  const device = req.body.device ?? req.headers["user-agent"]; // backwards compatability
 
   if (type === "anon") {
     if (!message || message.length < 1) {
@@ -85,7 +85,12 @@ export default async function handler(
 
   const decodedToken = await admin.auth().verifyIdToken(token);
 
-  if (reason !== "HELP" && reason !== "BUG" && reason !== "SUGGESTION") {
+  if (
+    reason !== "HELP" &&
+    reason !== "BUG" &&
+    reason !== "SUGGESTION" &&
+    reason !== "REPORT_POST"
+  ) {
     res.status(200).json({ success: false, error: "INVALID_REASON" });
     return;
   }
