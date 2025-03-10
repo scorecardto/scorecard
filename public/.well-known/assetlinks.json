@@ -1,11 +1,14 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.scorecardgrades.mobile",
       "sha256_cert_fingerprints": [
-        "fa:c6:17:45:dc:09:03:78:6f:b9:ed:e6:2a:96:2b:39:9f:73:48:f0:bb:6f:89:9b:83:32:66:75:91:03:3b:9c"
+        "fa:c6:17:45:dc:09:03:78:6f:b9:ed:e6:2a:96:2b:39:9f:73:48:f0:bb:6f:89:9b:83:32:66:75:91:03:3b:9c",
+        "60:18:6E:E3:C0:0A:2A:F0:17:C5:CC:DC:81:54:9F:37:12:EF:BE:99:0A:68:1A:65:24:6B:CC:00:67:AD:33:75"
       ]
     }
   }
